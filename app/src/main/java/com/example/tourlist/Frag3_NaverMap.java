@@ -176,7 +176,7 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
             // Places SDK 초기화
             if (getActivity() != null) {
                 Context context = getActivity().getApplicationContext();
-                Places.initialize(context, "AIzaSyAkrFWzJeXx_k_k0g5vyuitlB8u6txNT98");
+                Places.initialize(context, "AIzaSyBtOchZ5iZsWKxjBayu8q2Qe3oQQQBgp9k");
                 placesClient = Places.createClient(context);
                 Log.d(TAG, "Places SDK 초기화 성공");
             } else {

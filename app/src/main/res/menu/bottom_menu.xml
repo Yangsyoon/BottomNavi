@@ -36,6 +36,14 @@
         android:title="빈 칸"
         />
 
+    <item
+        android:id="@+id/action_tourist"
+        android:enabled="true"
+        android:icon="@drawable/baseline_apps_24"
+        android:menuCategory="secondary"
+        android:title="검색 및 카테고리"
+        />
+
 
 
 

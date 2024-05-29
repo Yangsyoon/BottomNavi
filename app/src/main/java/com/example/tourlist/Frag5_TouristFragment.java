@@ -1,5 +1,6 @@
 package com.example.tourlist;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -36,6 +37,16 @@ public class Frag5_TouristFragment extends Fragment {
         Button seoulButton = view.findViewById(R.id.seoulButton);
         Button daeguButton = view.findViewById(R.id.daeguButton);
         Button busanButton = view.findViewById(R.id.busanButton);
+        Button gyeonggiButton = view.findViewById(R.id.gyeonggiButton);
+        Button jeonButton = view.findViewById(R.id.jeonButton);
+        Button chungButton = view.findViewById(R.id.chungButton);
+        Button gyeongButton = view.findViewById(R.id.gyeongButton);
+        Button daejeonButton = view.findViewById(R.id.daejeonButton);
+        Button gangwonButton = view.findViewById(R.id.gangwonButton);
+        Button jejuButton = view.findViewById(R.id.jejuButton);
+        Button incheonButton = view.findViewById(R.id.incheonButton);
+        Button ulsanButton = view.findViewById(R.id.ulsanButton);
+        Button allButton = view.findViewById(R.id.allButton);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -78,6 +89,23 @@ public class Frag5_TouristFragment extends Fragment {
         seoulButton.setOnClickListener(regionClickListener);
         daeguButton.setOnClickListener(regionClickListener);
         busanButton.setOnClickListener(regionClickListener);
+        gyeonggiButton.setOnClickListener(regionClickListener);
+        jeonButton.setOnClickListener(regionClickListener);
+        chungButton.setOnClickListener(regionClickListener);
+        gyeongButton.setOnClickListener(regionClickListener);
+        daejeonButton.setOnClickListener(regionClickListener);
+        gangwonButton.setOnClickListener(regionClickListener);
+        jejuButton.setOnClickListener(regionClickListener);
+        incheonButton.setOnClickListener(regionClickListener);
+        ulsanButton.setOnClickListener(regionClickListener);
+
+        allButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectedRegion = "";
+                filter(searchEditText.getText().toString(), selectedRegion);
+            }
+        });
 
         return view;
     }
@@ -86,10 +114,64 @@ public class Frag5_TouristFragment extends Fragment {
         filteredAttractions.clear();
         for (TouristAttraction attraction : attractions) {
             if ((attraction.getName().contains(text) || attraction.getAddress().contains(text)) &&
-                    attraction.getAddress().contains(region)) {
+                    (region.isEmpty() || attraction.getAddress().contains(region))) {
                 filteredAttractions.add(attraction);
             }
         }
         adapter.notifyDataSetChanged();
+    }
+
+        private class AttractionAdapter extends RecyclerView.Adapter<AttractionAdapter.AttractionViewHolder> {
+
+            private List<TouristAttraction> attractions;
+
+            AttractionAdapter(List<TouristAttraction> attractions) {
+                this.attractions = attractions;
+            }
+
+            @NonNull
+            @Override
+            public AttractionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_attraction, parent, false);
+                return new AttractionViewHolder(view);
+            }
+
+            @Override
+            public void onBindViewHolder(@NonNull AttractionViewHolder holder, int position) {
+                TouristAttraction attraction = attractions.get(position);
+                holder.bind(attraction);
+            }
+
+            @Override
+            public int getItemCount() {
+                return attractions.size();
+            }
+
+            class AttractionViewHolder extends RecyclerView.ViewHolder {
+
+                Button attractionButton;
+
+                AttractionViewHolder(View itemView) {
+                    super(itemView);
+                    attractionButton = itemView.findViewById(R.id.attractionButton);
+                }
+
+                void bind(final TouristAttraction attraction) {
+                    attractionButton.setText(attraction.getName());
+                    attractionButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(itemView.getContext(), TouristPlaceDetailActivity.class);
+                            intent.putExtra("PLACE_NAME", attraction.getName());
+                            intent.putExtra("ADDRESS", attraction.getAddress());
+                            intent.putExtra("DESCRIPTION", attraction.getDescription());
+                            intent.putExtra("PHONE", attraction.getPhone());
+                            intent.putExtra("PHOTO_URL", attraction.getPhotoUrl());
+                            itemView.getContext().startActivity(intent);
+                        }
+                    });
+                }
+
+            }
     }
 }

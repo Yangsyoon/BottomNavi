@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.PointF;
 import android.location.Address;
 import android.location.Geocoder;
@@ -110,7 +111,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
-
+import com.naver.maps.map.overlay.Marker;
+import com.naver.maps.map.overlay.OverlayImage;
 public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
     private String fragmentTag="NaverMap";
 
@@ -153,7 +155,7 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
 
 
 
-/////////////////////////////////////////////////
+    /////////////////////////////////////////////////
     private ArrayList<String> selectedPlaces = new ArrayList<>();
     private FusedLocationProviderClient fusedLocationClient;
 
@@ -164,7 +166,8 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
 
     private PlacesClient placesClient;
 
-
+    private Button placeNameButton;
+    private TouristPlace selectedPlace;
 
     @Nullable
     @Override
@@ -186,6 +189,17 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
             Log.e(TAG, "Places SDK 초기화 실패", e);
         }
 
+        placeNameButton = view.findViewById(R.id.place_name_button);
+        placeNameButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (selectedPlace != null) {
+                    searchPlaceIdByName(selectedPlace.getPlaceName(), selectedPlace);
+                } else {
+                    Toast.makeText(getContext(), "선택된 장소가 없습니다.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         //지도 출력
         mapView = view.findViewById(R.id.mapView);
@@ -245,7 +259,7 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
 
 
 
-        @Override
+    @Override
     public void onMapReady(@NonNull NaverMap map){
 
         mMap = map;
@@ -295,20 +309,11 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
 //                currentMarker.setCaptionText("선택된 위치");
 //                currentMarker.setIconTintColor(0x478EEC);
 //                currentMarker.setMap(mMap);
-
+// 마커 클릭이 아닌 지도를 클릭했을 때 버튼 숨기기
+                placeNameButton.setVisibility(View.GONE);
             }
 
         });
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -318,6 +323,14 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
     }
 
 
+
+    private void setupMarkerIcon(Marker marker) {
+        // 마커 아이콘 설정
+        OverlayImage icon = OverlayImage.fromResource(R.drawable.marker_icon); // 새로운 아이콘 리소스 사용
+        marker.setIcon(icon);
+        // marker.setWidth와 marker.setHeight는 사용하지 않습니다. 아이콘 자체를 작은 크기로 준비합니다.
+        marker.setIconTintColor(Color.parseColor("#FFA500")); // 주황색으로 설정
+    }
 
 
 
@@ -678,57 +691,36 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
 //                        });
 
 
-
+                        setupMarkerIcon(tourMarker);
 
                         tourMarker.setTag(new TouristPlace(placeName[0], latitude[0], longitude[0], address[0], description[0], phone[0])); // Tag에 객체 저장
 
                         tourMarker.setMap(mMap);
 
-                        tourMarker.setOnClickListener(new Marker.OnClickListener() {
-
-
+                        tourMarker.setOnClickListener(new Overlay.OnClickListener() {
                             @Override
                             public boolean onClick(@NonNull Overlay overlay) {
-                                Toast.makeText(getContext(), "마커 클릭됨 "+tourMarker.getCaptionText(), Toast.LENGTH_SHORT).show();
-                                selectedMarker=tourMarker;
+                                Toast.makeText(getContext(), "마커 클릭됨 " + tourMarker.getCaptionText(), Toast.LENGTH_SHORT).show();
+                                selectedMarker = tourMarker;
 
-
-//                                infoWindow.open(tourMarker);
-                                TouristPlace place = (TouristPlace)tourMarker.getTag();
-
-                                Toast.makeText(getContext(),"asdfasd"+place,Toast.LENGTH_SHORT).show();
-
+                                TouristPlace place = (TouristPlace) tourMarker.getTag();
                                 if (place != null) {
-//                                     장소 검색을 통해 placeId 가져오기
-
-                                    searchPlaceIdByName(place.getPlaceName(), place);
+                                    selectedPlace = place;
+                                    placeNameButton.setText(place.getPlaceName());
+                                    placeNameButton.setVisibility(View.VISIBLE); // 버튼 보이기
+                                } else {
+                                    selectedPlace = null; // place가 null일 경우 selectedPlace를 null로 설정
+                                    placeNameButton.setVisibility(View.GONE); // 버튼 숨기기
                                 }
                                 return true; // true로 설정하여 기본 마커 클릭 동작을 유지하지 않음
-
-
-//                                return false;
                             }
-
-
                         });
-
-
-
 
 
                         Log.d(TAG, "Tourist place marker added for: " + placeName + " at: " + latLng.toString());
                     } catch (Exception e) {
                         Log.e(TAG, "Error adding marker for tourist place: " + placeName, e);
                     }
-
-
-
-
-
-
-
-
-
 
                     Log.d(TAG, "Tourist place marker added for: " + placeName[0] + " at: " + latLng.toString());
                 }
@@ -739,59 +731,6 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
             showToast("Error parsing XML response");
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     private void searchPlaceIdByName(String placeName, TouristPlace place) {
@@ -813,6 +752,7 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
             Log.e(TAG, "Error finding place predictions: " + exception.getMessage());
         });
     }
+
 
     private void fetchPlaceDetails(String placeId, TouristPlace place) {
         List<Place.Field> placeFields = Arrays.asList(Place.Field.NAME, Place.Field.PHOTO_METADATAS);
@@ -837,9 +777,6 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
                         .setMaxWidth(500) // 사진의 최대 너비
                         .setMaxHeight(300) // 사진의 최대 높이
                         .build();
-
-
-                Toast.makeText(getContext(),"sibal",Toast.LENGTH_SHORT).show();
 
                 placesClient.fetchPhoto(photoRequest).addOnSuccessListener((fetchPhotoResponse) -> {
                     Bitmap bitmap = fetchPhotoResponse.getBitmap();
@@ -866,6 +803,7 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
             Log.e(TAG, "Place not found: " + exception.getMessage());
         });
     }
+
 
     private void openTouristPlaceDetailActivity(TouristPlace place) {
         Toast.makeText(getContext(),"openTour~"+place.getPlaceName(),Toast.LENGTH_SHORT).show();
@@ -996,7 +934,6 @@ class FavoriteLocation {
 
 
 }
-
 
 
 

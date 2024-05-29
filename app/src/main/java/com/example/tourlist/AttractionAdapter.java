@@ -1,9 +1,10 @@
 package com.example.tourlist;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
@@ -12,7 +13,7 @@ public class AttractionAdapter extends RecyclerView.Adapter<AttractionAdapter.At
 
     private List<TouristAttraction> attractions;
 
-    public AttractionAdapter(List<TouristAttraction> attractions) {
+    AttractionAdapter(List<TouristAttraction> attractions) {
         this.attractions = attractions;
     }
 
@@ -26,8 +27,7 @@ public class AttractionAdapter extends RecyclerView.Adapter<AttractionAdapter.At
     @Override
     public void onBindViewHolder(@NonNull AttractionViewHolder holder, int position) {
         TouristAttraction attraction = attractions.get(position);
-        holder.nameTextView.setText(attraction.getName());
-        holder.addressTextView.setText(attraction.getAddress());
+        holder.bind(attraction);
     }
 
     @Override
@@ -35,15 +35,26 @@ public class AttractionAdapter extends RecyclerView.Adapter<AttractionAdapter.At
         return attractions.size();
     }
 
-    static class AttractionViewHolder extends RecyclerView.ViewHolder {
-        TextView nameTextView;
-        TextView addressTextView;
+    class AttractionViewHolder extends RecyclerView.ViewHolder {
 
-        public AttractionViewHolder(@NonNull View itemView) {
+        Button attractionButton;
+
+        AttractionViewHolder(View itemView) {
             super(itemView);
-            nameTextView = itemView.findViewById(R.id.nameTextView);
-            addressTextView = itemView.findViewById(R.id.addressTextView);
+            attractionButton = itemView.findViewById(R.id.attractionButton);
+        }
+
+        void bind(final TouristAttraction attraction) {
+            attractionButton.setText(attraction.getName());
+            attractionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(itemView.getContext(), TouristPlaceDetailActivity.class);
+                    intent.putExtra("PLACE_NAME", attraction.getName());
+                    intent.putExtra("PLACE_ADDRESS", attraction.getAddress());
+                    itemView.getContext().startActivity(intent);
+                }
+            });
         }
     }
 }
-

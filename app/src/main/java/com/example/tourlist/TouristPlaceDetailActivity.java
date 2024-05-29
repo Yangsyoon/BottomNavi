@@ -30,6 +30,7 @@ public class TouristPlaceDetailActivity extends AppCompatActivity {
             TextView phoneTextView = findViewById(R.id.phoneTextView);
             ImageView imageView = findViewById(R.id.imageView);
 
+
             placeNameTextView.setText(place.getPlaceName());
             locationTextView.setText("Latitude: " + place.getLatitude() + ", Longitude: " + place.getLongitude());
             addressTextView.setText("Address: " + place.getAddress());

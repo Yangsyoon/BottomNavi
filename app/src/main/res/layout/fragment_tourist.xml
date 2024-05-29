@@ -1,42 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".Frag5_TouristFragment">
+    android:orientation="vertical">
 
     <EditText
         android:id="@+id/searchEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="검색어를 입력하세요" />
+        android:hint="Search" />
 
-    <LinearLayout
+    <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:padding="8dp"
+        android:scrollbars="none">
 
-        <Button
-            android:id="@+id/seoulButton"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="서울" />
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/daeguButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="대구" />
+            <Button
+                android:id="@+id/allButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:text="전체" />
 
-        <Button
-            android:id="@+id/busanButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="부산" />
+            <Button
+                android:id="@+id/seoulButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:text="서울특별시" />
 
-        <!-- 필요한 지역 버튼 추가 -->
-    </LinearLayout>
+            <Button
+                android:id="@+id/daeguButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:text="대구광역시" />
+
+            <Button
+                android:id="@+id/busanButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:text="부산광역시" />
+
+            <Button
+                android:id="@+id/incheonButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:text="인천광역시" />
+
+            <Button
+                android:id="@+id/ulsanButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:text="울산광역시" />
+
+            <Button
+                android:id="@+id/daejeonButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:text="대전광역시" />
+
+            <Button
+                android:id="@+id/gyeonggiButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:text="경기도" />
+
+            <Button
+                android:id="@+id/jeonButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:text="전라" />
+
+            <Button
+                android:id="@+id/chungButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:text="충청" />
+
+            <Button
+                android:id="@+id/gyeongButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:text="경상" />
+
+            <Button
+                android:id="@+id/gangwonButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:text="강원" />
+
+            <Button
+                android:id="@+id/jejuButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:text="제주" />
+
+        </LinearLayout>
+    </HorizontalScrollView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"

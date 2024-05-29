@@ -1,7 +1,8 @@
-package com.example.tourlist;
+package com.example.tourlist.Main;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -16,6 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.tourlist.Memory_Activity.MemoryActivity;
+import com.example.tourlist.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -43,6 +46,7 @@ public class Frag2_FavoriteList extends Fragment {
     private ListView favoriteListView;
     private ArrayAdapter<String> adapter;
     private List<FavoriteLocation> favoriteLocations;
+
     private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
 
@@ -62,6 +66,7 @@ public class Frag2_FavoriteList extends Fragment {
 
         if (user != null) {
             String userId = user.getUid();
+            //데이타베이스에서 users에서 userid에서 favorite에 접근.
             mDatabase = FirebaseDatabase.getInstance().getReference("users").child(userId).child("favorites");
             loadFavoriteLocations();
         } else {
@@ -69,16 +74,20 @@ public class Frag2_FavoriteList extends Fragment {
             // 로그인하지 않은 경우 이전 프레그먼트로 돌아감. 사실상 즐겨찾기 목록 종료
         }
 
-        // 항목을 클릭했을 때 수정
+        // 항목을 클릭했을 때 추억 액티비티로 전환.
         favoriteListView.setOnItemClickListener((parent, view, position, id) -> {
             FavoriteLocation location = favoriteLocations.get(position);
-            showEditDialog(location);
+            Intent intent = new Intent(getActivity(), MemoryActivity.class);
+            intent.putExtra("location_key", location.getKey());
+            intent.putExtra("location_name", location.getName());
+            startActivity(intent);
         });
 
         // 항목을 길게 눌렀을 때 삭제
         favoriteListView.setOnItemLongClickListener((parent, view, position, id) -> {
             FavoriteLocation location = favoriteLocations.get(position);
-            removeFavoriteLocation(location);
+            showEditDialog(location);
+//            removeFavoriteLocation(location);
             return true;
         });
 
@@ -167,6 +176,77 @@ public class Frag2_FavoriteList extends Fragment {
         }
     }
 
+    static class FavoriteLocation {
+        public double latitude;
+        public double longitude;
+        private String place_name; // 장소 이름 추가
+
+        private String key; // 추가된 필드
+
+        public FavoriteLocation() {
+            // Default constructor required for calls to DataSnapshot.getValue(FavoriteLocation.class)
+        }
+
+        public FavoriteLocation(String place_name, double latitude, double longitude) {
+            this.latitude = latitude;
+            this.longitude = longitude;
+            this.place_name = place_name;
+        }
+
+        /*public FavoriteLocation(String place_name, double latitude, double longitude) {
+            this.latitude = latitude;
+            this.longitude = longitude;
+            this.place_name = place_name;
+        }*/
+
+
+        public double getLatitude() {
+            return latitude;
+        }
+
+        public void setLatitude(double latitude) {
+            this.latitude = latitude;
+        }
+
+        public double getLongitude() {
+            return longitude;
+        }
+
+        public void setLongitude(double longitude) {
+            this.longitude = longitude;
+        }
+
+
+        public String getName() {
+            return place_name;
+        }
+
+        public void setName(String name) {
+            this.place_name = name;
+        }
+
+        public String getKey() {
+            return key;
+        }
+
+        public void setKey(String key) {
+            this.key = key;
+        }
+
+
+
+        @Override
+        public String toString() {
+            return place_name != null ? place_name : "Lat: " + latitude + ", Lng: " + longitude;
+        }
+
+
+
+
+
+
+
+    }
 }
 
 

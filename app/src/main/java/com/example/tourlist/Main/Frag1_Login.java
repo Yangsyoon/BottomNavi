@@ -1,6 +1,5 @@
-package com.example.tourlist;
+package com.example.tourlist.Main;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.tourlist.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -126,6 +126,63 @@ public class Frag1_Login extends Fragment {
                 transaction.commit();
             }
         });
+/////////////////////////////////////////////////////
+
+        //게스트 로그인.
+        Button btn_guest_login=view.findViewById(R.id.btn_guest_login);
+
+        btn_guest_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                FirebaseUser user = mAuth.getCurrentUser();
+
+                //로그인 안했으면 익명 로그인
+                if (user == null) {
+
+                    mAuth.signInAnonymously().addOnCompleteListener(getActivity(), task -> {
+                        if (task.isSuccessful()) {
+                            // 익명 로그인 성공
+                            Toast.makeText(getContext(), "게스트 로그인 성공", Toast.LENGTH_SHORT).show();
+
+                            //로그인 성공
+
+                            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                            Frag3_NaverMap frag3_NaverMap = new Frag3_NaverMap();
+                            //main_layout에 homeFragment로 transaction 한다.
+                            transaction.replace(R.id.main_frame, frag3_NaverMap);
+
+                            // 백 스택에 추가합니다.
+                            transaction.addToBackStack(null);
+                            //꼭 commit을 해줘야 바뀐다.
+                            transaction.commit();
+                        } else {
+                            // 익명 로그인 실패
+                            Toast.makeText(getContext(), "게스트 로그인 실패", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                }
+                else{
+                    Toast.makeText(getContext(), "로그아웃 해야함.frag1_login", Toast.LENGTH_SHORT).show();
+
+
+                }
+            }
+        });
+
+        //로그아웃
+        Button btn_signout=view.findViewById(R.id.btn_signout);
+        btn_signout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAuth.signOut();
+                Toast.makeText(getContext(), "로그아웃", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+
 
 
 

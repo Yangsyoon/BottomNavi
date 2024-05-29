@@ -5,15 +5,15 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:background="@color/blue"
+    tools:context=".Main.MainActivity"
+    android:background="@color/white"
     >
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavi"
         android:layout_width="406dp"
         android:layout_height="96dp"
-        app:backgroundTint="#C676D6F1"
+        app:backgroundTint="@color/white"
         app:itemIconTint="#000000"
         app:itemTextColor="#000000"
         app:layout_constraintBottom_toBottomOf="parent"

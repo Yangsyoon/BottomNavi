@@ -5,8 +5,9 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Frag1_Login"
-    android:background="@color/blue"
+    tools:context=".Main.Frag1_Login"
+    android:background="@color/white"
+
     >
 
 <!--   textemail~ 키보드에 @버튼 등. 편하게 세팅. -->
@@ -50,6 +51,18 @@
         app:layout_constraintTop_toBottomOf="@+id/et_email" />
 
     <Button
+        android:id="@+id/btn_guest_login"
+        android:layout_width="189dp"
+        android:layout_height="49dp"
+        android:layout_margin="8dp"
+        android:layout_marginBottom="88dp"
+        android:backgroundTint="#62C0F3"
+        android:text="게스트 로그인"
+        app:layout_constraintBottom_toTopOf="@+id/btn_login"
+        app:layout_constraintEnd_toEndOf="@+id/btn_login"
+        app:layout_constraintStart_toStartOf="@+id/btn_login" />
+
+    <Button
         android:id="@+id/btn_login"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -61,6 +74,20 @@
         android:backgroundTint="#62C0F3"
         />
 
+
+    <Button
+        android:id="@+id/btn_signout"
+        android:layout_width="188dp"
+        android:layout_height="47dp"
+        android:layout_margin="8dp"
+
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="#3E89DA"
+        android:text="로그아웃"
+        app:layout_constraintBottom_toTopOf="@+id/btn_register"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.73"
+        app:layout_constraintStart_toEndOf="@+id/btn_guest_login" />
 
     <Button
         android:id="@+id/btn_register"

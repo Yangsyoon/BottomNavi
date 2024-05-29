@@ -1,6 +1,7 @@
-package com.example.tourlist;
+package com.example.tourlist.Tourist_Search_Activity;
 
 import android.app.Application;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -23,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TouristViewModel extends AndroidViewModel {
+
+
     private MutableLiveData<List<TouristAttraction>> touristAttractions;
     private RequestQueue requestQueue;
 
@@ -73,24 +76,42 @@ public class TouristViewModel extends AndroidViewModel {
             int eventType = parser.getEventType();
             while (eventType != XmlPullParser.END_DOCUMENT) {
                 if (eventType == XmlPullParser.START_TAG && parser.getName().equals("record")) {
-                    String name = "", address = "";
+                    final String[] placeName = {""};
+                    final double[] latitude = {0.0};
+                    final double[] longitude = {0.0};
+                    final String[] address = {""};
+                    final String[] description = {""};
+                    final String[] phone = {""};
                     while (!(eventType == XmlPullParser.END_TAG && parser.getName().equals("record"))) {
                         if (eventType == XmlPullParser.START_TAG) {
                             String tagName = parser.getName();
                             switch (tagName) {
                                 case "관광지명":
-                                    name = parser.nextText();
+                                    placeName[0] = parser.nextText();
+                                    break;
+                                case "위도":
+                                    latitude[0] = Double.parseDouble(parser.nextText());
+                                    break;
+                                case "경도":
+                                    longitude[0] = Double.parseDouble(parser.nextText());
                                     break;
                                 case "소재지도로명주소":
-                                    address = parser.nextText();
+                                    address[0] = parser.nextText();
                                     break;
+                                case "관광지소개":
+                                    description[0] = parser.nextText();
+                                    break;
+                                case "관리기관전화번호":
+                                    phone[0] = parser.nextText();
                                 default:
-                                    break;
+
                             }
                         }
                         eventType = parser.next();
                     }
-                    attractions.add(new TouristAttraction(name, address));
+//                    attractions.add(new TouristAttraction(placeName[0], address[0]));
+                    attractions.add(new TouristAttraction(placeName[0], latitude[0], longitude[0], address[0], description[0], phone[0]));
+//                    new TouristPlace(placeName[0], latitude[0], longitude[0], address[0], description[0], phone[0])
                 }
                 eventType = parser.next();
             }
@@ -101,3 +122,5 @@ public class TouristViewModel extends AndroidViewModel {
         return attractions;
     }
 }
+
+

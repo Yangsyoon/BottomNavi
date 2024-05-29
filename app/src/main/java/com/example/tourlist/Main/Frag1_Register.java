@@ -1,4 +1,4 @@
-package com.example.tourlist;
+package com.example.tourlist.Main;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.tourlist.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -134,4 +135,46 @@ public class Frag1_Register extends Fragment {
     }
 
 
+    /*
+
+        사용자 계정 정보 모델 클래스
+        */
+    public static class UserAccount {
+
+    //    getter, setter.... alt+insert.
+
+        private String idToken; // Firebase Uid(고유 토큰정보)... 유일하게 가질 수있는 키값
+
+        private String emailId; // 이메일 아이디
+        private String password;// 비밀번호
+
+
+        public UserAccount() {
+        }
+
+        public String getIdToken() {
+            return idToken;
+        }
+
+        public void setIdToken(String idToken) {
+            this.idToken = idToken;
+        }
+    //    빈 생성자 적엉줘야함.
+
+        public String getEmailId() {
+            return emailId;
+        }
+
+        public void setEmailId(String emailId) {
+            this.emailId = emailId;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        public void setPassword(String password) {
+            this.password = password;
+        }
+    }
 }

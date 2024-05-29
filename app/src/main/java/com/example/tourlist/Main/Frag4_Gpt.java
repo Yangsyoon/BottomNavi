@@ -1,37 +1,21 @@
-package com.example.tourlist;
+package com.example.tourlist.Main;
 
 import android.os.Bundle;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
-
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-
-
-
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Bundle;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.TextView;
+import com.example.tourlist.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,7 +34,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class Frag4_Empty extends Fragment {
+public class Frag4_Gpt extends Fragment {
     private String fragmentTag="Empty";
 
     public void setFragmentTag(String tag) {
@@ -79,8 +63,8 @@ public class Frag4_Empty extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(@androidx.annotation.NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.frag4_empty,container,false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.frag4_gpt,container,false);
 
         Message message;
 
@@ -101,7 +85,7 @@ public class Frag4_Empty extends Fragment {
 
         sendButton.setOnClickListener((v)->{
             String question = messageEditText.getText().toString().trim();
-            addToChat(question, com.example.tourlist.Message.SENT_BY_ME);
+            addToChat(question, Message.SENT_BY_ME);
             messageEditText.setText("");
             callAPI(question);
             welcomeTextView.setVisibility(View.GONE);
@@ -118,7 +102,7 @@ public class Frag4_Empty extends Fragment {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                messageList.add(new com.example.tourlist.Message(message,sentBy));
+                messageList.add(new Message(message,sentBy));
                 messageAdapter.notifyDataSetChanged();
                 recyclerView.smoothScrollToPosition(messageAdapter.getItemCount());
             }
@@ -127,12 +111,12 @@ public class Frag4_Empty extends Fragment {
 
     void addResponse(String response){
         messageList.remove(messageList.size()-1);
-        addToChat(response, com.example.tourlist.Message.SENT_BY_BOT);
+        addToChat(response, Message.SENT_BY_BOT);
     }
 
     void callAPI(String question){
         //okhttp
-        messageList.add(new Message("Typing... ", com.example.tourlist.Message.SENT_BY_BOT));
+        messageList.add(new Message("Typing... ", Message.SENT_BY_BOT));
 
         JSONObject jsonBody = new JSONObject();
         try {
@@ -190,4 +174,80 @@ public class Frag4_Empty extends Fragment {
     }
 
 
+    public static class Message {
+        public static String SENT_BY_ME = "me";
+        public static String SENT_BY_BOT="bot";
+
+        String message;
+        String sentBy;
+
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
+
+        public String getSentBy() {
+            return sentBy;
+        }
+
+        public void setSentBy(String sentBy) {
+            this.sentBy = sentBy;
+        }
+
+        public Message(String message, String sentBy) {
+            this.message = message;
+            this.sentBy = sentBy;
+        }
+    }
+
+    public static class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHolder> {
+
+        List<Message> messageList;
+        public MessageAdapter(List<Message> messageList) {
+            this.messageList = messageList;
+        }
+
+        @NonNull
+        @Override
+        public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View chatView = LayoutInflater.from(parent.getContext()).inflate(R.layout.frag4_chat_item,null);
+            MyViewHolder myViewHolder = new MyViewHolder(chatView);
+            return myViewHolder;
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+            Message message = messageList.get(position);
+            if(message.getSentBy().equals(Message.SENT_BY_ME)){
+                holder.leftChatView.setVisibility(View.GONE);
+                holder.rightChatView.setVisibility(View.VISIBLE);
+                holder.rightTextView.setText(message.getMessage());
+            }else{
+                holder.rightChatView.setVisibility(View.GONE);
+                holder.leftChatView.setVisibility(View.VISIBLE);
+                holder.leftTextView.setText(message.getMessage());
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return messageList.size();
+        }
+
+        public class MyViewHolder extends RecyclerView.ViewHolder{
+            LinearLayout leftChatView,rightChatView;
+            TextView leftTextView,rightTextView;
+
+            public MyViewHolder(@NonNull View itemView) {
+                super(itemView);
+                leftChatView  = itemView.findViewById(R.id.left_chat_view);
+                rightChatView = itemView.findViewById(R.id.right_chat_view);
+                leftTextView = itemView.findViewById(R.id.left_chat_text_view);
+                rightTextView = itemView.findViewById(R.id.right_chat_text_view);
+            }
+        }
+    }
 }

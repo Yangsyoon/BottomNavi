@@ -1,4 +1,4 @@
-package com.example.tourlist;
+package com.example.tourlist.Tourist_Search_Activity;
 
 public class Message {
     public static String SENT_BY_ME = "me";

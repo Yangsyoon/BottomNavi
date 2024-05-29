@@ -1,15 +1,12 @@
-package com.example.tourlist;
+package com.example.tourlist.Main;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.Window;
-import android.view.WindowManager;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -17,6 +14,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.tourlist.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private Frag1_Register frag1_register;
     private Frag2_FavoriteList frag2_favoriteList;
     private Frag3_NaverMap frag3_NaverMap;
-    private Frag4_Empty frag4_Empty;
+    private Frag4_Gpt frag4_Empty;
     private Frag5_TouristFragment frag5_TouristFragment;
 
     private FirebaseAuth mAuth;
@@ -48,15 +46,15 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // 최하단 네비게이션 바. 색상
-        Window window = getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setNavigationBarColor(ContextCompat.getColor(this, R.color.darkblue));
+//        Window window = getWindow();
+//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//        window.setNavigationBarColor(ContextCompat.getColor(this, R.color.darkblue));
 
         frag1_login = new Frag1_Login();
         frag1_register = new Frag1_Register();
         frag2_favoriteList = new Frag2_FavoriteList();
         frag3_NaverMap = new Frag3_NaverMap();
-        frag4_Empty = new Frag4_Empty();
+        frag4_Empty = new Frag4_Gpt();
         frag5_TouristFragment = new Frag5_TouristFragment();
 
         bottomNavigationView = findViewById(R.id.bottomNavi);
@@ -99,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
                         tag = "Favorite";
                     } else if (currentFragment instanceof Frag3_NaverMap) {
                         tag = "NaverMap";
-                    } else if (currentFragment instanceof Frag4_Empty) {
+                    } else if (currentFragment instanceof Frag4_Gpt) {
                         tag = "Empty";
                     } else if (currentFragment instanceof Frag5_TouristFragment) {
                         tag = "Tourist";

@@ -1,4 +1,4 @@
-package com.example.tourlist;
+package com.example.tourlist.Tourist_Search_Activity;
 
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -7,6 +7,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.tourlist.R;
+
 import java.util.List;
 
 public class AttractionAdapter extends RecyclerView.Adapter<AttractionAdapter.AttractionViewHolder> {

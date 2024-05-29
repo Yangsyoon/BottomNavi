@@ -1,4 +1,4 @@
-package com.example.tourlist;
+package com.example.tourlist.Tourist_Search_Activity;
 
 import static android.content.ContentValues.TAG;
 
@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.tourlist.R;
 
 public class TouristPlaceDetailActivity extends AppCompatActivity {
 

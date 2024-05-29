@@ -1,4 +1,4 @@
-package com.example.tourlist;
+package com.example.tourlist.Tourist_Search_Activity;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.tourlist.R;
 
 import java.util.List;
 
@@ -21,7 +23,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View chatView = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_item,null);
+        View chatView = LayoutInflater.from(parent.getContext()).inflate(R.layout.frag4_chat_item,null);
         MyViewHolder myViewHolder = new MyViewHolder(chatView);
         return myViewHolder;
     }

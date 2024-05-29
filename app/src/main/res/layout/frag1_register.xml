@@ -5,8 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Frag1_Register"
-    android:background="@color/blue"
+    tools:context=".Main.Frag1.Frag1_Register"
+    android:background="@color/white"
     >
 
     <EditText

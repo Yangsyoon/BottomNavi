@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".Memory_Activity.MemoryActivity">
+
+    <TextView
+        android:id="@+id/location_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
+        android:text="Location Name"
+        android:padding="8dp"
+        android:gravity="center"/>
+
+    <ImageView
+        android:id="@+id/memory_image"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="16dp"
+        android:background="#e0e0e0"
+        android:contentDescription="Memory image"
+        android:scaleType="centerCrop"
+        android:onClick="selectImage"
+        />
+
+    <TextView
+        android:id="@+id/memory_display"
+        android:layout_width="379dp"
+        android:layout_height="282dp"
+        android:padding="16dp"
+        android:text="Click to add a memory"
+        android:textColor="@android:color/black"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/memory_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter your memory"
+        android:padding="16dp"
+        android:visibility="gone"/> <!-- 기본적으로 감춰진 상태 -->
+
+   <!-- <TextView
+        android:id="@+id/second_memory_display"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:text="Click to add additional text"
+        android:padding="16dp" />
+
+    <EditText
+        android:id="@+id/second_memory_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter additional text"
+        android:padding="16dp"
+        android:visibility="gone"/> &lt;!&ndash; 기본적으로 감춰진 상태 &ndash;&gt;-->
+
+    <Button
+        android:id="@+id/save_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Save Memory" />
+</LinearLayout>

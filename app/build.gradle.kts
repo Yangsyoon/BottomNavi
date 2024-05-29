@@ -42,6 +42,7 @@ dependencies {
 
     implementation(libs.firebase.auth)
     implementation(libs.firebase.database)
+    implementation(libs.firebase.storage)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
@@ -59,21 +60,33 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.0.0"))
 
     // Add the dependency for the Firebase Authentication library
+
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation("com.google.firebase:firebase-auth-ktx")
 
     // Also add the dependency for the Google Play services library and specify its version
-    implementation("com.google.android.gms:play-services-auth:21.1.1")
+    implementation("com.google.android.gms:play-services-auth:21.2.0")
 
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
+    implementation ("androidx.recyclerview:recyclerview:1.3.2")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
-
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
 
     //gpt api sdk
     implementation("com.squareup.okhttp3:okhttp:4.10.0")
 
     //장소 api sdk
     implementation ("com.google.android.libraries.places:places:3.4.0")
+
+
+    //이미지 가져오기.
+    implementation ("com.github.bumptech.glide:glide:4.11.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.11.0")
+
+    // FirebaseUI Storage only
+    implementation ("com.firebaseui:firebase-ui-storage:7.2.0")
+
+
 
 
 }

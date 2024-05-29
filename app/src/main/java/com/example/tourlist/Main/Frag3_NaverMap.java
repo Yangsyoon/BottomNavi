@@ -1,15 +1,16 @@
-package com.example.tourlist;
+package com.example.tourlist.Main;
+
+import static android.widget.Toast.LENGTH_SHORT;
 
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.PointF;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -22,7 +23,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 
@@ -30,10 +30,11 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NoConnectionError;
 import com.android.volley.ParseError;
 import com.android.volley.TimeoutError;
+import com.example.tourlist.R;
+import com.example.tourlist.Tourist_Search_Activity.TouristPlace;
+import com.example.tourlist.Tourist_Search_Activity.TouristPlaceDataHolder;
+import com.example.tourlist.Tourist_Search_Activity.TouristPlaceDetailActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.AutocompletePrediction;
 import com.google.android.libraries.places.api.model.PhotoMetadata;
@@ -47,17 +48,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
 import com.naver.maps.geometry.LatLng;
-import com.naver.maps.map.CameraAnimation;
-import com.naver.maps.map.CameraUpdate;
 import com.naver.maps.map.LocationTrackingMode;
 import com.naver.maps.map.MapView;
 import com.naver.maps.map.NaverMap;
-import com.naver.maps.map.NaverMapOptions;
 import com.naver.maps.map.OnMapReadyCallback;
 import com.naver.maps.map.UiSettings;
 import com.naver.maps.map.overlay.InfoWindow;
@@ -65,6 +60,7 @@ import com.naver.maps.map.overlay.Marker;
 
 
 import com.naver.maps.map.overlay.Overlay;
+import com.naver.maps.map.overlay.OverlayImage;
 import com.naver.maps.map.util.FusedLocationSource;
 
 
@@ -93,26 +89,12 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.naver.maps.map.util.FusedLocationSource;
-
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
-
-import java.io.IOException;
-import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
-import java.util.Set;
-import com.naver.maps.map.overlay.Marker;
-import com.naver.maps.map.overlay.OverlayImage;
+
 public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
     private String fragmentTag="NaverMap";
 
@@ -158,13 +140,20 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
     /////////////////////////////////////////////////
     private ArrayList<String> selectedPlaces = new ArrayList<>();
     private FusedLocationProviderClient fusedLocationClient;
-
-
-
-
-
-
     private PlacesClient placesClient;
+
+
+    /////
+    // 두 개의 마커를 저장할 변수
+    private Marker firstMarker = null;
+    private Marker secondMarker = null;
+    private boolean isSelectingMarkers = false; // 마커 선택 모드를 나타내는 변수
+    private Marker tour; // 클래스 멤버 변수로 선언
+    private LatLng destinationLatLng; // 추가
+    private LatLng sourceLatLng; // 추가
+    private String sourceName; // 추가
+    private String destinationName; // 추가
+    ///////////////////////////////////////
 
     private Button placeNameButton;
     private TouristPlace selectedPlace;
@@ -194,6 +183,7 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
             @Override
             public void onClick(View v) {
                 if (selectedPlace != null) {
+
                     searchPlaceIdByName(selectedPlace.getPlaceName(), selectedPlace);
                 } else {
                     Toast.makeText(getContext(), "선택된 장소가 없습니다.", Toast.LENGTH_SHORT).show();
@@ -317,19 +307,93 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
 
 
 
+
+
+        //길찾기!!!
+        // 마커 클릭 리스너
+        Button routeButton = view.findViewById(R.id.view_map_button); // 경로 버튼의 ID를 사용하여 버튼을 찾습니다.
+        routeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (firstMarker == null) {
+                    firstMarker = tour;
+                    Toast.makeText(getContext(), "첫 번째 마커 선택: " + firstMarker.getCaptionText(), LENGTH_SHORT).show();
+                } else if (secondMarker == null) {
+                    secondMarker = tour;
+                    Toast.makeText(getContext(), "두 번째 마커 선택: " + secondMarker.getCaptionText(), LENGTH_SHORT).show();
+                    // 선택된 두 마커의 이름을 가져와서 대중교통 길찾기 URL 생성
+                    String sourceName = firstMarker.getCaptionText();
+                    String destinationName = secondMarker.getCaptionText();
+                    LatLng sourceLatLng = firstMarker.getPosition();
+                    LatLng destinationLatLng = secondMarker.getPosition();
+                    String url = generateTransitRouteURL(sourceLatLng, sourceName, destinationLatLng, destinationName);
+
+                    Toast.makeText(getContext(), "url: "+url, LENGTH_SHORT).show();
+                    // 생성된 URL로 네이버 지도 앱을 열기
+                    openNaverMapWithTransitRoute(url);
+                } else {
+                    // 이미 두 개의 마커가 선택되어 있음
+                    Toast.makeText(getContext(), "이미 두 개의 마커를 선택하셨습니다.", LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+
+
         // 공공데이터로부터 관광지 정보 받아오기
         loadTouristPlaces();
 
     }
 
 
+    private String generateTransitRouteURL(LatLng sourceLatLng, String sourceName, LatLng destinationLatLng, String destinationName) {
+        String url = "nmap://route/public?";
+        try {
+            url += "slat=" + sourceLatLng.latitude;
+            url += "&slng=" + sourceLatLng.longitude;
+            url += "&sname=" + URLEncoder.encode(sourceName, "UTF-8"); // 이름에 공백 등이 있을 수 있으므로 인코딩
+            url += "&dlat=" + destinationLatLng.latitude;
+            url += "&dlng=" + destinationLatLng.longitude;
+            url += "&dname=" + URLEncoder.encode(destinationName, "UTF-8"); // 이름에 공백 등이 있을 수 있으므로 인코딩
+            url += "&appname=com.example.tourlist"; // 앱 이름 추가
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return url;
+    }
+
+    private void openNaverMapWithTransitRoute(String url) {
+
+        url="nmap://map?&TourList=com.example.tourlist";
+
+//        url = "nmap://actionPath?parameter=value&appname=com.example.tourlist";
+
+
+
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        intent.addCategory(Intent.CATEGORY_BROWSABLE);
+        List<ResolveInfo> list = getActivity().getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+
+
+
+
+        if (list == null || list.isEmpty()) {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("nmap://map?&TourList=com.example.tourlist")));
+//            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.nhn.android.nmap")));
+        } else {
+            startActivity(intent);
+        }
+    }
+
+
 
     private void setupMarkerIcon(Marker marker) {
-        // 마커 아이콘 설정
-        OverlayImage icon = OverlayImage.fromResource(R.drawable.marker_icon); // 새로운 아이콘 리소스 사용
-        marker.setIcon(icon);
-        // marker.setWidth와 marker.setHeight는 사용하지 않습니다. 아이콘 자체를 작은 크기로 준비합니다.
-        marker.setIconTintColor(Color.parseColor("#FFA500")); // 주황색으로 설정
+        //마커 아이콘 설정
+        OverlayImage icon = OverlayImage.fromResource(R.drawable.baseline_location_on_24); // 새로운 아이콘 리소스 사용
+       marker.setIcon(icon);
+       // marker.setWidth와 marker.setHeight는 사용하지 않습니다. 아이콘 자체를 작은 크기로 준비합니다.
+       // 주황색으로 설정
     }
 
 
@@ -407,7 +471,7 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
     }
 
 
-    private void addMarkers() {
+    /*private void addMarkers() {
         for (String place : selectedPlaces) {
             // 장소 이름을 위도와 경도로 변환하여 마커 추가
             Geocoder geocoder = new Geocoder(requireContext(), Locale.getDefault());
@@ -441,7 +505,7 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
                 Log.e(TAG, "Error adding marker for place: " + place, e);
             }
         }
-    }
+    }*/
 
 
 
@@ -498,110 +562,6 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
         RequestQueue queue = Volley.newRequestQueue(requireActivity());
         queue.add(request);
     }
-
-
-
-//    private void processXmlResponse(String response) {
-//        try {
-//            // XML 파싱
-//            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-//            XmlPullParser parser = factory.newPullParser();
-//            parser.setInput(new StringReader(response));
-//
-//            // XML 문서를 읽으면서 관광지 정보를 추출하고 지도에 마커를 추가
-//            int eventType = parser.getEventType();
-//            while (eventType != XmlPullParser.END_DOCUMENT) {
-//                if (eventType == XmlPullParser.START_TAG && parser.getName().equals("record")) {
-//                    // 각 record 태그마다 관광지 정보 추출
-//                    String placeName = "";
-//                    double latitude = 0.0;
-//                    double longitude = 0.0;
-//
-//                    while (!(eventType == XmlPullParser.END_TAG && parser.getName().equals("record"))) {
-//                        if (eventType == XmlPullParser.START_TAG) {
-//                            String tagName = parser.getName();
-//                            switch (tagName) {
-//                                case "관광지명":
-//                                    placeName = parser.nextText();
-//                                    break;
-//                                case "위도":
-//                                    latitude = Double.parseDouble(parser.nextText());
-//                                    break;
-//                                case "경도":
-//                                    longitude = Double.parseDouble(parser.nextText());
-//                                    break;
-//                                default:
-//                                    break;
-//                            }
-//                        }
-//                        eventType = parser.next();
-//                    }
-//
-//                    // 마커 추가
-//                    LatLng latLng = new LatLng(latitude, longitude);
-//                    try {
-//
-//
-//                        Marker tourMarker = new Marker();
-//
-//
-//                        tourMarker.setPosition(latLng);
-//                        tourMarker.setCaptionText(placeName);
-//                        tourMarker.setTag(placeName);
-//
-//                        tourMarker.setMap(mMap);
-//
-//                        tourMarker.setOnClickListener(new Marker.OnClickListener() {
-//
-//
-//                            @Override
-//                            public boolean onClick(@NonNull Overlay overlay) {
-//                                Toast.makeText(getContext(), "마커 클릭됨 "+tourMarker.getCaptionText(), Toast.LENGTH_SHORT).show();
-//                                selectedMarker=tourMarker;
-//
-//                                TouristPlace place = (TouristPlace)tourMarker.getTag();
-//
-//                                Toast.makeText(getContext(),"asdfasd"+place,Toast.LENGTH_SHORT).show();
-//
-//                                if (place != null) {
-////                                     장소 검색을 통해 placeId 가져오기
-//
-//                                    searchPlaceIdByName(place.getPlaceName(), place);
-//                                }
-//                                return true; // true로 설정하여 기본 마커 클릭 동작을 유지하지 않음
-//
-//
-////                                return false;
-//                            }
-//
-//
-//                        });
-//
-//
-//
-//
-//
-//                        Log.d(TAG, "Tourist place marker added for: " + placeName + " at: " + latLng.toString());
-//                    } catch (Exception e) {
-//                        Log.e(TAG, "Error adding marker for tourist place: " + placeName, e);
-//                    }
-//                }
-//                eventType = parser.next();
-//            }
-//        } catch (XmlPullParserException e) {
-//            // XML 파싱 예외 처리
-//            Log.e(TAG, "Error parsing XML response", e);
-//            showToast("Error parsing XML response");
-//        } catch (IOException e) {
-//            // IO 예외 처리
-//            Log.e(TAG, "IO Exception occurred", e);
-//            showToast("IO Exception occurred");
-//        }
-//    }
-
-
-
-
 
 
 
@@ -671,6 +631,7 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
 
                         tourMarker.setPosition(latLng);
                         tourMarker.setCaptionText(placeName[0]);
+//                        tourMarker.setTag(new TouristPlace(placeName[0], latitude[0], longitude[0], address[0], description[0], phone[0])); // Tag에 객체 저장
 
 
 
@@ -702,6 +663,10 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
                             public boolean onClick(@NonNull Overlay overlay) {
                                 Toast.makeText(getContext(), "마커 클릭됨 " + tourMarker.getCaptionText(), Toast.LENGTH_SHORT).show();
                                 selectedMarker = tourMarker;
+                                tour = tourMarker;
+
+//                                infoWindow.open(tourMarker);
+
 
                                 TouristPlace place = (TouristPlace) tourMarker.getTag();
                                 if (place != null) {
@@ -847,7 +812,7 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
             // 받아온 데이터 베이스에서 키 받고,  그 키를 통해  favoriteLocation(위도 경도) 등록.
             String key = mDatabase.push().getKey();
 //            FavoriteLocation favoriteLocation = new FavoriteLocation(location.place_name, location.latitude, location.longitude);
-            FavoriteLocation favoriteLocation = new FavoriteLocation(place_name,latitude, longitude);
+            Frag2_FavoriteList.FavoriteLocation favoriteLocation = new Frag2_FavoriteList.FavoriteLocation(place_name,latitude, longitude);
             mDatabase.child(key).setValue(favoriteLocation).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     Toast.makeText(getContext(), "즐겨찾기에 추가되었습니다.", Toast.LENGTH_SHORT).show();
@@ -861,84 +826,6 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
 
 
 }
-
-
-class FavoriteLocation {
-    public double latitude;
-    public double longitude;
-    private String place_name; // 장소 이름 추가
-
-    private String key; // 추가된 필드
-
-    public FavoriteLocation() {
-        // Default constructor required for calls to DataSnapshot.getValue(FavoriteLocation.class)
-    }
-
-    public FavoriteLocation(String place_name,double latitude, double longitude) {
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.place_name = place_name;
-    }
-
-    /*public FavoriteLocation(String place_name, double latitude, double longitude) {
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.place_name = place_name;
-    }*/
-
-
-    public double getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
-    public double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
-    }
-
-
-    public String getName() {
-        return place_name;
-    }
-
-    public void setName(String name) {
-        this.place_name = name;
-    }
-
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-
-
-    @Override
-    public String toString() {
-        return place_name != null ? place_name : "Lat: " + latitude + ", Lng: " + longitude;
-    }
-
-
-
-
-
-
-
-}
-
-
-
-
-
 
 
 

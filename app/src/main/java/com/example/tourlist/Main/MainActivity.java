@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private boolean isUserInteraction = false;
+    private int currentTabId = R.id.action_account; // 현재 탭을 추적
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,18 +64,22 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 isUserInteraction = true;
 
-                int n = menuItem.getItemId();
-                if(n==R.id.action_account)
-                    setFrag(0);
-                if(n==R.id.action_memory)
-                    setFrag(1);
-                if(n==R.id.action_map)
-                    setFrag(2);
-                if(n==R.id.action_empty)
-                    setFrag(3);
-                if(n==R.id.action_tourist)
-                    setFrag(4);
+                int nextTabId = menuItem.getItemId();
+                boolean forward = nextTabId > currentTabId;
 
+                if(nextTabId == R.id.action_account) {
+                    setFrag(0, forward);
+                } else if(nextTabId == R.id.action_memory) {
+                    setFrag(1, forward);
+                } else if(nextTabId == R.id.action_map) {
+                    setFrag(2, forward);
+                } else if(nextTabId == R.id.action_empty) {
+                    setFrag(3, forward);
+                } else if(nextTabId == R.id.action_tourist) {
+                    setFrag(4, forward);
+                }
+
+                currentTabId = nextTabId;
                 return true;
             }
         });
@@ -129,13 +134,18 @@ public class MainActivity extends AppCompatActivity {
         });
 
         if (savedInstanceState == null) {
-            setFrag(0); //첫 프래그먼트 화면을 무엇으로 지정해줄 것인지 선택
+            setFrag(0, true); //첫 프래그먼트 화면을 무엇으로 지정해줄 것인지 선택
         }
     }
 
-    private void setFrag(int n) {
+    private void setFrag(int n, boolean forward) {
         fm = getSupportFragmentManager();
         ft = fm.beginTransaction();
+        if (forward) {
+            ft.setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
+        } else {
+            ft.setCustomAnimations(R.anim.slide_in_from_left, R.anim.slide_out_to_right);
+        }
         switch(n) {
             case 0:
                 ft.replace(R.id.main_frame, frag1_login);

@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -25,12 +26,21 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.naver.maps.geometry.LatLng;
+import com.naver.maps.map.CameraUpdate;
+import com.naver.maps.map.MapView;
+import com.naver.maps.map.NaverMap;
+import com.naver.maps.map.OnMapReadyCallback;
+import com.naver.maps.map.overlay.Marker;
 
-public class TouristPlaceDetailActivity extends AppCompatActivity {
+public class TouristPlaceDetailActivity extends AppCompatActivity implements OnMapReadyCallback {
     private FirebaseAuth mAuth;
-
+    private MapView mapView;
 
     private DatabaseReference mDatabase;
+
+    public TouristPlace place = TouristPlaceDataHolder.getInstance().getPlace();
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,7 +51,8 @@ public class TouristPlaceDetailActivity extends AppCompatActivity {
 
 
 
-        TouristPlace place = TouristPlaceDataHolder.getInstance().getPlace();
+
+
 
 
         Button favoriteButton = findViewById(R.id.addfavoriteButton);
@@ -84,6 +95,11 @@ public class TouristPlaceDetailActivity extends AppCompatActivity {
         } else {
             Log.e(TAG, "TouristPlace data is null");
         }
+
+        mapView = findViewById(R.id.naver_map_view);
+        mapView.onCreate(savedInstanceState);
+        mapView.getMapAsync(this);
+
     }
 
     private Bitmap base64ToBitmap(String base64String) {
@@ -121,5 +137,19 @@ public class TouristPlaceDetailActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    @Override
+    public void onMapReady(@NonNull NaverMap naverMap) {
+// 마커 설정
+        Marker marker = new Marker();
+        LatLng placeLocation = new LatLng(place.getLatitude(), place.getLongitude());
+        marker.setPosition(placeLocation);
+        marker.setMap(naverMap);
+        marker.setCaptionText(place.getPlaceName());
+
+        // 카메라 업데이트
+        CameraUpdate cameraUpdate = CameraUpdate.scrollTo(placeLocation);
+        naverMap.moveCamera(cameraUpdate);
     }
 }

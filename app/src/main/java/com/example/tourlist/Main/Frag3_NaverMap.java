@@ -288,17 +288,17 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
         });
 
         //상세로 버튼
-        placeNameButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (selectedPlace != null) {
-
-                    searchPlaceIdByName(selectedPlace.getPlaceName(), selectedPlace);
-                } else {
-                    Toast.makeText(getContext(), "선택된 장소가 없습니다.", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+//        placeNameButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (selectedPlace != null) {
+//
+//                    searchPlaceIdByName(selectedPlace.getPlaceName(), selectedPlace);
+//                } else {
+//                    Toast.makeText(getContext(), "선택된 장소가 없습니다.", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        });
 
 
 

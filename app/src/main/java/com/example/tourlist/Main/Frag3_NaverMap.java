@@ -18,11 +18,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 
@@ -30,11 +34,14 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NoConnectionError;
 import com.android.volley.ParseError;
 import com.android.volley.TimeoutError;
+import com.bumptech.glide.Glide;
 import com.example.tourlist.R;
 import com.example.tourlist.Tourist_Search_Activity.TouristPlace;
 import com.example.tourlist.Tourist_Search_Activity.TouristPlaceDataHolder;
 import com.example.tourlist.Tourist_Search_Activity.TouristPlaceDetailActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.AutocompletePrediction;
 import com.google.android.libraries.places.api.model.PhotoMetadata;
@@ -91,7 +98,6 @@ import com.android.volley.toolbox.Volley;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -117,45 +123,56 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
 
 
 
-
-
-    private Button btnCurrentLocation;
-    private Location currentLocation;
-
     private static final String TAG = "Frag3_GoogleMap";
 
 
     private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
-    private LatLng selectedLocation;
+//    private LatLng selectedLocation;
 
 
-    private Marker currentMarker;
-    private Marker selectedMarker;
-    private Marker poiMarker;
+
 
 
 
 
     /////////////////////////////////////////////////
-    private ArrayList<String> selectedPlaces = new ArrayList<>();
+//    private ArrayList<String> selectedPlaces = new ArrayList<>();
     private FusedLocationProviderClient fusedLocationClient;
     private PlacesClient placesClient;
 
 
     /////
     // 두 개의 마커를 저장할 변수
-    private Marker firstMarker = null;
-    private Marker secondMarker = null;
-    private boolean isSelectingMarkers = false; // 마커 선택 모드를 나타내는 변수
-    private Marker tour; // 클래스 멤버 변수로 선언
+    private Marker startMarker = null;
+    private Marker destinationMarker = null;
+
+    private Marker current_beforeMarker;
+    private Marker selectedMarker;
+    private Marker poiMarker;
+
     private LatLng destinationLatLng; // 추가
     private LatLng sourceLatLng; // 추가
     private String sourceName; // 추가
     private String destinationName; // 추가
+
+    private float distance;
     ///////////////////////////////////////
 
     private Button placeNameButton;
+    private Button startButton;
+    private Button destinationButton;
+
+    private CardView infoCard;
+    private TextView infoTitle;
+    private TextView infoDescription;
+    private TextView infoAddress;
+
+    private TextView tv_dist;
+
+    private ImageView iv_picture;
+
+    private Location currentLocation;
     private TouristPlace selectedPlace;
 
     @Nullable
@@ -178,7 +195,99 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
             Log.e(TAG, "Places SDK 초기화 실패", e);
         }
 
+
+
+        startButton=view.findViewById(R.id.start_button);
+
+        destinationButton=view.findViewById(R.id.destination_button);
+
+        Button favoriteButton = view.findViewById(R.id.btn_fav);
+
         placeNameButton = view.findViewById(R.id.place_name_button);
+
+
+
+
+        infoCard = view.findViewById(R.id.info_card);
+        infoTitle = view.findViewById(R.id.tv_name);
+        infoDescription = view.findViewById(R.id.tv_description);
+        infoAddress = view.findViewById(R.id.tv_address);
+
+        iv_picture=view.findViewById(R.id.iv_picture);
+
+        tv_dist=view.findViewById(R.id.tv_dist);
+
+        //지도 출력
+        mapView = view.findViewById(R.id.mapView);
+        mapView.onCreate(savedInstanceState);
+        mapView.getMapAsync(this);
+
+
+
+
+//        locationSource = new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE);
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
+
+
+
+
+        startButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (selectedMarker == null) {
+
+                    Toast.makeText(getContext(), "출발지 마커선택하세요 ", LENGTH_SHORT).show();
+
+
+                }
+                else{
+                    startMarker = selectedMarker;
+                    sourceLatLng = startMarker.getPosition();
+                    sourceName = startMarker.getCaptionText();
+                    Toast.makeText(getContext(), "출발지 마커 선택: " + startMarker.getCaptionText(), LENGTH_SHORT).show();
+
+                }
+
+            }
+
+        });
+
+
+        destinationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (selectedMarker == null) {
+                    Toast.makeText(getContext(), "도착지 마커 선택하세요: ", LENGTH_SHORT).show();
+
+
+                }
+                else{
+                    destinationMarker = selectedMarker;
+
+                    destinationLatLng = destinationMarker.getPosition();
+                    destinationName = destinationMarker.getCaptionText();
+                    Toast.makeText(getContext(), "도착지 마커 선택: " + destinationMarker.getCaptionText(), LENGTH_SHORT).show();
+
+                }
+            }
+        });
+
+        //즐겨찾기 추가 버튼
+        favoriteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (selectedMarker != null) {
+                    // 데이터베이스에 위도 경도 추가 함수...
+                    addFavoriteLocation(selectedMarker.getCaptionText(),selectedMarker.getPosition().latitude,selectedMarker.getPosition().longitude);
+                } else {
+                    Toast.makeText(getContext(), "먼저 마커를 클릭하여 위치를 선택하세요.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        //상세로 버튼
         placeNameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -191,29 +300,7 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
             }
         });
 
-        //지도 출력
-        mapView = view.findViewById(R.id.mapView);
-        mapView.onCreate(savedInstanceState);
-        mapView.getMapAsync(this);
 
-        locationSource = new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE);
-
-
-
-
-        //즐겨찾기 추가 버튼
-        Button favoriteButton = view.findViewById(R.id.btn_fav);
-        favoriteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (selectedMarker != null) {
-                    // 데이터베이스에 위도 경도 추가 함수...
-                    addFavoriteLocation(selectedMarker.getCaptionText(),selectedMarker.getPosition().latitude,selectedMarker.getPosition().longitude);
-                } else {
-                    Toast.makeText(getContext(), "먼저 마커를 클릭하여 위치를 선택하세요.", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
 
 
 
@@ -264,6 +351,7 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
 
 
         //지도 시작시, 현재 위치로.
+        getCurrentLocation();
 
         map.setLocationSource(locationSource);
         map.setLocationTrackingMode(LocationTrackingMode.Follow);
@@ -283,8 +371,8 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
             @Override
             public void onMapClick(@NonNull PointF pointF, @NonNull LatLng latLng) {
                 // 이전에 생성된 마커가 있으면 제거
-                if (currentMarker != null && selectedMarker!=currentMarker) {
-                    currentMarker.setMap(null);
+                if (current_beforeMarker != null && selectedMarker!= current_beforeMarker) {
+                    current_beforeMarker.setMap(null);
                 }
 
                 // 이전에 생성된 POI 마커가 있다면 제거합니다.
@@ -310,30 +398,54 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
 
 
         //길찾기!!!
-        // 마커 클릭 리스너
+        // 경로 버튼 클릭 리스너
         Button routeButton = view.findViewById(R.id.view_map_button); // 경로 버튼의 ID를 사용하여 버튼을 찾습니다.
         routeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (firstMarker == null) {
-                    firstMarker = tour;
-                    Toast.makeText(getContext(), "첫 번째 마커 선택: " + firstMarker.getCaptionText(), LENGTH_SHORT).show();
-                } else if (secondMarker == null) {
-                    secondMarker = tour;
-                    Toast.makeText(getContext(), "두 번째 마커 선택: " + secondMarker.getCaptionText(), LENGTH_SHORT).show();
+                if (startMarker == null) {
+//                    toMarker = tour;
+                    Toast.makeText(getContext(), "출발지 마커 선택하세요 ", LENGTH_SHORT).show();
+                } else if (destinationMarker == null) {
+//                    fromMarker = tour;
+                    Toast.makeText(getContext(), "도착지 마커 선택하세요", LENGTH_SHORT).show();
                     // 선택된 두 마커의 이름을 가져와서 대중교통 길찾기 URL 생성
-                    String sourceName = firstMarker.getCaptionText();
-                    String destinationName = secondMarker.getCaptionText();
-                    LatLng sourceLatLng = firstMarker.getPosition();
-                    LatLng destinationLatLng = secondMarker.getPosition();
+
+                } else {
+
+                    String sourceName = startMarker.getCaptionText();
+                    String destinationName = destinationMarker.getCaptionText();
+                    LatLng sourceLatLng = startMarker.getPosition();
+                    LatLng destinationLatLng = destinationMarker.getPosition();
                     String url = generateTransitRouteURL(sourceLatLng, sourceName, destinationLatLng, destinationName);
 
                     Toast.makeText(getContext(), "url: "+url, LENGTH_SHORT).show();
                     // 생성된 URL로 네이버 지도 앱을 열기
                     openNaverMapWithTransitRoute(url);
-                } else {
+
+
+                    destinationMarker =null;
+                    startMarker =null;
+
                     // 이미 두 개의 마커가 선택되어 있음
-                    Toast.makeText(getContext(), "이미 두 개의 마커를 선택하셨습니다.", LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(), "이미 두 개의 마커를 선택하셨습니다.", LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+        infoCard.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+//                infoCard.setVisibility(View.GONE);
+
+
+                if (selectedPlace != null) {
+
+                    searchPlaceIdByName(selectedPlace.getPlaceName(), selectedPlace);
+                } else {
+                    Toast.makeText(getContext(), "선택된 장소가 없습니다.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -341,9 +453,29 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
 
 
 
+
         // 공공데이터로부터 관광지 정보 받아오기
         loadTouristPlaces();
 
+    }
+
+    private void getCurrentLocation() {
+        try {
+            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                fusedLocationClient.getLastLocation().addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        if (location != null) {
+                            currentLocation = location;
+                            Toast.makeText(getContext(), "Current location acquired", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        } catch (SecurityException e) {
+            e.printStackTrace();
+            Toast.makeText(getContext(), "Location permission not granted", Toast.LENGTH_SHORT).show();
+        }
     }
 
 
@@ -365,9 +497,10 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
 
     private void openNaverMapWithTransitRoute(String url) {
 
-        url="nmap://map?&TourList=com.example.tourlist";
+//        url="nmap://map?&TourList=com.example.tourlist";
 
 //        url = "nmap://actionPath?parameter=value&appname=com.example.tourlist";
+//        url = "nmap://route/public?slat=37.4640070&slng=126.9522394&sname=%EC%84%9C%EC%9A%B8%EB%8C%80%ED%95%99%EA%B5%90&dlat=37.5209436&dlng=127.1230074&dname=%EC%98%AC%EB%A6%BC%ED%94%BD%EA%B3%B5%EC%9B%90&appname=com.example.myapp";
 
 
 
@@ -376,193 +509,15 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
         List<ResolveInfo> list = getActivity().getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
 
 
+        startActivity(intent);
 
-
-        if (list == null || list.isEmpty()) {
+        /*if (list == null || list.isEmpty()) {
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("nmap://map?&TourList=com.example.tourlist")));
 //            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.nhn.android.nmap")));
         } else {
             startActivity(intent);
-        }
+        }*/
     }
-
-
-
-    private void setupMarkerIcon(Marker marker) {
-        //마커 아이콘 설정
-        OverlayImage icon = OverlayImage.fromResource(R.drawable.baseline_location_on_24); // 새로운 아이콘 리소스 사용
-       marker.setIcon(icon);
-       // marker.setWidth와 marker.setHeight는 사용하지 않습니다. 아이콘 자체를 작은 크기로 준비합니다.
-       // 주황색으로 설정
-    }
-
-
-
-    // 이거 권한 요청하는 거라는데 뭐 안 뜨는데??
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,  @NonNull int[] grantResults) {
-        if (locationSource.onRequestPermissionsResult(
-                requestCode, permissions, grantResults)) {
-            return;
-        }
-        super.onRequestPermissionsResult(
-                requestCode, permissions, grantResults);
-    }
-
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        mapView.onStart();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mapView.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mapView.onPause();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        mapView.onStop();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        mapView.onDestroy();
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        mapView.onLowMemory();
-    }
-
-
-    //테스트삼아 함 해봄.
-    private void setupPOI() {
-        // 예제 POI 추가
-        LatLng poiLocation = new LatLng(37.5665, 126.9780); // 예제 좌표 (서울특별시청)
-
-        // 마커 추가
-        Marker marker = new Marker();
-        marker.setPosition(poiLocation);
-        marker.setMap(mMap);
-
-        // 정보 창 추가
-        InfoWindow infoWindow = new InfoWindow();
-        infoWindow.setAdapter(new InfoWindow.DefaultTextAdapter(getContext()) {
-            @NonNull
-            @Override
-            public CharSequence getText(@NonNull InfoWindow infoWindow) {
-                return "서울특별시청"; // 예제 POI 이름
-            }
-        });
-        infoWindow.open(marker);
-    }
-
-
-    /*private void addMarkers() {
-        for (String place : selectedPlaces) {
-            // 장소 이름을 위도와 경도로 변환하여 마커 추가
-            Geocoder geocoder = new Geocoder(requireContext(), Locale.getDefault());
-            try {
-                List<Address> addresses = geocoder.getFromLocationName(place, 1);
-                assert addresses != null;
-                if (!addresses.isEmpty()) {
-                    Address address = addresses.get(0);
-                    com.google.android.gms.maps.model.LatLng latLng = new com.google.android.gms.maps.model.LatLng(address.getLatitude(), address.getLongitude());
-//                    mMap.addMarker(new MarkerOptions().position(latLng).title(place));// google
-
-                    double lat=latLng.latitude;
-                    double longt=latLng.longitude;
-
-                    LatLng placeLocation = new LatLng(lat, longt);
-
-
-                    // 마커 추가
-                    Marker marker = new Marker();
-                    marker.setPosition(placeLocation);
-                    marker.setTag(place);
-                    marker.setMap(mMap);
-
-
-
-                    Log.d(TAG, "Marker added for place: " + place + " at: " + latLng.toString());
-                } else {
-                    Log.d(TAG, "No addresses found for place: " + place);
-                }
-            } catch (IOException e) {
-                Log.e(TAG, "Error adding marker for place: " + place, e);
-            }
-        }
-    }*/
-
-
-
-
-    private void loadTouristPlaces() {
-        // 공공 데이터 API 엔드포인트
-        String url = "https://www.data.go.kr/download/15021141/standard.do";
-        String apiKey = "M4q3CWc0OP6VctrSKmKMdcNJAY3CWOj5XmhvM7WF2GkyXgdKb2IpCrGO8LRWl9Wl9986gSB%2Bi6t29viXcyV58g%3D%3D"; // 여기에 공공 데이터에서 발급한 API 키를 입력합니다.
-        String requestUrl = url + "?dataType=xml&ServiceKey=" + apiKey + "&pageNo=1&numOfRows=100";
-
-        // API 요청
-        StringRequest request = new StringRequest(Request.Method.GET, requestUrl,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        // 응답을 로그로 출력하여 확인
-                        Log.d(TAG, "API Response: " + response);
-
-                        // 응답의 시작 부분을 확인하여 XML 형식인지 확인
-                        if (response.trim().startsWith("<")) {
-                            // XML 응답을 처리하는 메서드 호출
-                            processXmlResponse(response);
-                            showToast("Tourist places loaded successfully");
-                        } else {
-                            showToast("Received non-XML response");
-                        }
-                    }
-                },
-
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        if (error instanceof TimeoutError) {
-                            Log.e(TAG, "TimeoutError occurred while fetching tourist places.");
-                        } else if (error instanceof NoConnectionError) {
-                            Log.e(TAG, "NoConnectionError occurred while fetching tourist places.");
-                        } else if (error instanceof ParseError) {
-                            Log.e(TAG, "ParseError occurred while fetching tourist places.");
-                        } else {
-                            Log.e(TAG, "Unknown error occurred: " + error.getMessage());
-                        }
-                        showToast("Error fetching tourist places");
-                    }
-                });
-
-        // 요청에 타임아웃 설정 추가
-        request.setRetryPolicy(new DefaultRetryPolicy(
-                10000, // 10초
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
-        ));
-
-        // 요청을 큐에 추가
-        RequestQueue queue = Volley.newRequestQueue(requireActivity());
-        queue.add(request);
-    }
-
 
 
 
@@ -663,20 +618,59 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
                             public boolean onClick(@NonNull Overlay overlay) {
                                 Toast.makeText(getContext(), "마커 클릭됨 " + tourMarker.getCaptionText(), Toast.LENGTH_SHORT).show();
                                 selectedMarker = tourMarker;
-                                tour = tourMarker;
+//                                tour = tourMarker;
 
 //                                infoWindow.open(tourMarker);
+
+                                getCurrentLocation();
+
+                                    //거리 계산.
+                                if (currentLocation != null) {
+                                    Location markerLocation = new Location("");
+                                    markerLocation.setLatitude(selectedMarker.getPosition().latitude);
+                                    markerLocation.setLongitude(selectedMarker.getPosition().longitude);
+
+                                    distance = currentLocation.distanceTo(markerLocation);
+                                    float distanceInKm = distance / 1000;
+                                    Toast.makeText(getContext(), "Distance: " + distanceInKm + " km", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getContext(), "Current location not available", Toast.LENGTH_SHORT).show();
+                                }
+
 
 
                                 TouristPlace place = (TouristPlace) tourMarker.getTag();
                                 if (place != null) {
+                                    infoCard.setVisibility(View.VISIBLE);
+
+                                    // tourmarker클릭시, 위 info cardview 바뀜.
+                                    // 나중에 여기에 장소 정보를 설정할 수 있습니다
+                                    infoTitle.setText(place.getPlaceName());
+                                    infoDescription.setText(place.getDescription());
+                                    infoAddress.setText(place.getAddress());
+                                    loadPlaceImage(place);
+                                    String s= String.format("%.2f", distance/1000);
+                                    tv_dist.setText(s+"Km");
+
                                     selectedPlace = place;
-                                    placeNameButton.setText(place.getPlaceName());
-                                    placeNameButton.setVisibility(View.VISIBLE); // 버튼 보이기
-                                } else {
+//                                    placeNameButton.setText(place.getPlaceName());
+//                                    placeNameButton.setVisibility(View.VISIBLE); // 버튼 보이기
+                                }
+                                else {
                                     selectedPlace = null; // place가 null일 경우 selectedPlace를 null로 설정
                                     placeNameButton.setVisibility(View.GONE); // 버튼 숨기기
+
                                 }
+
+
+
+
+
+
+
+
+
+
                                 return true; // true로 설정하여 기본 마커 클릭 동작을 유지하지 않음
                             }
                         });
@@ -696,6 +690,205 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
             showToast("Error parsing XML response");
         }
     }
+
+    private void loadPlaceImage(TouristPlace place) {
+        FindAutocompletePredictionsRequest request = FindAutocompletePredictionsRequest.builder()
+                .setQuery(place.getPlaceName())
+                .build();
+
+        placesClient.findAutocompletePredictions(request).addOnSuccessListener(response -> {
+            if (!response.getAutocompletePredictions().isEmpty()) {
+                AutocompletePrediction prediction = response.getAutocompletePredictions().get(0);
+                String placeId = prediction.getPlaceId();
+                Log.d(TAG, "Found placeId: " + placeId);
+                fetchPlacePhoto_to_cardview(placeId, place);
+            } else {
+                Log.d(TAG, "No predictions found for place: " + place.getPlaceName());
+            }
+        }).addOnFailureListener(exception -> {
+            Log.e(TAG, "Error finding place predictions: " + exception.getMessage());
+        });
+    }
+
+    private void fetchPlacePhoto_to_cardview(String placeId, TouristPlace place) {
+        List<Place.Field> placeFields = Arrays.asList(Place.Field.PHOTO_METADATAS);
+
+        FetchPlaceRequest request = FetchPlaceRequest.builder(placeId, placeFields).build();
+
+        placesClient.fetchPlace(request).addOnSuccessListener(response -> {
+            Place fetchedPlace = response.getPlace();
+
+            if (fetchedPlace.getPhotoMetadatas() != null && !fetchedPlace.getPhotoMetadatas().isEmpty()) {
+                PhotoMetadata photoMetadata = fetchedPlace.getPhotoMetadatas().get(0);
+
+                FetchPhotoRequest photoRequest = FetchPhotoRequest.builder(photoMetadata)
+                        .setMaxWidth(500)
+                        .setMaxHeight(300)
+                        .build();
+
+                placesClient.fetchPhoto(photoRequest).addOnSuccessListener(fetchPhotoResponse -> {
+                    Bitmap bitmap = fetchPhotoResponse.getBitmap();
+                    if (bitmap != null) {
+                        Glide.with(this)
+                                .load(bitmap)
+                                .into(iv_picture);
+                        Log.d(TAG, "Photo loaded into ImageView for place: " + place.getPlaceName());
+                    } else {
+                        Log.d(TAG, "Bitmap is null");
+                    }
+                }).addOnFailureListener(exception -> {
+                    Log.e(TAG, "Error fetching photo: " + exception.getMessage());
+                });
+            } else {
+                Log.d(TAG, "No photo metadata available");
+            }
+        }).addOnFailureListener(exception -> {
+            Log.e(TAG, "Place not found: " + exception.getMessage());
+        });
+    }
+
+
+
+
+
+    private void setupMarkerIcon(Marker marker) {
+        //마커 아이콘 설정
+        OverlayImage icon = OverlayImage.fromResource(R.drawable.baseline_location_on_24); // 새로운 아이콘 리소스 사용
+       marker.setIcon(icon);
+       // marker.setWidth와 marker.setHeight는 사용하지 않습니다. 아이콘 자체를 작은 크기로 준비합니다.
+       // 주황색으로 설정
+    }
+
+
+
+    // 이거 권한 요청하는 거라는데 뭐 안 뜨는데??
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,  @NonNull int[] grantResults) {
+        if (locationSource.onRequestPermissionsResult(
+                requestCode, permissions, grantResults)) {
+            return;
+        }
+        super.onRequestPermissionsResult(
+                requestCode, permissions, grantResults);
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mapView.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mapView.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mapView.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mapView.onStop();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mapView.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mapView.onLowMemory();
+    }
+
+
+    //테스트삼아 함 해봄.
+    private void setupPOI() {
+        // 예제 POI 추가
+        LatLng poiLocation = new LatLng(37.5665, 126.9780); // 예제 좌표 (서울특별시청)
+
+        // 마커 추가
+        Marker marker = new Marker();
+        marker.setPosition(poiLocation);
+        marker.setMap(mMap);
+
+        // 정보 창 추가
+        InfoWindow infoWindow = new InfoWindow();
+        infoWindow.setAdapter(new InfoWindow.DefaultTextAdapter(getContext()) {
+            @NonNull
+            @Override
+            public CharSequence getText(@NonNull InfoWindow infoWindow) {
+                return "서울특별시청"; // 예제 POI 이름
+            }
+        });
+//        infoWindow.open(marker);
+    }
+
+
+
+
+    private void loadTouristPlaces() {
+        // 공공 데이터 API 엔드포인트
+        String url = "https://www.data.go.kr/download/15021141/standard.do";
+        String apiKey = "M4q3CWc0OP6VctrSKmKMdcNJAY3CWOj5XmhvM7WF2GkyXgdKb2IpCrGO8LRWl9Wl9986gSB%2Bi6t29viXcyV58g%3D%3D"; // 여기에 공공 데이터에서 발급한 API 키를 입력합니다.
+        String requestUrl = url + "?dataType=xml&ServiceKey=" + apiKey + "&pageNo=1&numOfRows=100";
+
+        // API 요청
+        StringRequest request = new StringRequest(Request.Method.GET, requestUrl,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // 응답을 로그로 출력하여 확인
+                        Log.d(TAG, "API Response: " + response);
+
+                        // 응답의 시작 부분을 확인하여 XML 형식인지 확인
+                        if (response.trim().startsWith("<")) {
+                            // XML 응답을 처리하는 메서드 호출
+                            processXmlResponse(response);
+                            showToast("Tourist places loaded successfully");
+                        } else {
+                            showToast("Received non-XML response");
+                        }
+                    }
+                },
+
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (error instanceof TimeoutError) {
+                            Log.e(TAG, "TimeoutError occurred while fetching tourist places.");
+                        } else if (error instanceof NoConnectionError) {
+                            Log.e(TAG, "NoConnectionError occurred while fetching tourist places.");
+                        } else if (error instanceof ParseError) {
+                            Log.e(TAG, "ParseError occurred while fetching tourist places.");
+                        } else {
+                            Log.e(TAG, "Unknown error occurred: " + error.getMessage());
+                        }
+                        showToast("Error fetching tourist places");
+                    }
+                });
+
+        // 요청에 타임아웃 설정 추가
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10000, // 10초
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
+
+        // 요청을 큐에 추가
+        RequestQueue queue = Volley.newRequestQueue(requireActivity());
+        queue.add(request);
+    }
+
 
 
     private void searchPlaceIdByName(String placeName, TouristPlace place) {
@@ -786,7 +979,6 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
         Log.d(TAG, "Encoded bitmap to Base64: " + encoded);
         return encoded;
     }
-
 
 
 

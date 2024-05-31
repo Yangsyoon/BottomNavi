@@ -148,6 +148,12 @@ public class Frag5_TouristFragment extends Fragment {
     }
 
     private void filter(String text, String region) {
+        if (attractions == null || attractions.isEmpty()) {
+            // 데이터가 아직 로드되지 않았습니다.
+            Toast.makeText(getContext(), "데이터가 로드되지 않았습니다.", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "Attractions data is null or empty. Skipping filter.");
+            return;
+        }
         filteredAttractions.clear();
         for (TouristAttraction attraction : attractions) {
             if ((attraction.getName().contains(text) || attraction.getAddress().contains(text)) &&

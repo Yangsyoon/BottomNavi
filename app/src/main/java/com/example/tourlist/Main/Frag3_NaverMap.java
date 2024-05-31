@@ -812,7 +812,7 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
             // 받아온 데이터 베이스에서 키 받고,  그 키를 통해  favoriteLocation(위도 경도) 등록.
             String key = mDatabase.push().getKey();
 //            FavoriteLocation favoriteLocation = new FavoriteLocation(location.place_name, location.latitude, location.longitude);
-            Frag2_FavoriteList.FavoriteLocation favoriteLocation = new Frag2_FavoriteList.FavoriteLocation(place_name,latitude, longitude);
+            FavoriteLocation favoriteLocation = new FavoriteLocation(place_name,latitude, longitude);
             mDatabase.child(key).setValue(favoriteLocation).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     Toast.makeText(getContext(), "즐겨찾기에 추가되었습니다.", Toast.LENGTH_SHORT).show();

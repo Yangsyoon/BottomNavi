@@ -2,27 +2,57 @@ package com.example.tourlist.Tourist_Search_Activity;
 
 import static android.content.ContentValues.TAG;
 
+import static java.security.AccessController.getContext;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.tourlist.Main.FavoriteLocation;
+import com.example.tourlist.Main.Frag2_FavoriteList;
 import com.example.tourlist.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class TouristPlaceDetailActivity extends AppCompatActivity {
+    private FirebaseAuth mAuth;
+
+
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tourist_place_detail);
 
+        mAuth = FirebaseAuth.getInstance();
+
+
+
         TouristPlace place = TouristPlaceDataHolder.getInstance().getPlace();
+
+
+        Button favoriteButton = findViewById(R.id.addfavoriteButton);
+        favoriteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    // 데이터베이스에 위도 경도 추가 함수...
+//                Toast.makeText(TouristPlaceDetailActivity.this, "zclikclick.", Toast.LENGTH_SHORT).show();
+                    addFavoriteLocation(place.getPlaceName(), place.getLatitude(), place.getLongitude());
+            }
+        });
 
         if (place != null) {
             TextView placeNameTextView = findViewById(R.id.placeNameTextView);
@@ -63,6 +93,33 @@ public class TouristPlaceDetailActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.e(TAG, "Error decoding Base64 string", e);
             return null;
+        }
+    }
+
+    private void addFavoriteLocation(String place_name, double latitude, double longitude) {
+
+        Log.d(TAG, "addFavoriteLocation called");
+
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+
+            // 해당 유저 계정에 해당하는 데이터베이스 받아옴.
+
+            String userId = user.getUid();
+            mDatabase = FirebaseDatabase.getInstance().getReference("users").child(userId).child("favorites");
+
+
+            // 받아온 데이터 베이스에서 키 받고,  그 키를 통해  favoriteLocation(위도 경도) 등록.
+            String key = mDatabase.push().getKey();
+//            FavoriteLocation favoriteLocation = new FavoriteLocation(location.place_name, location.latitude, location.longitude);
+            FavoriteLocation favoriteLocation = new FavoriteLocation(place_name,latitude, longitude);
+            mDatabase.child(key).setValue(favoriteLocation).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Toast.makeText(this, "즐겨찾기에 추가되었습니다.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "즐겨찾기 추가 실패", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 }

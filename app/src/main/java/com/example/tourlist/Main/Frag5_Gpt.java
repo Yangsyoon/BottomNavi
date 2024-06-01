@@ -134,6 +134,8 @@ public class Frag5_Gpt extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        int a;//git merge test
+
         RequestBody body = RequestBody.create(jsonBody.toString(),JSON);
         Request request = new Request.Builder()
                 .url("\n" +

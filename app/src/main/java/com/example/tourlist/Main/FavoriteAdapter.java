@@ -2,6 +2,7 @@ package com.example.tourlist.Main;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tourlist.Memory_Activity.MemoryActivity;
 import com.example.tourlist.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
@@ -20,6 +25,9 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Favori
     private List<FavoriteLocation> favoriteLocations;
     private Context context;
     private OnItemLongClickListener onItemLongClickListener;
+
+
+    private DatabaseReference mDatabase;
 
     public FavoriteAdapter(Context context, List<FavoriteLocation> favoriteLocations) {
         this.context = context;
@@ -63,10 +71,45 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Favori
     }
 
     public void removeItem(int position) {
-        favoriteLocations.remove(position);
-        notifyItemRemoved(position);
-        // 여기서 데이터베이스에서 항목을 삭제하는 코드를 추가할 수 있습니다.
+        if (position < 0 || position >= favoriteLocations.size()) {
+            // 인덱스가 유효한 범위를 벗어나는 경우
+            Log.e("FavoriteAdapter", "Index out of bounds: " + position);
+            return;
+        }
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+
+        if (user != null) {
+            String userId = user.getUid();
+            mDatabase = FirebaseDatabase.getInstance().getReference("users").child(userId).child("favorites");
+
+            FavoriteLocation location = favoriteLocations.get(position);
+            String key = location.getKey();
+
+            if (key != null) {
+                mDatabase.child(key).removeValue().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        if (position < favoriteLocations.size()) {
+                            favoriteLocations.remove(position);
+                            notifyItemRemoved(position);
+                            notifyItemRangeChanged(position, favoriteLocations.size());
+                        }
+                    } else {
+                        // 오류 처리
+                        Log.e("FavoriteAdapter", "Failed to remove item from database");
+                    }
+                });
+            } else {
+                if (position < favoriteLocations.size()) {
+                    favoriteLocations.remove(position);
+                    notifyItemRemoved(position);
+                    notifyItemRangeChanged(position, favoriteLocations.size());
+                }
+            }
+        }
     }
+
 
     public static class FavoriteViewHolder extends RecyclerView.ViewHolder {
         public TextView favoriteName;

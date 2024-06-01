@@ -32,7 +32,7 @@ public class Frag1_Register extends Fragment {
     //이것만으로도 회원가입은 구현 가능. 근데 데이터베이스로 관리해야...
 
     private DatabaseReference mDatabaseReference; //실시간 데이터베이스. 서버연동.
-    private EditText mEtEmail, mEtPwd;
+    private EditText mEtEmail, mEtPwd,mEtnickname;
     private Button mBtnRegister; //회원가입 버튼
 
 
@@ -50,6 +50,7 @@ public class Frag1_Register extends Fragment {
 
         mEtEmail=view.findViewById(R.id.et_email);
         mEtPwd=view.findViewById(R.id.et_pwd);
+        mEtnickname=view.findViewById(R.id.et_nickname);
         mBtnRegister=view.findViewById(R.id.btn_register);
 
         mBtnRegister.setOnClickListener(new View.OnClickListener() {
@@ -58,6 +59,7 @@ public class Frag1_Register extends Fragment {
                 //회원가입 처리 시작
                 String email = mEtEmail.getText().toString(); //사용자가 입력한 값을 가져온다. 문자열로 변환
                 String pwd = mEtPwd.getText().toString();
+                String nickname = mEtnickname.getText().toString();
 
                 //Firebase Auth 진행. 회원가입.
                 mFirebaseAuth.createUserWithEmailAndPassword(email, pwd).addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
@@ -71,6 +73,7 @@ public class Frag1_Register extends Fragment {
                             account.setIdToken(user.getUid());// 고유값이다.. 정도로 이해ㅣ.
                             account.setEmailId(user.getEmail()); // 로그인 성공했으니,email 적어도 되지 않나..?
                             account.setPassword(pwd);
+                            account.setNickname(nickname);
 
                             //setValue: database에 insert삽입 행위.
                             mDatabaseReference.child("UserAccount").child(user.getUid()).setValue(account);
@@ -147,6 +150,7 @@ public class Frag1_Register extends Fragment {
 
         private String emailId; // 이메일 아이디
         private String password;// 비밀번호
+        private String nickname;//
 
 
         public UserAccount() {
@@ -176,5 +180,11 @@ public class Frag1_Register extends Fragment {
         public void setPassword(String password) {
             this.password = password;
         }
+
+        public String getNickname() {return nickname;}
+
+        public void setNickname(String nickname) {
+            this.nickname = nickname;
+            }
     }
 }

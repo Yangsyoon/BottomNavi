@@ -116,7 +116,7 @@ private void save_Text(String locationKey) {
         Log.d("MemoryActivity3", "Memory ...database");
 
 
-        mDatabase.child(userId).child(locationKey).child("text").setValue(text)
+        mDatabase.child(user.getEmail()).child(locationKey).child("text").setValue(text)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Log.d("MemoryActivity", "Memory saved");
@@ -243,7 +243,7 @@ private void getFireBaseProfileImage(String locationKey) {
     FirebaseUser user = mAuth.getCurrentUser();
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageReference = storage.getReference();
-    StorageReference pathReference = storageReference.child("memories").child(user.getUid()).child(locationKey);//.child("1.jpg");
+    StorageReference pathReference = storageReference.child("memories").child(user.getEmail()).child(locationKey);//.child("1.jpg");
     if (pathReference == null) {
         Toast.makeText(MemoryActivity.this, "저장소에 사진이 없습니다." ,Toast.LENGTH_SHORT).show();
         Log.d("check1", "저장소사진없."+locationKey);

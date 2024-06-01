@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private Frag2_FavoriteList frag2_favoriteList;
     private Frag3_NaverMap frag3_NaverMap;
     private Frag5_Gpt frag4_Empty;
-    private Frag4_TouristFragment frag4_TouristFragment;
+    private Frag4_Tourist_Search frag4_TouristSearch;
 
     private FirebaseAuth mAuth;
     private boolean isUserInteraction = false;
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         frag2_favoriteList = new Frag2_FavoriteList();
         frag3_NaverMap = new Frag3_NaverMap();
         frag4_Empty = new Frag5_Gpt();
-        frag4_TouristFragment = new Frag4_TouristFragment();
+        frag4_TouristSearch = new Frag4_Tourist_Search();
 
         bottomNavigationView = findViewById(R.id.bottomNavi);
         bottomNavigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
                         tag = "NaverMap";
                     } else if (currentFragment instanceof Frag5_Gpt) {
                         tag = "Empty";
-                    } else if (currentFragment instanceof Frag4_TouristFragment) {
+                    } else if (currentFragment instanceof Frag4_Tourist_Search) {
                         tag = "Tourist";
                     }
 
@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
                 ft.addToBackStack(null);
                 break;
             case 4:
-                ft.replace(R.id.main_frame, frag4_TouristFragment);
+                ft.replace(R.id.main_frame, frag4_TouristSearch);
                 ft.addToBackStack(null);
                 break;
         }

@@ -39,7 +39,7 @@
     </activity>
 
     <activity
-        android:name=".Tourist_Search_Activity.TouristPlaceDetailActivity"
+        android:name=".Tourist_Detail_Activity.TouristPlaceDetailActivity"
         android:exported="true"
 
 

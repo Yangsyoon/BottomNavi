@@ -36,9 +36,9 @@ import com.android.volley.ParseError;
 import com.android.volley.TimeoutError;
 import com.bumptech.glide.Glide;
 import com.example.tourlist.R;
-import com.example.tourlist.Tourist_Search_Activity.TouristPlace;
-import com.example.tourlist.Tourist_Search_Activity.TouristPlaceDataHolder;
-import com.example.tourlist.Tourist_Search_Activity.TouristPlaceDetailActivity;
+import com.example.tourlist.Tourist_Detail_Activity.Detail_files.TouristPlace;
+import com.example.tourlist.Tourist_Detail_Activity.Detail_files.TouristPlaceDataHolder;
+import com.example.tourlist.Tourist_Detail_Activity.TouristPlaceDetailActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -340,6 +340,8 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
     public void onMapReady(@NonNull NaverMap map){
 
         mMap = map;
+
+//        Toast.makeText(getContext(), "호롤ㄹ", Toast.LENGTH_SHORT).show();
 
         Log.d(TAG, "GoogleMap is ready");
 
@@ -814,7 +816,7 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
     //테스트삼아 함 해봄.
     private void setupPOI() {
         // 예제 POI 추가
-        LatLng poiLocation = new LatLng(37.5665, 126.9780); // 예제 좌표 (서울특별시청)
+//        LatLng poiLocation = new LatLng(37.5665, 126.9780); // 예제 좌표 (서울특별시청)
 
         // 마커 추가
 //        Marker marker = new Marker();

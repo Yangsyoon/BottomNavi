@@ -1,4 +1,4 @@
-package com.example.tourlist.Tourist_Search_Activity;
+package com.example.tourlist.Tourist_Detail_Activity.Detail_files;
 
 public class TouristAttraction {
 

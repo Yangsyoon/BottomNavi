@@ -20,11 +20,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tourlist.R;
-import com.example.tourlist.Tourist_Search_Activity.TouristAttraction;
-import com.example.tourlist.Tourist_Search_Activity.TouristPlace;
-import com.example.tourlist.Tourist_Search_Activity.TouristPlaceDataHolder;
-import com.example.tourlist.Tourist_Search_Activity.TouristPlaceDetailActivity;
-import com.example.tourlist.Tourist_Search_Activity.TouristViewModel;
+import com.example.tourlist.Tourist_Detail_Activity.Detail_files.TouristAttraction;
+import com.example.tourlist.Tourist_Detail_Activity.Detail_files.TouristPlace;
+import com.example.tourlist.Tourist_Detail_Activity.Detail_files.TouristPlaceDataHolder;
+import com.example.tourlist.Tourist_Detail_Activity.TouristPlaceDetailActivity;
+import com.example.tourlist.Tourist_Detail_Activity.Detail_files.TouristViewModel;
 import com.google.android.libraries.places.api.model.AutocompletePrediction;
 //
 
@@ -50,7 +50,7 @@ import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRe
 import com.google.android.libraries.places.api.net.PlacesClient;
 
 
-public class Frag4_TouristFragment extends Fragment {
+public class Frag4_Tourist_Search extends Fragment {
     private static final String TAG = "Frag5_GoogleMap";
 
     private List<TouristAttraction> attractions;
@@ -64,7 +64,7 @@ public class Frag4_TouristFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.frag5_tourist, container, false);
+        View view = inflater.inflate(R.layout.frag4_tourist, container, false);
 
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
@@ -175,7 +175,7 @@ public class Frag4_TouristFragment extends Fragment {
             @NonNull
             @Override
             public AttractionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.frag5_item_attraction, parent, false);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.frag4_item_attraction, parent, false);
                 return new AttractionViewHolder(view);
             }
 

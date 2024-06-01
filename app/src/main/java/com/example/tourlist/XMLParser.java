@@ -1,6 +1,6 @@
 package com.example.tourlist;
 
-import com.example.tourlist.Tourist_Search_Activity.TouristAttraction;
+import com.example.tourlist.Tourist_Detail_Activity.Detail_files.TouristAttraction;
 
 import org.w3c.dom.*;
 import javax.xml.parsers.*;

@@ -50,7 +50,7 @@ import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRe
 import com.google.android.libraries.places.api.net.PlacesClient;
 
 
-public class Frag5_TouristFragment extends Fragment {
+public class Frag4_TouristFragment extends Fragment {
     private static final String TAG = "Frag5_GoogleMap";
 
     private List<TouristAttraction> attractions;
@@ -64,7 +64,7 @@ public class Frag5_TouristFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_tourist, container, false);
+        View view = inflater.inflate(R.layout.frag5_tourist, container, false);
 
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
@@ -175,7 +175,7 @@ public class Frag5_TouristFragment extends Fragment {
             @NonNull
             @Override
             public AttractionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_attraction, parent, false);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.frag5_item_attraction, parent, false);
                 return new AttractionViewHolder(view);
             }
 

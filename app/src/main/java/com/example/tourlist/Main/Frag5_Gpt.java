@@ -34,7 +34,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class Frag4_Gpt extends Fragment {
+public class Frag5_Gpt extends Fragment {
     private String fragmentTag="Empty";
 
     public void setFragmentTag(String tag) {
@@ -138,7 +138,7 @@ public class Frag4_Gpt extends Fragment {
         Request request = new Request.Builder()
                 .url("\n" +
                         "https://api.openai.com/v1/chat/completions")
-                .header("Authorization","Bearer sk-proj-OAlTWMk3p7cVQ9RwkPgvT3BlbkFJMBrpUpQqRpOwqIxaI7Xx")
+                .header("Authorization","Bearer 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")
                 .post(body)
                 .build();
 
@@ -174,80 +174,82 @@ public class Frag4_Gpt extends Fragment {
     }
 
 
-    public static class Message {
-        public static String SENT_BY_ME = "me";
-        public static String SENT_BY_BOT="bot";
 
-        String message;
-        String sentBy;
+}
 
-        public String getMessage() {
-            return message;
-        }
+ class Message {
+    public static String SENT_BY_ME = "me";
+    public static String SENT_BY_BOT="bot";
 
-        public void setMessage(String message) {
-            this.message = message;
-        }
+    String message;
+    String sentBy;
 
-        public String getSentBy() {
-            return sentBy;
-        }
+    public String getMessage() {
+        return message;
+    }
 
-        public void setSentBy(String sentBy) {
-            this.sentBy = sentBy;
-        }
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
-        public Message(String message, String sentBy) {
-            this.message = message;
-            this.sentBy = sentBy;
+    public String getSentBy() {
+        return sentBy;
+    }
+
+    public void setSentBy(String sentBy) {
+        this.sentBy = sentBy;
+    }
+
+    public Message(String message, String sentBy) {
+        this.message = message;
+        this.sentBy = sentBy;
+    }
+}
+
+class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHolder> {
+
+    List<Message> messageList;
+    public MessageAdapter(List<Message> messageList) {
+        this.messageList = messageList;
+    }
+
+    @NonNull
+    @Override
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View chatView = LayoutInflater.from(parent.getContext()).inflate(R.layout.frag4_chat_item,null);
+        MyViewHolder myViewHolder = new MyViewHolder(chatView);
+        return myViewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        Message message = messageList.get(position);
+        if(message.getSentBy().equals(Message.SENT_BY_ME)){
+            holder.leftChatView.setVisibility(View.GONE);
+            holder.rightChatView.setVisibility(View.VISIBLE);
+            holder.rightTextView.setText(message.getMessage());
+        }else{
+            holder.rightChatView.setVisibility(View.GONE);
+            holder.leftChatView.setVisibility(View.VISIBLE);
+            holder.leftTextView.setText(message.getMessage());
         }
     }
 
-    public static class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHolder> {
+    @Override
+    public int getItemCount() {
+        return messageList.size();
+    }
 
-        List<Message> messageList;
-        public MessageAdapter(List<Message> messageList) {
-            this.messageList = messageList;
-        }
+    public class MyViewHolder extends RecyclerView.ViewHolder{
+        LinearLayout leftChatView,rightChatView;
+        TextView leftTextView,rightTextView;
 
-        @NonNull
-        @Override
-        public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View chatView = LayoutInflater.from(parent.getContext()).inflate(R.layout.frag4_chat_item,null);
-            MyViewHolder myViewHolder = new MyViewHolder(chatView);
-            return myViewHolder;
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-            Message message = messageList.get(position);
-            if(message.getSentBy().equals(Message.SENT_BY_ME)){
-                holder.leftChatView.setVisibility(View.GONE);
-                holder.rightChatView.setVisibility(View.VISIBLE);
-                holder.rightTextView.setText(message.getMessage());
-            }else{
-                holder.rightChatView.setVisibility(View.GONE);
-                holder.leftChatView.setVisibility(View.VISIBLE);
-                holder.leftTextView.setText(message.getMessage());
-            }
-        }
-
-        @Override
-        public int getItemCount() {
-            return messageList.size();
-        }
-
-        public class MyViewHolder extends RecyclerView.ViewHolder{
-            LinearLayout leftChatView,rightChatView;
-            TextView leftTextView,rightTextView;
-
-            public MyViewHolder(@NonNull View itemView) {
-                super(itemView);
-                leftChatView  = itemView.findViewById(R.id.left_chat_view);
-                rightChatView = itemView.findViewById(R.id.right_chat_view);
-                leftTextView = itemView.findViewById(R.id.left_chat_text_view);
-                rightTextView = itemView.findViewById(R.id.right_chat_text_view);
-            }
+        public MyViewHolder(@NonNull View itemView) {
+            super(itemView);
+            leftChatView  = itemView.findViewById(R.id.left_chat_view);
+            rightChatView = itemView.findViewById(R.id.right_chat_view);
+            leftTextView = itemView.findViewById(R.id.left_chat_text_view);
+            rightTextView = itemView.findViewById(R.id.right_chat_text_view);
         }
     }
 }

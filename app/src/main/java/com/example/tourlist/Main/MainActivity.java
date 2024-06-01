@@ -28,8 +28,8 @@ public class MainActivity extends AppCompatActivity {
     private Frag1_Register frag1_register;
     private Frag2_FavoriteList frag2_favoriteList;
     private Frag3_NaverMap frag3_NaverMap;
-    private Frag4_Gpt frag4_Empty;
-    private Frag5_TouristFragment frag5_TouristFragment;
+    private Frag5_Gpt frag4_Empty;
+    private Frag4_TouristFragment frag4_TouristFragment;
 
     private FirebaseAuth mAuth;
     private boolean isUserInteraction = false;
@@ -55,8 +55,8 @@ public class MainActivity extends AppCompatActivity {
         frag1_register = new Frag1_Register();
         frag2_favoriteList = new Frag2_FavoriteList();
         frag3_NaverMap = new Frag3_NaverMap();
-        frag4_Empty = new Frag4_Gpt();
-        frag5_TouristFragment = new Frag5_TouristFragment();
+        frag4_Empty = new Frag5_Gpt();
+        frag4_TouristFragment = new Frag4_TouristFragment();
 
         bottomNavigationView = findViewById(R.id.bottomNavi);
         bottomNavigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
@@ -102,9 +102,9 @@ public class MainActivity extends AppCompatActivity {
                         tag = "Favorite";
                     } else if (currentFragment instanceof Frag3_NaverMap) {
                         tag = "NaverMap";
-                    } else if (currentFragment instanceof Frag4_Gpt) {
+                    } else if (currentFragment instanceof Frag5_Gpt) {
                         tag = "Empty";
-                    } else if (currentFragment instanceof Frag5_TouristFragment) {
+                    } else if (currentFragment instanceof Frag4_TouristFragment) {
                         tag = "Tourist";
                     }
 
@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
                 ft.addToBackStack(null);
                 break;
             case 4:
-                ft.replace(R.id.main_frame, frag5_TouristFragment);
+                ft.replace(R.id.main_frame, frag4_TouristFragment);
                 ft.addToBackStack(null);
                 break;
         }

@@ -39,7 +39,7 @@ public class TouristPlaceDetailActivity extends AppCompatActivity implements OnM
 
     private DatabaseReference mDatabase;
 
-    public TouristPlace place = TouristPlaceDataHolder.getInstance().getPlace();
+    public TouristPlace place ;
 
 
     @Override
@@ -50,7 +50,7 @@ public class TouristPlaceDetailActivity extends AppCompatActivity implements OnM
         mAuth = FirebaseAuth.getInstance();
 
 
-
+        place = TouristPlaceDataHolder.getInstance().getPlace();
 
 
 
@@ -147,6 +147,10 @@ public class TouristPlaceDetailActivity extends AppCompatActivity implements OnM
         marker.setPosition(placeLocation);
         marker.setMap(naverMap);
         marker.setCaptionText(place.getPlaceName());
+
+        //
+
+//        placeLocation = new LatLng(37.5665, 126.9780);
 
         // 카메라 업데이트
         CameraUpdate cameraUpdate = CameraUpdate.scrollTo(placeLocation);

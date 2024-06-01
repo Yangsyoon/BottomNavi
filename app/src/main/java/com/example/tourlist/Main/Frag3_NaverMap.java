@@ -361,7 +361,7 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
         uiSettings.setLocationButtonEnabled(true);
 
         // POI 설정
-        setupPOI();
+        //setupPOI();
 
 
 
@@ -817,19 +817,19 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
         LatLng poiLocation = new LatLng(37.5665, 126.9780); // 예제 좌표 (서울특별시청)
 
         // 마커 추가
-        Marker marker = new Marker();
-        marker.setPosition(poiLocation);
-        marker.setMap(mMap);
+//        Marker marker = new Marker();
+//        marker.setPosition(poiLocation);
+//        marker.setMap(mMap);
 
         // 정보 창 추가
-        InfoWindow infoWindow = new InfoWindow();
-        infoWindow.setAdapter(new InfoWindow.DefaultTextAdapter(getContext()) {
-            @NonNull
-            @Override
-            public CharSequence getText(@NonNull InfoWindow infoWindow) {
-                return "서울특별시청"; // 예제 POI 이름
-            }
-        });
+//        InfoWindow infoWindow = new InfoWindow();
+//        infoWindow.setAdapter(new InfoWindow.DefaultTextAdapter(getContext()) {
+//            @NonNull
+//            @Override
+//            public CharSequence getText(@NonNull InfoWindow infoWindow) {
+//                return "서울특별시청"; // 예제 POI 이름
+//            }
+//        });
 //        infoWindow.open(marker);
     }
 

@@ -1,14 +1,10 @@
 package com.example.tourlist.Main;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -64,6 +60,12 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Favori
     @Override
     public int getItemCount() {
         return favoriteLocations.size();
+    }
+
+    public void removeItem(int position) {
+        favoriteLocations.remove(position);
+        notifyItemRemoved(position);
+        // 여기서 데이터베이스에서 항목을 삭제하는 코드를 추가할 수 있습니다.
     }
 
     public static class FavoriteViewHolder extends RecyclerView.ViewHolder {

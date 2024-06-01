@@ -224,8 +224,8 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
 
 
 
-
-//        locationSource = new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE);
+        //이거 현재 위치로 갈때 필요한거.
+        locationSource = new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
 

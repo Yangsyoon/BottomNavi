@@ -1,3 +1,5 @@
+import java.util.regex.Pattern.compile
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.gms.google.services)
@@ -85,6 +87,9 @@ dependencies {
 
     // FirebaseUI Storage only
     implementation ("com.firebaseui:firebase-ui-storage:7.2.0")
+    
+    //swipe layout
+//    implementation("com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1")
 
 
 

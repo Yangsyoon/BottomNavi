@@ -218,7 +218,7 @@ public class Frag4_TouristFragment extends Fragment {
 
 
 
-                            Intent intent = new Intent(itemView.getContext(), TouristPlaceDetailActivity.class);
+//                            Intent intent = new Intent(itemView.getContext(), TouristPlaceDetailActivity.class);
                             //상세 액티비티에서 인텐트받아서 설정하는게 아니라 place hold.. 로 설정해서 못쓴다.
 //                            intent.putExtra("PLACE_NAME", attraction.getName());
 //                            intent.putExtra("ADDRESS", attraction.getAddress());

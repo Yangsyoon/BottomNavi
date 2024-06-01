@@ -138,7 +138,8 @@ public class Frag5_Gpt extends Fragment {
         Request request = new Request.Builder()
                 .url("\n" +
                         "https://api.openai.com/v1/chat/completions")
-                .header("Authorization","Bearer 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")
+//                .header("Authorization","Bearer 1")
+//                .header("Authorization","Bearer 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")
                 .post(body)
                 .build();
 

@@ -2,22 +2,20 @@ package com.example.tourlist.Main;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.tourlist.Memory_Activity.MemoryActivity;
 import com.example.tourlist.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -31,7 +29,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Frag2_FavoriteList extends Fragment {
-    private String fragmentTag="Favorite";
+
+    private String fragmentTag = "Favorite";
 
     public void setFragmentTag(String tag) {
         this.fragmentTag = tag;
@@ -43,8 +42,8 @@ public class Frag2_FavoriteList extends Fragment {
 
     private View view;
 
-    private ListView favoriteListView;
-    private ArrayAdapter<String> adapter;
+    private RecyclerView favoriteRecyclerView;
+    private FavoriteAdapter adapter;
     private List<FavoriteLocation> favoriteLocations;
 
     private DatabaseReference mDatabase;
@@ -53,43 +52,26 @@ public class Frag2_FavoriteList extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.frag2_favorite_list,container,false);
+        view = inflater.inflate(R.layout.frag2_favorite_list, container, false);
 
-        favoriteListView = view.findViewById(R.id.favorite_list);
+        favoriteRecyclerView = view.findViewById(R.id.favorite_list);
+        favoriteRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         favoriteLocations = new ArrayList<>();
-        List<String> favoriteList = new ArrayList<>();
-        adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, favoriteList);
-        favoriteListView.setAdapter(adapter);
+        adapter = new FavoriteAdapter(getContext(), favoriteLocations);
+        favoriteRecyclerView.setAdapter(adapter);
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
 
         if (user != null) {
             String userId = user.getUid();
-            //데이타베이스에서 users에서 userid에서 favorite에 접근.
             mDatabase = FirebaseDatabase.getInstance().getReference("users").child(userId).child("favorites");
             loadFavoriteLocations();
         } else {
             Toast.makeText(getContext(), "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
-            // 로그인하지 않은 경우 이전 프레그먼트로 돌아감. 사실상 즐겨찾기 목록 종료
         }
 
-        // 항목을 클릭했을 때 추억 액티비티로 전환.
-        favoriteListView.setOnItemClickListener((parent, view, position, id) -> {
-            FavoriteLocation location = favoriteLocations.get(position);
-            Intent intent = new Intent(getActivity(), MemoryActivity.class);
-            intent.putExtra("location_key", location.getKey());
-            intent.putExtra("location_name", location.getName());
-            startActivity(intent);
-        });
-
-        // 항목을 길게 눌렀을 때 삭제
-        favoriteListView.setOnItemLongClickListener((parent, view, position, id) -> {
-            FavoriteLocation location = favoriteLocations.get(position);
-            showEditDialog(location);
-//            removeFavoriteLocation(location);
-            return true;
-        });
+        adapter.setOnItemLongClickListener(this::showEditDialog);
 
         return view;
     }
@@ -99,17 +81,13 @@ public class Frag2_FavoriteList extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 favoriteLocations.clear();
-                List<String> favoriteList = new ArrayList<>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     FavoriteLocation location = snapshot.getValue(FavoriteLocation.class);
                     if (location != null) {
                         location.setKey(snapshot.getKey());
                         favoriteLocations.add(location);
-                        favoriteList.add(location.toString());
                     }
                 }
-                adapter.clear();
-                adapter.addAll(favoriteList);
                 adapter.notifyDataSetChanged();
             }
 
@@ -119,22 +97,6 @@ public class Frag2_FavoriteList extends Fragment {
             }
         });
     }
-
-
-
-    private void removeFavoriteLocation(FavoriteLocation location) {
-        if (location.getKey() != null) {
-            mDatabase.child(location.getKey()).removeValue().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    Toast.makeText(getContext(), "즐겨찾기에서 삭제되었습니다.", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getContext(), "삭제 실패", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-    }
-
-
 
     private void showEditDialog(FavoriteLocation location) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -175,12 +137,4 @@ public class Frag2_FavoriteList extends Fragment {
             });
         }
     }
-
-
 }
-
-
-
-
-
-

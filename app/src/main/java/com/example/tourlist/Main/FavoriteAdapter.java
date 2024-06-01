@@ -87,13 +87,17 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Favori
             FavoriteLocation location = favoriteLocations.get(position);
             String key = location.getKey();
 
+//            favoriteLocations.remove(position);
+
+
+
             if (key != null) {
                 mDatabase.child(key).removeValue().addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         if (position < favoriteLocations.size()) {
                             favoriteLocations.remove(position);
-                            notifyItemRemoved(position);
-                            notifyItemRangeChanged(position, favoriteLocations.size());
+//                            notifyItemRemoved(position);
+//                            notifyItemRangeChanged(position, favoriteLocations.size());
                         }
                     } else {
                         // 오류 처리
@@ -103,8 +107,8 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Favori
             } else {
                 if (position < favoriteLocations.size()) {
                     favoriteLocations.remove(position);
-                    notifyItemRemoved(position);
-                    notifyItemRangeChanged(position, favoriteLocations.size());
+//                    notifyItemRemoved(position);
+//                    notifyItemRangeChanged(position, favoriteLocations.size());
                 }
             }
         }

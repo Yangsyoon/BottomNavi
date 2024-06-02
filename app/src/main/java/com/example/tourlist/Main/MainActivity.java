@@ -3,19 +3,25 @@ package com.example.tourlist.Main;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 
+import androidx.appcompat.widget.Toolbar;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.tourlist.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -35,6 +41,11 @@ public class MainActivity extends AppCompatActivity {
     private boolean isUserInteraction = false;
     private int currentTabId = R.id.action_account; // 현재 탭을 추적
 
+    private DrawerLayout drawerLayout;
+    private View drawerView;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
 //        Window window = getWindow();
 //        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 //        window.setNavigationBarColor(ContextCompat.getColor(this, R.color.darkblue));
+
+
 
         frag1_login = new Frag1_Login();
         frag1_register = new Frag1_Register();
@@ -136,7 +149,63 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             setFrag(0, true); //첫 프래그먼트 화면을 무엇으로 지정해줄 것인지 선택
         }
+
+        drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        drawerView = (View)findViewById(R.id.drawer);
+
+
+        ImageButton openbutton = findViewById(R.id.openbutton);
+        openbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.openDrawer(drawerView);
+            }
+        });
+
+        drawerLayout.setDrawerListener(listener);
+        drawerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.closeDrawer(drawerView);
+            }
+        });
+
+        Button button = findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Frag1_Login loginFragment = new Frag1_Login();
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.main_frame, loginFragment);
+                transaction.commit();
+
+                drawerLayout.closeDrawer(drawerView);
+            }
+        });
+
     }
+
+    DrawerLayout.DrawerListener listener = new DrawerLayout.DrawerListener() {
+        @Override
+        public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+            //슬라이드 했을때
+        }
+
+        @Override
+        public void onDrawerOpened(@NonNull View drawerView) {
+            //드로어가 오픈됐을때
+        }
+
+        @Override
+        public void onDrawerClosed(@NonNull View drawerView) {
+            //드로어가 닫혔을때
+        }
+
+        @Override
+        public void onDrawerStateChanged(int newState) {
+            //드로어 상태가 바뀌었을때
+        }
+    };
 
     private void setFrag(int n, boolean forward) {
         fm = getSupportFragmentManager();

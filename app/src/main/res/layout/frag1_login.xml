@@ -57,7 +57,7 @@
         android:layout_height="49dp"
         android:layout_margin="8dp"
         android:layout_marginBottom="88dp"
-        android:backgroundTint="#62C0F3"
+        android:backgroundTint="@color/darkblue"
         android:text="게스트 로그인"
         app:layout_constraintBottom_toTopOf="@+id/btn_login"
         app:layout_constraintEnd_toEndOf="@+id/btn_login"
@@ -74,7 +74,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btn_register"
         app:layout_constraintStart_toStartOf="parent"
-        android:backgroundTint="#62C0F3"
+        android:backgroundTint="@color/darkblue"
 
         />
 
@@ -86,7 +86,7 @@
         android:layout_margin="8dp"
 
         android:layout_marginBottom="10dp"
-        android:backgroundTint="#3E89DA"
+        android:backgroundTint="@color/blue"
         android:text="로그아웃"
         app:layout_constraintBottom_toTopOf="@+id/btn_register"
         app:layout_constraintEnd_toEndOf="parent"
@@ -100,7 +100,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:backgroundTint="#3E89DA"
+        android:backgroundTint="@color/blue"
 
         android:text="회원가입"
         app:layout_constraintBottom_toBottomOf="parent"

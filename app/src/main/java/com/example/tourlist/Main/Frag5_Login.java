@@ -22,7 +22,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class Frag1_Login extends Fragment {
+public class Frag5_Login extends Fragment {
     private String fragmentTag="Login";
 
     public void setFragmentTag(String tag) {
@@ -44,7 +44,7 @@ public class Frag1_Login extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.frag1_login,container,false);
+        view = inflater.inflate(R.layout.frag5_login,container,false);
 
 
         mAuth = FirebaseAuth.getInstance();//google
@@ -82,9 +82,9 @@ public class Frag1_Login extends Fragment {
                                         //로그인 성공
 
                                         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                                        Frag3_NaverMap frag3_NaverMap = new Frag3_NaverMap();
+                                        Frag1_NaverMap frag1_NaverMap = new Frag1_NaverMap();
                                         //main_layout에 homeFragment로 transaction 한다.
-                                        transaction.replace(R.id.main_frame, frag3_NaverMap);
+                                        transaction.replace(R.id.main_frame, frag1_NaverMap);
 
                                         // 백 스택에 추가합니다.
                                         transaction.addToBackStack(null);
@@ -119,9 +119,9 @@ public class Frag1_Login extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                Frag1_Register frag1_register = new Frag1_Register();
+                Frag5_Register frag5_register = new Frag5_Register();
                 //main_layout에 homeFragment로 transaction 한다.
-                transaction.replace(R.id.main_frame, frag1_register);
+                transaction.replace(R.id.main_frame, frag5_register);
                 //꼭 commit을 해줘야 바뀐다.
                 transaction.commit();
             }
@@ -148,9 +148,9 @@ public class Frag1_Login extends Fragment {
                             //로그인 성공
 
                             FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                            Frag3_NaverMap frag3_NaverMap = new Frag3_NaverMap();
+                            Frag1_NaverMap frag1_NaverMap = new Frag1_NaverMap();
                             //main_layout에 homeFragment로 transaction 한다.
-                            transaction.replace(R.id.main_frame, frag3_NaverMap);
+                            transaction.replace(R.id.main_frame, frag1_NaverMap);
 
                             // 백 스택에 추가합니다.
                             transaction.addToBackStack(null);

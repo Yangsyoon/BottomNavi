@@ -34,7 +34,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class Frag5_Gpt extends Fragment {
+public class Frag4_Gpt extends Fragment {
     private String fragmentTag="Empty";
 
     public void setFragmentTag(String tag) {
@@ -64,7 +64,7 @@ public class Frag5_Gpt extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.frag5_gpt,container,false);
+        view = inflater.inflate(R.layout.frag4_gpt,container,false);
 
         Message message;
 
@@ -219,7 +219,7 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHolder> {
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View chatView = LayoutInflater.from(parent.getContext()).inflate(R.layout.frag5_chat_item,null);
+        View chatView = LayoutInflater.from(parent.getContext()).inflate(R.layout.frag4_chat_item,null);
         MyViewHolder myViewHolder = new MyViewHolder(chatView);
         return myViewHolder;
     }

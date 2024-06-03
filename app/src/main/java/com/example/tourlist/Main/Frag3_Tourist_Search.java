@@ -55,7 +55,7 @@ import com.example.tourlist.Course.CourseViewModel;
 import com.example.tourlist.Course.TouristCourse;
 
 
-public class Frag4_Tourist_Search extends Fragment {
+public class Frag3_Tourist_Search extends Fragment {
     private static final String TAG = "Frag4_GoogleMap";
 
     private List<TouristAttraction> attractions;
@@ -73,7 +73,7 @@ public class Frag4_Tourist_Search extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.frag4_tourist, container, false);
+        View view = inflater.inflate(R.layout.frag3_tourist_search, container, false);
 
         RecyclerView recyclerView1_placelist = view.findViewById(R.id.recyclerView1);
         RecyclerView recyclerView2_course = view.findViewById(R.id.recyclerView2);

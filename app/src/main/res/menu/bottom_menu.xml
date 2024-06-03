@@ -18,7 +18,7 @@
 
 
     <item
-        android:id="@+id/action_tourist"
+        android:id="@+id/action_tourist_search"
         android:enabled="true"
         android:icon="@drawable/baseline_apps_24"
         android:menuCategory="secondary"
@@ -27,7 +27,7 @@
 
 
     <item
-        android:id="@+id/action_empty"
+        android:id="@+id/action_gpt"
         android:enabled="true"
         android:icon="@drawable/baseline_apps_24"
         android:menuCategory="secondary"

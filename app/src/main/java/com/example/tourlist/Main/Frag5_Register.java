@@ -23,7 +23,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class Frag1_Register extends Fragment {
+public class Frag5_Register extends Fragment {
 
     private View view;
 
@@ -40,7 +40,7 @@ public class Frag1_Register extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.frag1_register,container,false);
+        view = inflater.inflate(R.layout.frag5_register,container,false);
 
 
 
@@ -101,9 +101,9 @@ public class Frag1_Register extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                Frag1_Login frag1_login = new Frag1_Login();
+                Frag5_Login frag5_login = new Frag5_Login();
                 //main_layout에 homeFragment로 transaction 한다.
-                transaction.replace(R.id.main_frame, frag1_login);
+                transaction.replace(R.id.main_frame, frag5_login);
                 // 백 스택에 추가합니다.
                 transaction.addToBackStack(null);
 

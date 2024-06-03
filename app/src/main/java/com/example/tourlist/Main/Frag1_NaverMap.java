@@ -101,7 +101,7 @@ import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.List;
 
-public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
+public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback {
     private String fragmentTag="NaverMap";
 
     public void setFragmentTag(String tag) {
@@ -178,7 +178,7 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.frag3_navermap,container,false);
+        view = inflater.inflate(R.layout.frag1_navermap,container,false);
 
 
         try {

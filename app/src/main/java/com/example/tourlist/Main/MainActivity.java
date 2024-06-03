@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
-import androidx.appcompat.widget.Toolbar;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,7 +20,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.tourlist.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -30,12 +28,12 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private FragmentManager fm;
     private FragmentTransaction ft;
-    private Frag1_Login frag1_login;
-    private Frag1_Register frag1_register;
+    private Frag5_Login frag5_login;
+    private Frag5_Register frag5_register;
     private Frag2_FavoriteList frag2_favoriteList;
-    private Frag3_NaverMap frag3_NaverMap;
-    private Frag5_Gpt frag4_Empty;
-    private Frag4_Tourist_Search frag4_TouristSearch;
+    private Frag1_NaverMap frag1_NaverMap;
+    private Frag4_Gpt frag4_Gpt;
+    private Frag3_Tourist_Search frag3_TouristSearch;
     private ResizableFragment resizableFragment;
     private FirebaseAuth mAuth;
     private boolean isUserInteraction = false;
@@ -64,12 +62,12 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        frag1_login = new Frag1_Login();
-        frag1_register = new Frag1_Register();
+        frag5_login = new Frag5_Login();
+        frag5_register = new Frag5_Register();
         frag2_favoriteList = new Frag2_FavoriteList();
-        frag3_NaverMap = new Frag3_NaverMap();
-        frag4_Empty = new Frag5_Gpt();
-        frag4_TouristSearch = new Frag4_Tourist_Search();
+        frag1_NaverMap = new Frag1_NaverMap();
+        frag4_Gpt = new Frag4_Gpt();
+        frag3_TouristSearch = new Frag3_Tourist_Search();
         resizableFragment = new ResizableFragment();
 
         bottomNavigationView = findViewById(R.id.bottomNavi);
@@ -82,15 +80,15 @@ public class MainActivity extends AppCompatActivity {
                 boolean forward = nextTabId > currentTabId;
 
                 if(nextTabId == R.id.action_account) {
-                    setFrag(0, forward);
+                    setFrag(4, forward);
                 } else if(nextTabId == R.id.action_memory) {
                     setFrag(1, forward);
                 } else if(nextTabId == R.id.action_map) {
-                    setFrag(2, forward);
-                } else if(nextTabId == R.id.action_empty) {
+                    setFrag(0, forward);
+                } else if(nextTabId == R.id.action_gpt) {
                     setFrag(3, forward);
-                } else if(nextTabId == R.id.action_tourist) {
-                    setFrag(4, forward);
+                } else if(nextTabId == R.id.action_tourist_search) {
+                    setFrag(2, forward);
                 }
 
                 currentTabId = nextTabId;
@@ -110,15 +108,15 @@ public class MainActivity extends AppCompatActivity {
                 Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.main_frame);
 
                 if (currentFragment != null) {
-                    if (currentFragment instanceof Frag1_Login) {
+                    if (currentFragment instanceof Frag5_Login) {
                         tag = "Login";
                     } else if (currentFragment instanceof Frag2_FavoriteList) {
                         tag = "Favorite";
-                    } else if (currentFragment instanceof Frag3_NaverMap) {
+                    } else if (currentFragment instanceof Frag1_NaverMap) {
                         tag = "NaverMap";
-                    } else if (currentFragment instanceof Frag5_Gpt) {
-                        tag = "Empty";
-                    } else if (currentFragment instanceof Frag4_Tourist_Search) {
+                    } else if (currentFragment instanceof Frag4_Gpt) {
+                        tag = "Gpt";
+                    } else if (currentFragment instanceof Frag3_Tourist_Search) {
                         tag = "Tourist";
                     }
 
@@ -133,11 +131,11 @@ public class MainActivity extends AppCompatActivity {
                             case "NaverMap":
                                 bottomNavigationView.setSelectedItemId(R.id.action_map);
                                 break;
-                            case "Empty":
-                                bottomNavigationView.setSelectedItemId(R.id.action_empty);
+                            case "Gpt":
+                                bottomNavigationView.setSelectedItemId(R.id.action_gpt);
                                 break;
-                            case "Tourist":
-                                bottomNavigationView.setSelectedItemId(R.id.action_tourist);
+                            case "Tourist_Search":
+                                bottomNavigationView.setSelectedItemId(R.id.action_tourist_search);
                                 break;
                         }
                         int backStackEntryCount = getSupportFragmentManager().getBackStackEntryCount();
@@ -175,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Frag1_Login loginFragment = new Frag1_Login();
+                Frag5_Login loginFragment = new Frag5_Login();
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.main_frame, loginFragment);
                 transaction.commit();
@@ -217,8 +215,8 @@ public class MainActivity extends AppCompatActivity {
 //            ft.setCustomAnimations(R.anim.slide_in_from_left, R.anim.slide_out_to_right);
         }
         switch(n) {
-            case 0:
-                ft.replace(R.id.main_frame, frag1_login);
+            case 4:
+                ft.replace(R.id.main_frame, frag5_login);
                 removeResizableFragment(); // ResizableFragment 제거
                 break;
             case 1:
@@ -226,18 +224,18 @@ public class MainActivity extends AppCompatActivity {
                 ft.addToBackStack(null);
                 removeResizableFragment(); // ResizableFragment 제거
                 break;
-            case 2:
-                ft.replace(R.id.main_frame, frag3_NaverMap);
+            case 0:
+                ft.replace(R.id.main_frame, frag1_NaverMap);
                 ft.addToBackStack(null);
                 addResizableFragment(); // ResizableFragment 추가
                 break;
             case 3:
-                ft.replace(R.id.main_frame, frag4_Empty);
+                ft.replace(R.id.main_frame, frag4_Gpt);
                 ft.addToBackStack(null);
                 removeResizableFragment(); // ResizableFragment 제거
                 break;
-            case 4:
-                ft.replace(R.id.main_frame, frag4_TouristSearch);
+            case 2:
+                ft.replace(R.id.main_frame, frag3_TouristSearch);
                 ft.addToBackStack(null);
                 removeResizableFragment(); // ResizableFragment 제거
                 break;

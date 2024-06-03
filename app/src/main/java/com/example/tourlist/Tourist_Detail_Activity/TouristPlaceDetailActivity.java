@@ -21,7 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tourlist.Main.FavoriteLocation;
-import com.example.tourlist.Main.Frag1_Register;
+import com.example.tourlist.Main.Frag5_Register;
 import com.example.tourlist.R;
 import com.example.tourlist.Tourist_Detail_Activity.Comment.Comment;
 import com.example.tourlist.Tourist_Detail_Activity.Comment.CommentsAdapter;
@@ -42,7 +42,6 @@ import com.naver.maps.map.OnMapReadyCallback;
 import com.naver.maps.map.overlay.Marker;
 
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -166,7 +165,7 @@ public class TouristPlaceDetailActivity extends AppCompatActivity implements OnM
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()) {
-                        Frag1_Register.UserAccount account = snapshot.getValue(Frag1_Register.UserAccount.class);
+                        Frag5_Register.UserAccount account = snapshot.getValue(Frag5_Register.UserAccount.class);
                         if (account != null) {
                             userName[0] = account.getNickname();
                         }
@@ -234,7 +233,7 @@ public class TouristPlaceDetailActivity extends AppCompatActivity implements OnM
                 mDB.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        Frag1_Register.UserAccount userAccount = dataSnapshot.getValue(Frag1_Register.UserAccount.class);
+                        Frag5_Register.UserAccount userAccount = dataSnapshot.getValue(Frag5_Register.UserAccount.class);
                         if (userAccount != null) {
                             userName[0] = userAccount.getNickname();
                             // userName을 사용하여 UI 업데이트 등 수행

@@ -37,6 +37,7 @@ class XmlParser2 {
                         if (eventType == XmlPullParser.START_TAG) {
                             String tagName = parser.getName();
                             switch (tagName) {
+
 //                                case "subname":
 //                                    subname = parser.nextText();
 //                                    break;
@@ -46,6 +47,7 @@ class XmlParser2 {
                                 case "title":
                                     subname = parser.nextText();
                                     break;
+
                             }
                         }
                         eventType = parser.next();

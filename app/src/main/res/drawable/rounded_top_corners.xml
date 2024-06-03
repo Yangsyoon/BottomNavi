@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Solid background -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/white" />
+            <corners android:topLeftRadius="16dp" android:topRightRadius="16dp" />
+        </shape>
+    </item>
+
+    <!-- Stroke for top corners -->
+    <item android:left="0dp" android:right="0dp" android:top="0dp" android:bottom="-1dp">
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/transparent" />
+            <corners android:topLeftRadius="16dp" android:topRightRadius="16dp" />
+            <stroke android:width="1dp" android:color="#000000" />
+        </shape>
+    </item>
+</layer-list>

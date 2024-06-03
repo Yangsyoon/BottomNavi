@@ -13,13 +13,13 @@
         <!-- 터치 제스처를 위한 버튼 -->
         <ImageButton
             android:id="@+id/drag_button"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="369dp"
+            android:layout_height="31dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="10dp"
             android:background="?android:attr/selectableItemBackground"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_drag_handle" />
+            android:src="@drawable/ic_drag_handle_3" />
 
     </FrameLayout>
 

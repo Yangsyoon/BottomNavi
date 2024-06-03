@@ -212,9 +212,9 @@ public class MainActivity extends AppCompatActivity {
         fm = getSupportFragmentManager();
         ft = fm.beginTransaction();
         if (forward) {
-            ft.setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
+//            ft.setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
         } else {
-            ft.setCustomAnimations(R.anim.slide_in_from_left, R.anim.slide_out_to_right);
+//            ft.setCustomAnimations(R.anim.slide_in_from_left, R.anim.slide_out_to_right);
         }
         switch(n) {
             case 0:
@@ -265,8 +265,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         FirebaseUser user = mAuth.getCurrentUser();
-        if (user != null && !user.isAnonymous()) {
-            mAuth.signOut(); // 익명 계정이 아닌 경우에만 로그아웃
+        if (user != null ) {//&& !user.isAnonymous()// 익명 계정이 아닌 경우에만 로그아웃
+            mAuth.signOut(); //유저 있으면 로그아웃.
         }
     }
 }

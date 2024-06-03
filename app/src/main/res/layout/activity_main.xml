@@ -14,18 +14,6 @@
         tools:context=".Main.MainActivity"
         android:background="@color/white">
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottomNavi"
-            android:layout_width="406dp"
-            android:layout_height="96dp"
-            app:backgroundTint="@color/white"
-            app:itemIconTint="#000000"
-            app:itemTextColor="#000000"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/main_frame"
-            app:menu="@menu/bottom_menu" />
 
         <FrameLayout
             android:id="@+id/main_frame"
@@ -57,6 +45,21 @@
             android:scaleType="fitCenter"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
+
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNavi"
+            android:layout_width="406dp"
+            android:layout_height="96dp"
+            app:backgroundTint="@color/white"
+            app:itemIconTint="#000000"
+            app:itemTextColor="#000000"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/main_frame"
+            app:menu="@menu/bottom_menu" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

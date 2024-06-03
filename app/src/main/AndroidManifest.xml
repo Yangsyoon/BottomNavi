@@ -26,7 +26,7 @@
     <activity
         android:name=".Main.MainActivity"
         android:exported="true"
-
+        android:windowSoftInputMode="adjustPan"
 
         >
         <intent-filter>
@@ -50,6 +50,7 @@
     <activity
         android:name=".Memory_Activity.MemoryActivity"
         android:exported="true"
+
         >
     </activity>
 

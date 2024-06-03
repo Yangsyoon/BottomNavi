@@ -31,7 +31,7 @@ public class ResizableFragment extends Fragment {
         ImageButton dragButton = view.findViewById(R.id.drag_button);
 
         // 최소 높이를 200dp로 설정
-        minHeight = (int) (100 * getResources().getDisplayMetrics().density);
+        minHeight = (int) (40 * getResources().getDisplayMetrics().density);
 
         // 레이아웃이 그려진 후에 maxHeight를 설정
         view.post(new Runnable() {

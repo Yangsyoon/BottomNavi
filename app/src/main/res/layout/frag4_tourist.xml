@@ -7,9 +7,10 @@
 
     <EditText
         android:id="@+id/searchEditText"
-        android:layout_width="match_parent"
+        style="@style/SearchEditTextStyle"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:hint="Search" />
+        android:hint="Search here" />
 
     <HorizontalScrollView
         android:layout_width="match_parent"

@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private Frag3_NaverMap frag3_NaverMap;
     private Frag5_Gpt frag4_Empty;
     private Frag4_Tourist_Search frag4_TouristSearch;
-
+    private ResizableFragment resizableFragment;
     private FirebaseAuth mAuth;
     private boolean isUserInteraction = false;
     private int currentTabId = R.id.action_account; // 현재 탭을 추적
@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
         frag3_NaverMap = new Frag3_NaverMap();
         frag4_Empty = new Frag5_Gpt();
         frag4_TouristSearch = new Frag4_Tourist_Search();
+        resizableFragment = new ResizableFragment();
 
         bottomNavigationView = findViewById(R.id.bottomNavi);
         bottomNavigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
@@ -218,27 +219,48 @@ public class MainActivity extends AppCompatActivity {
         switch(n) {
             case 0:
                 ft.replace(R.id.main_frame, frag1_login);
+                removeResizableFragment(); // ResizableFragment 제거
                 break;
             case 1:
                 ft.replace(R.id.main_frame, frag2_favoriteList);
                 ft.addToBackStack(null);
+                removeResizableFragment(); // ResizableFragment 제거
                 break;
             case 2:
                 ft.replace(R.id.main_frame, frag3_NaverMap);
                 ft.addToBackStack(null);
+                addResizableFragment(); // ResizableFragment 추가
                 break;
             case 3:
                 ft.replace(R.id.main_frame, frag4_Empty);
                 ft.addToBackStack(null);
+                removeResizableFragment(); // ResizableFragment 제거
                 break;
             case 4:
                 ft.replace(R.id.main_frame, frag4_TouristSearch);
                 ft.addToBackStack(null);
+                removeResizableFragment(); // ResizableFragment 제거
                 break;
         }
         ft.commit();
     }
+    private void addResizableFragment() {
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.overlay_frame);
+        if (currentFragment == null) {
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.add(R.id.overlay_frame, resizableFragment);
+            fragmentTransaction.commit();
+        }
+    }
 
+    private void removeResizableFragment() {
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.overlay_frame);
+        if (currentFragment != null) {
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.remove(currentFragment);
+            fragmentTransaction.commit();
+        }
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();

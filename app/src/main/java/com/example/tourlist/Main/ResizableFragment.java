@@ -20,6 +20,7 @@ public class ResizableFragment extends Fragment {
     private static final String TAG = "ResizableFragment";
     private int minHeight; // px 단위의 최소 높이
     private int maxHeight; // 화면 높이에 대한 최대 높이
+    private int initialHeight; // px 단위의 초기 높이
 
     @Nullable
     @Override
@@ -32,13 +33,23 @@ public class ResizableFragment extends Fragment {
 
         // 최소 높이를 200dp로 설정
         minHeight = (int) (40 * getResources().getDisplayMetrics().density);
+//        initialHeight= (int) (40 * getResources().getDisplayMetrics().density);
 
         // 레이아웃이 그려진 후에 maxHeight를 설정
+        // 레이아웃이 그려진 후에 초기 높이 및 maxHeight를 설정
         view.post(new Runnable() {
             @Override
             public void run() {
                 maxHeight = view.getHeight();
                 Log.d(TAG, "Max height set to " + maxHeight);
+
+                // 초기 높이 설정
+//                if (resizableView.getHeight() < initialHeight) {
+//                    ViewGroup.LayoutParams layoutParams = resizableView.getLayoutParams();
+//                    layoutParams.height = initialHeight;
+//                    resizableView.setLayoutParams(layoutParams);
+//                    Log.d(TAG, "Initial height set to " + initialHeight);
+//                }
             }
         });
 

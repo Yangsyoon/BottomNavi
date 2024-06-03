@@ -6,7 +6,7 @@
     <FrameLayout
         android:id="@+id/resizable_view"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="40dp"
         android:layout_alignParentBottom="true"
         android:background="@drawable/rounded_top_corners">
 

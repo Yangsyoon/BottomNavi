@@ -116,7 +116,8 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="50dp"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
@@ -129,8 +130,7 @@
                     android:elevation="4dp"
                     android:text="출발지 선택"
                     android:textColor="@android:color/white"
-                    android:textSize="16sp"
-                     />
+                    android:textSize="16sp" />
 
                 <Button
                     android:id="@+id/destination_button"
@@ -141,16 +141,14 @@
                     android:elevation="4dp"
                     android:text="도착지 선택"
                     android:textColor="@android:color/white"
-                    android:textSize="16sp"
-                     />
+                    android:textSize="16sp" />
 
 
                 <Button
                     android:id="@+id/view_map_button"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="경로"
-                     />
+                    android:text="경로" />
 
 
                 <Button
@@ -161,23 +159,22 @@
                     android:elevation="4dp"
                     android:text="즐겨찾기 추가"
                     android:textColor="@android:color/white"
-                    android:textSize="16sp"
-                    />
+                    android:textSize="16sp" />
 
-                    <Button
-                        android:id="@+id/place_name_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:background="@drawable/rounded_button"
-                        android:elevation="4dp"
-                        android:text="Place Name"
-                        android:textColor="@android:color/white"
-                        android:textSize="16sp"
-                        android:visibility="gone"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                <Button
+                    android:id="@+id/place_name_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/rounded_button"
+                    android:elevation="4dp"
+                    android:text="Place Name"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </LinearLayout>
 

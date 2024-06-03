@@ -13,7 +13,7 @@ import com.example.tourlist.Tourist_Detail_Activity.TouristPlaceDetailActivity;
 
 import java.util.List;
 
-public class AttractionAdapter extends RecyclerView.Adapter<AttractionAdapter.AttractionViewHolder> {
+public class AttractionAdapter extends RecyclerView.Adapter<AttractionViewHolder> {
 
     private List<TouristAttraction> attractions;
 
@@ -39,26 +39,5 @@ public class AttractionAdapter extends RecyclerView.Adapter<AttractionAdapter.At
         return attractions.size();
     }
 
-    class AttractionViewHolder extends RecyclerView.ViewHolder {
 
-        Button attractionButton;
-
-        AttractionViewHolder(View itemView) {
-            super(itemView);
-            attractionButton = itemView.findViewById(R.id.attractionButton);
-        }
-
-        void bind(final TouristAttraction attraction) {
-            attractionButton.setText(attraction.getName());
-            attractionButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(itemView.getContext(), TouristPlaceDetailActivity.class);
-                    intent.putExtra("PLACE_NAME", attraction.getName());
-                    intent.putExtra("PLACE_ADDRESS", attraction.getAddress());
-                    itemView.getContext().startActivity(intent);
-                }
-            });
-        }
-    }
 }

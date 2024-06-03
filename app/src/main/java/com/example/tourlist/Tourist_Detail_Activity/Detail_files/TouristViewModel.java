@@ -13,6 +13,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.tourlist.Tourist_Detail_Activity.Detail_files.TouristAttraction;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -64,6 +65,8 @@ public class TouristViewModel extends AndroidViewModel {
 
         requestQueue.add(request);
     }
+
+//    https://apis.data.go.kr/B551011/KorService1/areaBasedList1?serviceKey={}&numOfRows=300&pageNo=1&MobileOS=ETC&MobileApp=AppTest&arrange=O&contentTypeId=25
 
     private List<TouristAttraction> processXmlResponse(String response) {
         List<TouristAttraction> attractions = new ArrayList<>();

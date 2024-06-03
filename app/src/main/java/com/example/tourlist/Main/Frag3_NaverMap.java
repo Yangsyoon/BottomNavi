@@ -185,7 +185,7 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
             // Places SDK 초기화
             if (getActivity() != null) {
                 Context context = getActivity().getApplicationContext();
-                Places.initialize(context, "AIzaSyBTmeSMNBR9Fp8IQ3SjG16BU3m-DJdSqPI");
+                Places.initialize(context, "AIzaSyAlkrLP2vM_bjmH2vFcRjNSQNN4IZkBKD4");
                 placesClient = Places.createClient(context);
                 Log.d(TAG, "Places SDK 초기화 성공");
             } else {
@@ -1014,6 +1014,9 @@ public class Frag3_NaverMap extends Fragment implements OnMapReadyCallback {
                     Toast.makeText(getContext(), "즐겨찾기 추가 실패", Toast.LENGTH_SHORT).show();
                 }
             });
+
+            mDatabase = FirebaseDatabase.getInstance().getReference("course").child(userId).child("favorites");
+
         }
     }
 

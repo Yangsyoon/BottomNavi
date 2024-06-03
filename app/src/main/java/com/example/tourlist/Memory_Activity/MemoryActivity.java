@@ -240,6 +240,7 @@ private void getFireBaseProfileImage(String locationKey) {
 //    load=(ImageView)findViewById(R.id.loadimg);
     Log.d("check1", "locationKey"+locationKey);
 
+
     FirebaseUser user = mAuth.getCurrentUser();
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageReference = storage.getReference();

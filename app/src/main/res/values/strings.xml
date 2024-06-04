@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">TourList</string>
+    <string name="open_button_description">Open menu</string>
+    <string name="fab_sub1_description">Sub action 1</string>
+    <string name="fab_sub2_description">Sub action 2</string>
+    <string name="fab_main_description">Main action</string>
 </resources>

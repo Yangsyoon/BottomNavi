@@ -31,25 +31,20 @@ public class ResizableFragment extends Fragment {
         final FrameLayout resizableView = view.findViewById(R.id.resizable_view);
         ImageButton dragButton = view.findViewById(R.id.drag_button);
 
+        // Frag2_FavoriteList를 추가합니다.
+        Frag2_FavoriteList frag2_favoriteList = new Frag2_FavoriteList();
+        getChildFragmentManager().beginTransaction()
+                .add(R.id.frameLayout_drag_button_below, frag2_favoriteList).commit();
+
         // 최소 높이를 200dp로 설정
         minHeight = (int) (40 * getResources().getDisplayMetrics().density);
-//        initialHeight= (int) (40 * getResources().getDisplayMetrics().density);
 
         // 레이아웃이 그려진 후에 maxHeight를 설정
-        // 레이아웃이 그려진 후에 초기 높이 및 maxHeight를 설정
         view.post(new Runnable() {
             @Override
             public void run() {
                 maxHeight = view.getHeight();
                 Log.d(TAG, "Max height set to " + maxHeight);
-
-                // 초기 높이 설정
-//                if (resizableView.getHeight() < initialHeight) {
-//                    ViewGroup.LayoutParams layoutParams = resizableView.getLayoutParams();
-//                    layoutParams.height = initialHeight;
-//                    resizableView.setLayoutParams(layoutParams);
-//                    Log.d(TAG, "Initial height set to " + initialHeight);
-//                }
             }
         });
 

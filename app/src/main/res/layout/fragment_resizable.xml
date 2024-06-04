@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -10,16 +11,38 @@
         android:layout_alignParentBottom="true"
         android:background="@drawable/rounded_top_corners">
 
-        <!-- 터치 제스처를 위한 버튼 -->
-        <ImageButton
-            android:id="@+id/drag_button"
-            android:layout_width="369dp"
-            android:layout_height="31dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="10dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_drag_handle_3" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!-- 터치 제스처를 위한 버튼 -->
+            <ImageButton
+                android:id="@+id/drag_button"
+                android:layout_width="369dp"
+                android:layout_height="31dp"
+                android:layout_gravity="center_horizontal"
+                android:background="?android:attr/selectableItemBackground"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_drag_handle_3"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/frameLayout_drag_button_below"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                 />
+
+            <FrameLayout
+                android:id="@+id/frameLayout_drag_button_below"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/drag_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+               >
+
+            </FrameLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     </FrameLayout>
 

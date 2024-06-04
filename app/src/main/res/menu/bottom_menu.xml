@@ -3,7 +3,7 @@
     <item
         android:id="@+id/action_map"
         android:enabled="true"
-        android:icon="@drawable/house_chimney"
+        android:icon="@drawable/home_24"
         android:menuCategory="secondary"
         android:title="지도"/>
 
@@ -11,7 +11,7 @@
     <item
         android:id="@+id/action_memory"
         android:enabled="true"
-        android:icon="@drawable/circle_star"
+        android:icon="@drawable/star_24"
         android:menuCategory="secondary"
         android:title="추억"/>
 
@@ -20,7 +20,7 @@
     <item
         android:id="@+id/action_tourist_search"
         android:enabled="true"
-        android:icon="@drawable/search_location"
+        android:icon="@drawable/search_location_24"
         android:menuCategory="secondary"
         android:title="검색 및 카테고리"
         />
@@ -29,7 +29,7 @@
     <item
         android:id="@+id/action_gpt"
         android:enabled="true"
-        android:icon="@drawable/gpt_ai"
+        android:icon="@drawable/artificial_intelligence_24"
         android:menuCategory="secondary"
         android:title="gpt"
         />
@@ -40,7 +40,7 @@
     <item
         android:id="@+id/action_account"
         android:enabled="true"
-        android:icon="@drawable/user"
+        android:icon="@drawable/user_24"
         android:title="내 계정"
         android:menuCategory="secondary"
         />

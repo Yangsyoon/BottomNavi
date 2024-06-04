@@ -49,7 +49,7 @@
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavi"
-            android:layout_width="406dp"
+            android:layout_width="0dp"
             android:layout_height="96dp"
             app:backgroundTint="@color/white"
             app:itemIconTint="#000000"
@@ -58,7 +58,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/main_frame"
-            app:menu="@menu/bottom_menu" />
+            app:menu="@menu/bottom_menu">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="#FFCFCFCF"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.bottomnavigation.BottomNavigationView>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

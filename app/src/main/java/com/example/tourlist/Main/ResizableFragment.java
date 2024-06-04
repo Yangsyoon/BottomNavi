@@ -10,10 +10,14 @@ import android.widget.ImageButton;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.example.tourlist.R;
+
+import java.lang.reflect.InvocationTargetException;
 
 public class ResizableFragment extends Fragment {
 
@@ -31,13 +35,13 @@ public class ResizableFragment extends Fragment {
         final FrameLayout resizableView = view.findViewById(R.id.resizable_view);
         ImageButton dragButton = view.findViewById(R.id.drag_button);
 
-        // Frag2_FavoriteList를 추가합니다.
-        Frag2_FavoriteList frag2_favoriteList = new Frag2_FavoriteList();
-        getChildFragmentManager().beginTransaction()
-                .add(R.id.frameLayout_drag_button_below, frag2_favoriteList).commit();
+//        // Frag2_FavoriteList를 추가합니다.
+//        Frag2_FavoriteList frag2_favoriteList = new Frag2_FavoriteList();
+//        getChildFragmentManager().beginTransaction()
+//                .add(R.id.frameLayout_drag_button_below, frag2_favoriteList).commit();
 
         // 최소 높이를 200dp로 설정
-        minHeight = (int) (40 * getResources().getDisplayMetrics().density);
+        minHeight = (int) (37 * getResources().getDisplayMetrics().density);
 
         // 레이아웃이 그려진 후에 maxHeight를 설정
         view.post(new Runnable() {
@@ -94,5 +98,53 @@ public class ResizableFragment extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Log.d(TAG, "6");
+
+        // Arguments로 전달된 자식 Fragment를 추가합니다.
+        Bundle args = getArguments();
+        if (args != null) {
+            String fragmentClassName = args.getString("child_fragment_class");
+            Fragment childFragment = getChildFragment(fragmentClassName);
+            Log.d(TAG, "7 "+fragmentClassName);
+            if (childFragment != null) {
+                addChildFragment(childFragment);
+            }
+        }
+    }
+
+    private Fragment getChildFragment(String fragmentClassName) {
+        // 전달된 클래스 이름에 따라 자식 Fragment를 생성합니다.
+        try {
+            if (fragmentClassName.equals(Frag2_FavoriteList.class.getName())) {
+                Log.d(TAG, "1");
+
+                return new Frag2_FavoriteList();
+
+            } else if (fragmentClassName.equals(Frag3_Tourist_Search.class.getName())) {
+                Log.d(TAG, "2");
+
+                return new Frag3_Tourist_Search();
+            } else if (fragmentClassName.equals(Frag4_Gpt.class.getName())) {
+                Log.d(TAG, "3");
+
+                return new Frag4_Gpt();
+            } // 추가적인 Fragment 클래스도 여기에 추가할 수 있습니다.
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void addChildFragment(Fragment fragment) {
+        Log.d(TAG, "4");
+
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.replace(R.id.frameLayout_drag_button_below, fragment);
+        transaction.commit();
     }
 }

@@ -7,7 +7,7 @@
     <FrameLayout
         android:id="@+id/resizable_view"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="37dp"
         android:layout_alignParentBottom="true"
         android:background="@drawable/rounded_top_corners">
 
@@ -24,20 +24,19 @@
                 android:background="?android:attr/selectableItemBackground"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_drag_handle_3"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/frameLayout_drag_button_below"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                 />
+                app:layout_constraintTop_toTopOf="parent" />
+
 
             <FrameLayout
                 android:id="@+id/frameLayout_drag_button_below"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/drag_button"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-               >
+                app:layout_constraintTop_toBottomOf="@id/drag_button">
 
             </FrameLayout>
 

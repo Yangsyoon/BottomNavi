@@ -1,16 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@color/white"
-    >
+    android:background="@color/white">
+
+
+<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent">-->
+
+    <TextView
+        android:id="@+id/tv"
+        android:layout_width="match_parent"
+        android:layout_height="74dp"
+        android:gravity="center"
+        android:text="Favorite"
+        android:textSize="20sp"
+
+        >
+
+    </TextView>
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#FFCFCFCF"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        >
+
+    </View>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/favorite_list"
-        android:layout_width="match_parent"
+        android:layout_width="411dp"
         android:layout_height="match_parent"
+
         android:transitionName="profileImageTransition"
 
+
+
         />
+
+
+<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
+
 </LinearLayout>

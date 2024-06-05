@@ -1,11 +1,18 @@
 package com.example.tourlist.Main;
 
+import android.content.Context;
 import android.os.Bundle;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -14,6 +21,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -23,8 +31,9 @@ import com.example.tourlist.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     private BottomNavigationView bottomNavigationView;
     private FragmentManager fm;
@@ -46,8 +55,11 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private View drawerView;
 
-//
-//
+
+    private FloatingActionButton fab_main, fab_sub1, fab_sub2;
+    private Animation fab_open, fab_close;
+    private boolean isFabOpen = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,15 +97,15 @@ public class MainActivity extends AppCompatActivity {
                 int nextTabId = menuItem.getItemId();
                 boolean forward = nextTabId > currentTabId;
 
-                if(nextTabId == R.id.action_account) {
+                if (nextTabId == R.id.action_account) {
                     setFrag(4, forward);
-                } else if(nextTabId == R.id.action_memory) {
+                } else if (nextTabId == R.id.action_memory) {
                     setFrag(1, forward);
-                } else if(nextTabId == R.id.action_map) {
+                } else if (nextTabId == R.id.action_map) {
                     setFrag(0, forward);
-                } else if(nextTabId == R.id.action_gpt) {
+                } else if (nextTabId == R.id.action_gpt) {
                     setFrag(3, forward);
-                } else if(nextTabId == R.id.action_tourist_search) {
+                } else if (nextTabId == R.id.action_tourist_search) {
                     setFrag(2, forward);
                 }
 
@@ -152,12 +164,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
         if (savedInstanceState == null) {
-            setFrag(0, true); //첫 프래그먼트 화면을 무엇으로 지정해줄 것인지 선택
+            setFrag(0, true); // 첫 프래그먼트 화면을 무엇으로 지정해줄 것인지 선택
         }
 
-        drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
-        drawerView = (View)findViewById(R.id.drawer);
-
+        drawerLayout = findViewById(R.id.drawer_layout);
+        drawerView = findViewById(R.id.drawer);
 
         ImageButton openbutton = findViewById(R.id.openbutton);
         openbutton.setOnClickListener(new View.OnClickListener() {
@@ -193,22 +204,22 @@ public class MainActivity extends AppCompatActivity {
     DrawerLayout.DrawerListener listener = new DrawerLayout.DrawerListener() {
         @Override
         public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
-            //슬라이드 했을때
+            // 슬라이드 했을 때
         }
 
         @Override
         public void onDrawerOpened(@NonNull View drawerView) {
-            //드로어가 오픈됐을때
+            // 드로어가 오픈됐을 때
         }
 
         @Override
         public void onDrawerClosed(@NonNull View drawerView) {
-            //드로어가 닫혔을때
+            // 드로어가 닫혔을 때
         }
 
         @Override
         public void onDrawerStateChanged(int newState) {
-            //드로어 상태가 바뀌었을때
+            // 드로어 상태가 바뀌었을 때
         }
     };
 
@@ -281,8 +292,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         FirebaseUser user = mAuth.getCurrentUser();
-        if (user != null ) {//&& !user.isAnonymous()// 익명 계정이 아닌 경우에만 로그아웃
-            mAuth.signOut(); //유저 있으면 로그아웃.
+        if (user != null) {
+            mAuth.signOut(); // 유저 있으면 로그아웃
         }
     }
 }

@@ -87,9 +87,14 @@ dependencies {
 
     // FirebaseUI Storage only
     implementation ("com.firebaseui:firebase-ui-storage:7.2.0")
-    
+    implementation ("androidx.appcompat:appcompat:1.6.1")
+    implementation ("com.google.android.material:material:1.4.0")
+    implementation ("androidx.appcompat:appcompat:1.6.1")
+
+
     //swipe layout
 //    implementation("com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1")
+
 
 
 

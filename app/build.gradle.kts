@@ -58,7 +58,6 @@ dependencies {
     implementation("com.google.android.gms:play-services-location:21.2.0")
 
 
-
     // Import the BoM for the Firebase platform
     implementation(platform("com.google.firebase:firebase-bom:33.0.0"))
 
@@ -83,8 +82,8 @@ dependencies {
 
 
     //이미지 가져오기.
-    implementation ("com.github.bumptech.glide:glide:4.11.0")
-    annotationProcessor("com.github.bumptech.glide:compiler:4.11.0")
+    implementation ("com.github.bumptech.glide:glide:4.12.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
 
     // FirebaseUI Storage only
     implementation ("com.firebaseui:firebase-ui-storage:7.2.0")

@@ -1,78 +1,52 @@
 package com.example.tourlist.Course;
 
+import java.util.List;
+
 public class TouristCourse {
 
-    private String name;
-    private String address;
-    private double latitude;
-    private double longitude;
-    private String description;
-    private String phone;
-    private String photoUrl;
+    private String content_id;
+    private String course_title;
+    private List<TouristCoursePlace> places;
 
-    // 기존 생성자
-    public TouristCourse(String name, double latitude, double longitude, String address, String description, String phone, String photoUrl) {
-        this.name = name;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.address = address;
-        this.description = description;
-        this.phone = phone;
-        this.photoUrl = photoUrl;
+    // 기본 생성자
+    public TouristCourse() {
     }
 
-    // 두 개의 인자를 받는 생성자 추가
-    public TouristCourse(String name, String address) {
-        this(name,-1,-1, address, "", "", "");
+    // 생성자 추가
+    public TouristCourse(String content_id, String course_title) {
+        this.content_id = content_id;
+        this.course_title = course_title;
+        this.places = places;
+    }
+    public TouristCourse(String content_id, String course_title, List<TouristCoursePlace> places) {
+        this.content_id = content_id;
+        this.course_title = course_title;
+        this.places = places;
     }
 
-    //parser2
-    public TouristCourse(String name) {
-        this(name,-1,-1,"", "", "", "");
+    // Getter 메소드
+    public String getContent_id() {
+        return content_id;
     }
 
-
-
-    //프레그 3에 맞춰 생성자.
-    public TouristCourse(String name, double latitude, double longitude, String address, String description, String phone) {
-        this.name = name;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.address = address;
-        this.description = description;
-        this.phone = phone;
-
+    public String getCourse_title() {
+        return course_title;
     }
 
-
-
-
-    // Getter methods
-    public String getName() {
-        return name;
+    public List<TouristCoursePlace> getPlaces() {
+        return places;
     }
 
-    public double getlatitude() {
-        return latitude;
-    }
-    public double getlongitude() {
-        return longitude;
+    // Setter 메소드
+    public void setContent_id(String content_id) {
+        this.content_id = content_id;
     }
 
-
-    public String getAddress() {
-        return address;
+    public void setCourse_title(String course_title) {
+        this.course_title = course_title;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public String getPhotoUrl() {
-        return photoUrl;
+    public void setPlaces(List<TouristCoursePlace> places) {
+        this.places = places;
     }
 }

@@ -23,8 +23,10 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.tourlist.Course.Frag_Course_List;
 import com.example.tourlist.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -42,7 +44,10 @@ public class MainActivity extends AppCompatActivity{
     private Frag1_NaverMap frag1_NaverMap;
     private Frag4_Gpt frag4_Gpt;
     private Frag3_Tourist_Search frag3_TouristSearch;
+    private Frag_Course_List frag_course_list;
     private ResizableFragment resizableFragment;
+
+    private Slide1 slide1;
     private FirebaseAuth mAuth;
     private boolean isUserInteraction = false;
     private int currentTabId = R.id.action_account; // 현재 탭을 추적
@@ -66,6 +71,12 @@ public class MainActivity extends AppCompatActivity{
             return insets;
         });
 
+        // 최하단 네비게이션 바. 색상
+//        Window window = getWindow();
+//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//        window.setNavigationBarColor(ContextCompat.getColor(this, R.color.darkblue));
+
+//
 
         frag5_login = new Frag5_Login();
         frag5_register = new Frag5_Register();
@@ -74,6 +85,8 @@ public class MainActivity extends AppCompatActivity{
         frag4_Gpt = new Frag4_Gpt();
         frag3_TouristSearch = new Frag3_Tourist_Search();
         resizableFragment = new ResizableFragment();
+        slide1 = new Slide1();
+        frag_course_list=new Frag_Course_List();
 
         bottomNavigationView = findViewById(R.id.bottomNavi);
         bottomNavigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
@@ -185,6 +198,7 @@ public class MainActivity extends AppCompatActivity{
                 drawerLayout.closeDrawer(drawerView);
             }
         });
+
     }
 
     DrawerLayout.DrawerListener listener = new DrawerLayout.DrawerListener() {
@@ -218,41 +232,51 @@ public class MainActivity extends AppCompatActivity{
             // ft.setCustomAnimations(R.anim.slide_in_from_left, R.anim.slide_out_to_right);
         }
         switch (n) {
-            case 4:
-                ft.replace(R.id.main_frame, frag5_login);
-                removeResizableFragment(); // ResizableFragment 제거
-                break;
-            case 1:
-                ft.replace(R.id.main_frame, frag2_favoriteList);
-                ft.addToBackStack(null);
-                removeResizableFragment(); // ResizableFragment 제거
-                break;
+
+
             case 0:
                 ft.replace(R.id.main_frame, frag1_NaverMap);
                 ft.addToBackStack(null);
-                addResizableFragment(); // ResizableFragment 추가
+                addNewResizableFragment(Frag3_Tourist_Search.class); // ResizableFragment 추가
+                break;
+
+            case 1:
+                ft.replace(R.id.main_frame, frag1_NaverMap);
+                ft.addToBackStack(null);
+                addNewResizableFragment(Frag2_FavoriteList.class);
+                break;
+
+
+            case 2:
+//                ft.replace(R.id.main_frame, frag3_TouristSearch);
+                ft.replace(R.id.main_frame, frag_course_list);
+                ft.addToBackStack(null);
+                removeResizableFragment(); // ResizableFragment 제거
                 break;
             case 3:
                 ft.replace(R.id.main_frame, frag4_Gpt);
                 ft.addToBackStack(null);
                 removeResizableFragment(); // ResizableFragment 제거
                 break;
-            case 2:
-                ft.replace(R.id.main_frame, frag3_TouristSearch);
-                ft.addToBackStack(null);
+
+            case 4:
+                ft.replace(R.id.main_frame, frag5_login);
                 removeResizableFragment(); // ResizableFragment 제거
                 break;
+
         }
         ft.commit();
     }
 
-    private void addResizableFragment() {
-        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.overlay_frame);
-        if (currentFragment == null) {
-            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.add(R.id.overlay_frame, resizableFragment);
-            fragmentTransaction.commit();
-        }
+    private void addNewResizableFragment(Class<? extends Fragment> fragmentClass) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        ResizableFragment newResizableFragment = new ResizableFragment();
+        Bundle bundle = new Bundle();
+        // 자식 Fragment 클래스 이름을 번들에 추가
+        bundle.putString("child_fragment_class", fragmentClass.getName());
+        newResizableFragment.setArguments(bundle);
+        fragmentTransaction.replace(R.id.overlay_frame, newResizableFragment);
+        fragmentTransaction.commit();
     }
 
     private void removeResizableFragment() {

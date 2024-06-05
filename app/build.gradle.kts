@@ -82,8 +82,8 @@ dependencies {
 
 
     //이미지 가져오기.
-    implementation ("com.github.bumptech.glide:glide:4.11.0")
-    annotationProcessor("com.github.bumptech.glide:compiler:4.11.0")
+    implementation ("com.github.bumptech.glide:glide:4.12.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
 
     // FirebaseUI Storage only
     implementation ("com.firebaseui:firebase-ui-storage:7.2.0")

@@ -18,6 +18,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.tourlist.Course.Frag_Course_List;
 import com.example.tourlist.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private Frag1_NaverMap frag1_NaverMap;
     private Frag4_Gpt frag4_Gpt;
     private Frag3_Tourist_Search frag3_TouristSearch;
+    private Frag_Course_List frag_course_list;
     private ResizableFragment resizableFragment;
 
     private Slide1 slide1;
@@ -72,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
         frag3_TouristSearch = new Frag3_Tourist_Search();
         resizableFragment = new ResizableFragment();
         slide1 = new Slide1();
+        frag_course_list=new Frag_Course_List();
 
         bottomNavigationView = findViewById(R.id.bottomNavi);
         bottomNavigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
@@ -234,7 +237,8 @@ public class MainActivity extends AppCompatActivity {
 
 
             case 2:
-                ft.replace(R.id.main_frame, frag3_TouristSearch);
+//                ft.replace(R.id.main_frame, frag3_TouristSearch);
+                ft.replace(R.id.main_frame, frag_course_list);
                 ft.addToBackStack(null);
                 removeResizableFragment(); // ResizableFragment 제거
                 break;

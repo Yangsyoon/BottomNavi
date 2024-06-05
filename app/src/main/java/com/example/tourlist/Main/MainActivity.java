@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
 //        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 //        window.setNavigationBarColor(ContextCompat.getColor(this, R.color.darkblue));
 
-
+//
 
         frag5_login = new Frag5_Login();
         frag5_register = new Frag5_Register();

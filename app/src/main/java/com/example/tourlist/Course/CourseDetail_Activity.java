@@ -1,130 +1,114 @@
 package com.example.tourlist.Course;
 
-import static android.content.ContentValues.TAG;
-
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.tourlist.R;
 
+import java.util.List;
+
 public class CourseDetail_Activity extends AppCompatActivity {
 
-    private LinearLayout placesContainer;
-    private TouristCourseRepository repository;
-    private MutableLiveData<TouristCourse> touristCourse;
+    private RecyclerView recyclerView;
+    private PlaceViewModel viewModel;
+    private PlaceAdapter placeAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.frag_course_detail);
+        setContentView(R.layout.activity_course_detail);
 
-        placesContainer = findViewById(R.id.placesContainer);
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        placeAdapter = new PlaceAdapter();
+        recyclerView.setAdapter(placeAdapter);
 
-        repository = TouristCourseRepository.getInstance(getApplication());
-
-        touristCourse = new MutableLiveData<>();
+        viewModel = new ViewModelProvider(this).get(PlaceViewModel.class);
 
         String contentId = getIntent().getStringExtra("CONTENT_ID");
 
-        repository.loadTouristCourseDetails(contentId, touristCourse);
+        viewModel.loadTouristCoursePlaces(contentId);
 
-        touristCourse.observe(this, new Observer<TouristCourse>() {
+        viewModel.getPlaces().observe(this, new Observer<List<TouristCoursePlace>>() {
             @Override
-            public void onChanged(TouristCourse course) {
-                if (course != null) {
-                    for (TouristCoursePlace place : course.getPlaces()) {
-                        addPlaceCard(place);
-                    }
+            public void onChanged(List<TouristCoursePlace> places) {
+                if (places != null) {
+                    placeAdapter.setPlaces(places);
                 }
             }
         });
     }
 
-    private void addPlaceCard(TouristCoursePlace place) {
-        CardView cardView = new CardView(this);
-        LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        cardParams.setMargins(16, 16, 16, 16); // 상, 하, 좌, 우 마진 설정
-        cardView.setLayoutParams(cardParams);
-        cardView.setCardElevation(8);
-        cardView.setRadius(16); // 모서리를 더 둥글게 설정
+    public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.PlaceViewHolder> {
 
-        LinearLayout cardContent = new LinearLayout(this);
-        cardContent.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT));
-        cardContent.setOrientation(LinearLayout.VERTICAL);
-        cardContent.setPadding(24, 24, 24, 24); // 카드뷰 내부에 더 많은 패딩 설정
+        private List<TouristCoursePlace> places;
 
-        TextView nameTextView = new TextView(this);
-        nameTextView.setText(place.getSubname());
-        nameTextView.setTextSize(22); // 텍스트 크기 키움
-        nameTextView.setLineSpacing(1.5f, 1.5f); // 줄 간격 설정
-
-        ImageView imageView = new ImageView(this);
-        LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                300); // 이미지뷰 높이 증가
-        imageParams.setMargins(0, 16, 0, 16); // 이미지뷰 상하 마진 설정
-        imageView.setLayoutParams(imageParams);
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-
-        // 공통정보조회 API로부터 firstimage를 가져와서 설정
-        String imageUrl = place.getFirstimage();
-//        String imageUrl = "http://tong.visitkorea.or.kr/cms/resource/87/2733187_image2_1.jpg";
-
-        if (imageUrl!=null&&!imageUrl.isEmpty()) {
-            Uri uri = Uri.parse(imageUrl);
-            // 이미지를 비동기적으로 로드하는 라이브러리 사용 (예: Glide, Picasso)
-            Glide.with(getApplication()).load(uri).into(imageView);
-        } else {
-//            imageView.setImageResource(R.drawable.placeholder_image); // 기본 이미지 설정
-            Log.d(TAG, " null");
+        public void setPlaces(List<TouristCoursePlace> places) {
+            this.places = places;
+            notifyDataSetChanged();
         }
 
+        @NonNull
+        @Override
+        public PlaceViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_course_place_detail, parent, false);
+            return new PlaceViewHolder(view);
+        }
 
-//        Bitmap bitmap = base64ToBitmap(imageUrl);
-//        if (bitmap != null) {
-//            imageView.setImageBitmap(bitmap);
-//        } else {
-//            Log.d(TAG, "Decoded bitmap is null");
-//        }
+        @Override
+        public void onBindViewHolder(@NonNull PlaceViewHolder holder, int position) {
+            TouristCoursePlace place = places.get(position);
+            holder.bind(place);
+        }
 
-        TextView overviewTextView = new TextView(this);
-        overviewTextView.setText(place.getSubdetailoverview());
-        overviewTextView.setTextSize(18); // 텍스트 크기 키움
-        overviewTextView.setLineSpacing(1.5f, 1.5f); // 줄 간격 설정
+        @Override
+        public int getItemCount() {
+            return places == null ? 0 : places.size();
+        }
 
-        cardContent.addView(nameTextView);
-        cardContent.addView(imageView); // 이미지뷰 추가
-        cardContent.addView(overviewTextView);
+        class PlaceViewHolder extends RecyclerView.ViewHolder {
 
-        cardView.addView(cardContent);
+            private TextView nameTextView;
+            private ImageView imageView;
+            private TextView addressTextView;
+            private TextView overviewTextView;
 
-        placesContainer.addView(cardView);
+            public PlaceViewHolder(@NonNull View itemView) {
+                super(itemView);
+                nameTextView = itemView.findViewById(R.id.placeNameTextView);
+                imageView = itemView.findViewById(R.id.placeImageView);
+                addressTextView = itemView.findViewById(R.id.placeAddressTextView);
+                overviewTextView = itemView.findViewById(R.id.placeOverviewTextView);
+            }
+
+            public void bind(TouristCoursePlace place) {
+                nameTextView.setText(place.getSubname());
+                addressTextView.setText(place.getAddr1()); // 주소 설정
+//                addressTextView.setText("icandoit"); // 주소 설정
+                overviewTextView.setText(place.getSubdetailoverview());
+
+                String imageUrl = place.getFirstimage();
+                if (imageUrl != null && !imageUrl.isEmpty()) {
+                    Uri uri = Uri.parse(imageUrl);
+                    Glide.with(itemView.getContext()).load(uri).into(imageView);
+                } else {
+                    Log.d("2", "Image URL is null or empty");
+                }
+            }
+        }
     }
-
-//    private Bitmap base64ToBitmap(String base64String) {
-//        try {
-//            byte[] decodedString = Base64.decode(base64String, Base64.DEFAULT);
-//            return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-//        } catch (Exception e) {
-//            Log.e(TAG, "Error decoding Base64 string", e);
-//            return null;
-//        }
-//    }
 }

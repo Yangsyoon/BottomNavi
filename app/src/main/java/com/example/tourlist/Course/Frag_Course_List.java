@@ -1,22 +1,19 @@
 package com.example.tourlist.Course;
 
-
-import android.content.Intent;
-import android.graphics.Bitmap;
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -24,61 +21,40 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tourlist.R;
-import com.example.tourlist.Tourist_Detail_Activity.Detail_files.TouristAttraction;
-import com.example.tourlist.Tourist_Detail_Activity.Detail_files.TouristPlace;
-import com.example.tourlist.Tourist_Detail_Activity.Detail_files.TouristPlaceDataHolder;
-import com.example.tourlist.Tourist_Detail_Activity.Detail_files.TouristViewModel;
-import com.example.tourlist.Tourist_Detail_Activity.TouristPlaceDetailActivity;
-import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.model.AutocompletePrediction;
-import com.google.android.libraries.places.api.model.PhotoMetadata;
-import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.net.FetchPhotoRequest;
-import com.google.android.libraries.places.api.net.FetchPlaceRequest;
-import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
-import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-
 public class Frag_Course_List extends Fragment {
-    private static final String TAG = "Frag4_GoogleMap";
 
-
-
-    private String selectedRegion = "";
-
-
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
     private CourseViewModel courseViewModel;
     private CourseAdapter courseAdapter;
     private List<TouristCourse> courses;
+    private FusedLocationProviderClient fusedLocationProviderClient;
+    private String currentLatitude;
+    private String currentLongitude;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag_course_list, container, false);
 
-
         RecyclerView recyclerView2_course = view.findViewById(R.id.recyclerView2);
-
-
         recyclerView2_course.setLayoutManager(new LinearLayoutManager(getContext()));
 
-
-
-
-        // CourseViewModel 설정
         courseViewModel = new ViewModelProvider(requireActivity()).get(CourseViewModel.class);
         courses = new ArrayList<>();
 
-        //course adapter
         courseAdapter = new CourseAdapter(courses);
         recyclerView2_course.setAdapter(courseAdapter);
 
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity());
 
         courseViewModel.getTouristCourses().observe(getViewLifecycleOwner(), new Observer<List<TouristCourse>>() {
             @Override
@@ -89,144 +65,158 @@ public class Frag_Course_List extends Fragment {
             }
         });
 
+        Button allButton = view.findViewById(R.id.allButton);
+        Button seoulButton = view.findViewById(R.id.seoulButton);
+        Button daeguButton = view.findViewById(R.id.daeguButton);
+        Button busanButton = view.findViewById(R.id.busanButton);
+        Button incheonButton = view.findViewById(R.id.incheonButton);
+        Button ulsanButton = view.findViewById(R.id.ulsanButton);
+        Button daejeonButton = view.findViewById(R.id.daejeonButton);
+        Button gyeonggiButton = view.findViewById(R.id.gyeonggiButton);
+        Button jeonButton = view.findViewById(R.id.jeonButton);
+        Button chungButton = view.findViewById(R.id.chungButton);
+        Button gyeongButton = view.findViewById(R.id.gyeongButton);
+        Button gangwonButton = view.findViewById(R.id.gangwonButton);
+        Button jejuButton = view.findViewById(R.id.jejuButton);
+        Button gpsButton = view.findViewById(R.id.mylocation);
 
+        getCurrentLocation();
 
+        gpsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+                } else {
+                }
+                courseViewModel.filterCoursesByGps(currentLatitude, currentLongitude);
 
+            }
+        });
 
+        allButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                courseViewModel.filterCoursesByAreaCode("");
+            }
+        });
 
+        seoulButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                courseViewModel.filterCoursesByAreaCode("1");
+            }
+        });
+
+        daeguButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                courseViewModel.filterCoursesByAreaCode("4");
+            }
+        });
+
+        busanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                courseViewModel.filterCoursesByAreaCode("6");
+            }
+        });
+
+        incheonButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                courseViewModel.filterCoursesByAreaCode("2");
+            }
+        });
+
+        ulsanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                courseViewModel.filterCoursesByAreaCode("7");
+            }
+        });
+
+        daejeonButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                courseViewModel.filterCoursesByAreaCode("3");
+            }
+        });
+
+        gyeonggiButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                courseViewModel.filterCoursesByAreaCode("31");
+            }
+        });
+
+        jeonButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                courseViewModel.filterCoursesByAreaCode("37");
+            }
+        });
+
+        chungButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                courseViewModel.filterCoursesByAreaCode("34");
+            }
+        });
+
+        gyeongButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                courseViewModel.filterCoursesByAreaCode("35");
+            }
+        });
+
+        gangwonButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                courseViewModel.filterCoursesByAreaCode("32");
+            }
+        });
+
+        jejuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                courseViewModel.filterCoursesByAreaCode("39");
+            }
+        });
 
         return view;
     }
 
-
-/*
-    private class AttractionAdapter extends RecyclerView.Adapter<AttractionAdapter.AttractionViewHolder> {
-
-        private List<TouristAttraction> attractions;
-
-        AttractionAdapter(List<TouristAttraction> attractions) {
-            this.attractions = attractions;
-        }
-
-        @NonNull
-        @Override
-        public AttractionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.frag4_item_attraction, parent, false);
-            return new AttractionViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull AttractionViewHolder holder, int position) {
-            TouristAttraction attraction = attractions.get(position);
-            holder.bind(attraction);// 장소 리스트(배열의 인덱스해당하는 값.). 0 , 1, 2
-        }
-
-        @Override
-        public int getItemCount() {
-            return attractions.size();
-        }
-
-        class AttractionViewHolder extends RecyclerView.ViewHolder {
-
-            Button attractionButton;
-
-            AttractionViewHolder(View itemView) {
-                super(itemView);
-                attractionButton = itemView.findViewById(R.id.attractionButton);
-            }
-
-            void bind(final TouristAttraction attraction) {
-                attractionButton.setText(attraction.getName());
-                attractionButton.setOnClickListener(new View.OnClickListener() {
+    private void getCurrentLocation() {
+        fusedLocationProviderClient.getLastLocation()
+                .addOnCompleteListener(new OnCompleteListener<Location>() {
                     @Override
-                    public void onClick(View v) {
-                        TouristPlace place = new TouristPlace(attraction.getName(), attraction.getlatitude(), attraction.getlongitude(), attraction.getAddress(), attraction.getDescription(), attraction.getPhone());
-                        TouristPlaceDataHolder.getInstance().setPlace(place);
+                    public void onComplete(@NonNull Task<Location> task) {
+                        if (task.isSuccessful() && task.getResult() != null) {
+                            Location location = task.getResult();
+                            currentLatitude = Double.toString(location.getLatitude());
+                            currentLongitude = Double.toString(location.getLongitude());
 
-                        Toast.makeText(getContext(), "openTour " + place.getPlaceName(), Toast.LENGTH_SHORT).show();
-
-//                        Places.initialize(getContext(), "AIzaSyAlkrLP2vM_bjmH2vFcRjNSQNN4IZkBKD4");
-//                        placesClient = Places.createClient(getContext());
-//
-//                        searchPlaceIdByName(place.getPlaceName(), place);
+                            // 현재 위치를 사용하여 필요한 작업을 수행
+                            // 예: 현재 위치 기반으로 코스를 필터링하거나 다른 작업 수행
+//                            Toast.makeText(getContext(), "현재 위치: " + currentLatitude + ", " + currentLongitude, Toast.LENGTH_LONG).show();
+                        } else {
+//                            Toast.makeText(getContext(), "위치를 가져올 수 없습니다.", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getCurrentLocation();
+            } else {
+                Toast.makeText(getContext(), "위치 권한이 거부되었습니다.", Toast.LENGTH_SHORT).show();
             }
         }
     }
-
-    private void searchPlaceIdByName(String placeName, TouristPlace place) {
-        FindAutocompletePredictionsRequest request = FindAutocompletePredictionsRequest.builder()
-                .setQuery(placeName)
-                .build();
-        Log.d(TAG, "No predictions found for place: " + placeName);
-
-        placesClient.findAutocompletePredictions(request).addOnSuccessListener((response) -> {
-            if (!response.getAutocompletePredictions().isEmpty()) {
-                AutocompletePrediction prediction = response.getAutocompletePredictions().get(0);
-                String placeId = prediction.getPlaceId();
-                Log.d(TAG, "Found placeId: " + placeId);
-                fetchPlaceDetails(placeId, place);
-            } else {
-                Log.d(TAG, "No predictions found for place: " + placeName);
-            }
-        }).addOnFailureListener((exception) -> {
-            Log.e(TAG, "Error finding place predictions: " + exception.getMessage());
-        });
-    }
-
-    private void fetchPlaceDetails(String placeId, TouristPlace place) {
-        List<Place.Field> placeFields = Arrays.asList(Place.Field.NAME, Place.Field.PHOTO_METADATAS);
-
-        FetchPlaceRequest request = FetchPlaceRequest.builder(placeId, placeFields).build();
-
-        placesClient.fetchPlace(request).addOnSuccessListener((response) -> {
-            Place fetchedPlace = response.getPlace();
-            String name = fetchedPlace.getName();
-            Log.d(TAG, "Place name: " + name);
-
-            if (fetchedPlace.getPhotoMetadatas() != null && !fetchedPlace.getPhotoMetadatas().isEmpty()) {
-                PhotoMetadata photoMetadata = fetchedPlace.getPhotoMetadatas().get(0);
-                FetchPhotoRequest photoRequest = FetchPhotoRequest.builder(photoMetadata)
-                        .setMaxWidth(500)
-                        .setMaxHeight(300)
-                        .build();
-
-                placesClient.fetchPhoto(photoRequest).addOnSuccessListener((fetchPhotoResponse) -> {
-                    Bitmap bitmap = fetchPhotoResponse.getBitmap();
-                    if (bitmap != null) {
-                        place.setPhotoUrl(bitmapToBase64(bitmap));
-                        Log.d(TAG, "Photo URL set for place: " + place.getPlaceName());
-                    } else {
-                        Log.d(TAG, "Bitmap is null");
-                    }
-                    openTouristPlaceDetailActivity(place);
-                }).addOnFailureListener((exception) -> {
-                    Log.e(TAG, "Error fetching photo: " + exception.getMessage());
-                    openTouristPlaceDetailActivity(place);
-                });
-            } else {
-                Log.d(TAG, "No photo metadata available");
-                openTouristPlaceDetailActivity(place);
-            }
-        }).addOnFailureListener((exception) -> {
-            Log.e(TAG, "Place not found: " + exception.getMessage());
-        });
-    }
-
-    private void openTouristPlaceDetailActivity(TouristPlace place) {
-        Toast.makeText(getContext(), "openTour~" + place.getPlaceName(), Toast.LENGTH_SHORT).show();
-        TouristPlaceDataHolder.getInstance().setPlace(place);
-        Intent intent = new Intent(getActivity(), TouristPlaceDetailActivity.class);
-        startActivity(intent);
-    }
-
-    private String bitmapToBase64(Bitmap bitmap) {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-        byte[] byteArray = byteArrayOutputStream.toByteArray();
-        String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
-        Log.d(TAG, "Encoded bitmap to Base64: " + encoded);
-        return encoded;
-    }*/
 }

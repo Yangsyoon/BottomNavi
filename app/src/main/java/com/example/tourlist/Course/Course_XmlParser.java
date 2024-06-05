@@ -32,19 +32,17 @@ class Course_XmlParser {
             while (eventType != XmlPullParser.END_DOCUMENT) {
                 if (eventType == XmlPullParser.START_TAG && parser.getName().equals("item")) {
                     String contentid = "";
+                    String areacode = "";
                     String course_title = "";
-                    String subdetailoverview = "";
+
                     while (!(eventType == XmlPullParser.END_TAG && parser.getName().equals("item"))) {
                         if (eventType == XmlPullParser.START_TAG) {
                             String tagName = parser.getName();
                             switch (tagName) {
 
-//                                case "subname":
-//                                    subname = parser.nextText();
-//                                    break;
-//                                case "subdetailoverview":
-//                                    subdetailoverview = parser.nextText();
-//                                    break;
+                                case "areacode":
+                                    areacode = parser.nextText();
+                                    break;
                                 case "contentid":
                                     contentid = parser.nextText();
                                     break;
@@ -52,12 +50,16 @@ class Course_XmlParser {
                                     course_title = parser.nextText();
                                     break;
 
+                                case "arr1":
+
+
+
                             }
                         }
                         eventType = parser.next();
                     }
 //                    courses.add(new TouristCourse(subname, subdetailoverview));
-                    courses.add(new TouristCourse(contentid, course_title));
+                    courses.add(new TouristCourse(contentid, course_title,areacode));
                 }
                 eventType = parser.next();
             }
@@ -123,6 +125,12 @@ class Course_XmlParser {
                                 place.setSubdetailalt(parser.nextText());
                             }
                             break;
+
+                        case "arr1":
+                            if (place != null) {
+                                place.setAddr1(parser.nextText());
+                            }
+                            break;
                     }
                 } else if (eventType == XmlPullParser.END_TAG && parser.getName().equals("item")) {
                     if (place != null) {
@@ -139,7 +147,7 @@ class Course_XmlParser {
         return course;
     }
 
-    public void parseCommonInfo(InputStream inputStream, TouristCoursePlace place) {
+    public TouristCoursePlace parseCommonInfo(InputStream inputStream, TouristCoursePlace place) {
         try (BufferedReader bufreader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
             StringBuilder xmlData = new StringBuilder();
             String line;
@@ -156,7 +164,7 @@ class Course_XmlParser {
                 if (eventType == XmlPullParser.START_TAG) {
                     String tagName = parser.getName();
                     switch (tagName) {
-                        case "firstimage":
+                        case "originimgurl":
                             place.setFirstimage(parser.nextText());
                             break;
                         case "areacode":
@@ -181,7 +189,7 @@ class Course_XmlParser {
         } catch (XmlPullParserException | IOException e) {
             e.printStackTrace();
         }
-
+        return place;
     }
 
 

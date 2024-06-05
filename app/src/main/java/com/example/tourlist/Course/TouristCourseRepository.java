@@ -32,17 +32,17 @@ public class TouristCourseRepository {
         return instance;
     }
 
-    public void loadTouristCourses(final MutableLiveData<List<TouristCourse>> touristCourses) {
-//        String requestUrl = "https://apis.data.go.kr/B551011/KorService1/detailInfo1?serviceKey=jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D&MobileOS=ETC&MobileApp=AppTest&contentId=1885246&contentTypeId=25&numOfRows=6&pageNo=1";
+    public RequestQueue getRequestQueue() {
+        return requestQueue;
+    }
 
-        //코스 정보 출력(지역기반) //~행복 코스//김해 가야~코스 ...
-        String requestUrl = "https://apis.data.go.kr/B551011/KorService1/areaBasedList1?serviceKey=jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D&numOfRows=10&pageNo=1&MobileOS=ETC&MobileApp=AppTest&listYN=Y&arrange=O&contentTypeId=25";
+    public void loadTouristCourses(final MutableLiveData<List<TouristCourse>> touristCourses) {
+        String requestUrl = "https://apis.data.go.kr/B551011/KorService1/areaBasedList1?numOfRows=30&pageNo=1&MobileOS=ETC&MobileApp=AppTest&ServiceKey=jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D&listYN=Y&arrange=A&contentTypeId=25&areaCode=&sigunguCode=&cat1=&cat2=&cat3=";
 
         InputStreamRequest request = new InputStreamRequest(Request.Method.GET, requestUrl,
                 new Response.Listener<InputStream>() {
                     @Override
                     public void onResponse(InputStream response) {
-                        //코스들 저장. 코스 하나당 contentid
                         List<TouristCourse> courses = courseXmlParser.parse(response);
                         touristCourses.setValue(courses);
                     }
@@ -58,9 +58,6 @@ public class TouristCourseRepository {
     }
 
     public void loadTouristCourseDetails(final String contentId, final MutableLiveData<TouristCourse> touristCourse) {
-
-        //xmL: 하나 코스에 서브 장소들
-
         String requestUrl = "https://apis.data.go.kr/B551011/KorService1/detailInfo1?serviceKey=YOUR_API_KEY&MobileOS=ETC&MobileApp=AppTest&contentId=" + contentId + "&contentTypeId=25&numOfRows=10&pageNo=1";
 
         InputStreamRequest request = new InputStreamRequest(Request.Method.GET, requestUrl,
@@ -70,11 +67,8 @@ public class TouristCourseRepository {
                         TouristCourse course = courseXmlParser.parseDetail(response);
                         touristCourse.setValue(course);
 
-                        // 각 subcontentid에 대해 공통정보조회 API 요청
                         for (TouristCoursePlace place : course.getPlaces()) {
-                            Log.d("subcontentid", place.getSubcontentid());
-                            Log.d("", place.getSubcontentid());
-//                            loadCommonInfo(place.getSubcontentid(), place, touristCourse);
+                            loadCommonInfo(place.getSubcontentid(), place, touristCourse);
                         }
                     }
                 },
@@ -87,31 +81,83 @@ public class TouristCourseRepository {
 
         requestQueue.add(request);
     }
-//    https://apis.data.go.kr/B551011/KorService1/detailCommon1?serviceKey=jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D&MobileOS=ETC&MobileApp=AppTest&contentId=128803&contentTypeId=12&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&catcodeYN=Y&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y&numOfRows=10&pageNo=1
 
-//    https://apis.data.go.kr/B551011/KorService1/detailCommon1?serviceKey=&MobileOS=ETC&MobileApp=AppTest&contentId=1260275&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&catcodeYN=Y&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y&numOfRows=10&pageNo=1
-private void loadCommonInfo(final String subcontentid, final TouristCoursePlace place, final MutableLiveData<TouristCourse> touristCourse) {
-    String requestUrl = "https://apis.data.go.kr/B551011/KorService1/detailCommon1?serviceKey=YOUR_API_KEY&MobileOS=ETC&MobileApp=AppTest&contentId=" + subcontentid + "&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&addrinfoYN=Y&mapinfoYN=Y";
+    private void loadCommonInfo(final String subcontentid, final TouristCoursePlace place, final MutableLiveData<TouristCourse> touristCourse) {
+//        String requestUrl = "https://apis.data.go.kr/B551011/KorService1/detailCommon1?serviceKey=YOUR_API_KEY&MobileOS=ETC&MobileApp=AppTest&contentId=" + subcontentid + "&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&addrinfoYN=Y&mapinfoYN=Y";
+        String requestUrl = "https://apis.data.go.kr/B551011/KorService1/detailImage1?serviceKey=jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D&MobileOS=ETC&MobileApp=AppTest&contentId=" + subcontentid + "&imageYN=Y&subImageYN=Y&numOfRows=10&pageNo=1";
+        //                   https://apis.data.go.kr/B551011/KorService1/detailImage1?serviceKey=jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D&MobileOS=ETC&MobileApp=AppTest&contentId=250121&imageYN=Y&subImageYN=Y&numOfRows=10&pageNo=1
 
-    InputStreamRequest request = new InputStreamRequest(Request.Method.GET, requestUrl,
-            new Response.Listener<InputStream>() {
-                @Override
-                public void onResponse(InputStream response) {
-                    courseXmlParser.parseCommonInfo(response, place);
-                    Log.d("firstimage1", place.getSubname() + place.getFirstimage());
-                    // 업데이트된 정보를 반영하여 LiveData를 갱신
-                    touristCourse.setValue(touristCourse.getValue());
-                }
-            },
-            new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    // Handle error
-                }
-            });
+        InputStreamRequest request = new InputStreamRequest(Request.Method.GET, requestUrl,
+                new Response.Listener<InputStream>() {
+                    @Override
+                    public void onResponse(InputStream response) {
+                        courseXmlParser.parseCommonInfo(response, place);
+                        Log.d("firstimage1", place.getSubname() + place.getFirstimage());
+                        touristCourse.setValue(touristCourse.getValue());
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle error
+                    }
+                });
 
-    requestQueue.add(request);
-}
+        requestQueue.add(request);
+    }
+
+    public void loadFilteredCourses(final String areaCode, final MutableLiveData<List<TouristCourse>> filteredCourses) {
+        String requestUrl = "https://apis.data.go.kr/B551011/KorService1/areaBasedList1?serviceKey=YOUR_API_KEY&numOfRows=10&pageNo=1&MobileOS=ETC&MobileApp=AppTest&listYN=Y&arrange=O&contentTypeId=25&areaCode=" + areaCode;
+
+        InputStreamRequest request = new InputStreamRequest(Request.Method.GET, requestUrl,
+                new Response.Listener<InputStream>() {
+                    @Override
+                    public void onResponse(InputStream response) {
+                        List<TouristCourse> courses = courseXmlParser.parse(response);
+                        filteredCourses.setValue(courses);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle error
+                    }
+                });
+
+        requestQueue.add(request);
+    }
+
+    public void loadFilteredGps(final String latitude, final String longitude, final MutableLiveData<List<TouristCourse>> filteredCourses) {
+        Log.d("latitude", latitude);
+//        String requestUrl = "https://apis.data.go.kr/B551011/KorService1/areaBasedList1?serviceKey=YOUR_API_KEY&numOfRows=10&pageNo=1&MobileOS=ETC&MobileApp=AppTest&listYN=Y&arrange=O&contentTypeId=25&areaCode=" + areaCode;
+        String requestUrl = "https://apis.data.go.kr/B551011/KorService1/locationBasedList1?serviceKey=jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D&numOfRows=15&pageNo=1&MobileOS=ETC&MobileApp=AppTest&listYN=Y&arrange=O&mapX="+longitude+"&mapY="+latitude+"&radius=20000&contentTypeId=25";
+
+//        https://apis.data.go.kr/B551011/KorService1/locationBasedList1?serviceKey=jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D&numOfRows=10&pageNo=1&MobileOS=ETC&MobileApp=AppTest&listYN=Y&arrange=O&mapX=128.6102797&mapY=35.8889217&radius=20000&contentTypeId=25
+
+//        https://apis.data.go.kr/B551011/KorService1/locationBasedList1?serviceKey=&numOfRows=10&pageNo=1&MobileOS=ETC&MobileApp=AppTest&listYN=Y&arrange=O&mapX=128.6102797&mapY=35.8889217&radius=20000&contentTypeId=25
+//        https://apis.data.go.kr/B551011/KorService1/locationBasedList1?serviceKey=jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D&numOfRows=10&pageNo=1&MobileOS=ETC&MobileApp=AppTest&listYN=Y&arrange=O&mapX=128.6102797&mapY=35.8889217&radius=20000&contentTypeId=25
+
+
+
+
+
+        InputStreamRequest request = new InputStreamRequest(Request.Method.GET, requestUrl,
+                new Response.Listener<InputStream>() {
+                    @Override
+                    public void onResponse(InputStream response) {
+                        List<TouristCourse> courses = courseXmlParser.parse(response);
+                        filteredCourses.setValue(courses);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle error
+                    }
+                });
+
+        requestQueue.add(request);
+    }
 
 
 }

@@ -139,7 +139,7 @@ class Course_XmlParser {
         return course;
     }
 
-    public TouristCoursePlace parseCommonInfo(InputStream inputStream, TouristCoursePlace place) {
+    public void parseCommonInfo(InputStream inputStream, TouristCoursePlace place) {
         try (BufferedReader bufreader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
             StringBuilder xmlData = new StringBuilder();
             String line;
@@ -181,7 +181,7 @@ class Course_XmlParser {
         } catch (XmlPullParserException | IOException e) {
             e.printStackTrace();
         }
-        return place;
+
     }
 
 

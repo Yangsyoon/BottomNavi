@@ -59,6 +59,7 @@ public class TouristCourseRepository {
 
     public void loadTouristCourseDetails(final String contentId, final MutableLiveData<TouristCourse> touristCourse) {
 
+        //xmL: 하나 코스에 서브 장소들
 
         String requestUrl = "https://apis.data.go.kr/B551011/KorService1/detailInfo1?serviceKey=YOUR_API_KEY&MobileOS=ETC&MobileApp=AppTest&contentId=" + contentId + "&contentTypeId=25&numOfRows=10&pageNo=1";
 
@@ -67,11 +68,13 @@ public class TouristCourseRepository {
                     @Override
                     public void onResponse(InputStream response) {
                         TouristCourse course = courseXmlParser.parseDetail(response);
-//                        touristCourse.setValue(course);
+                        touristCourse.setValue(course);
 
                         // 각 subcontentid에 대해 공통정보조회 API 요청
                         for (TouristCoursePlace place : course.getPlaces()) {
-                            loadCommonInfo(place.getSubcontentid(), place, touristCourse);
+                            Log.d("subcontentid", place.getSubcontentid());
+                            Log.d("", place.getSubcontentid());
+//                            loadCommonInfo(place.getSubcontentid(), place, touristCourse);
                         }
                     }
                 },
@@ -87,29 +90,28 @@ public class TouristCourseRepository {
 //    https://apis.data.go.kr/B551011/KorService1/detailCommon1?serviceKey=jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D&MobileOS=ETC&MobileApp=AppTest&contentId=128803&contentTypeId=12&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&catcodeYN=Y&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y&numOfRows=10&pageNo=1
 
 //    https://apis.data.go.kr/B551011/KorService1/detailCommon1?serviceKey=&MobileOS=ETC&MobileApp=AppTest&contentId=1260275&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&catcodeYN=Y&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y&numOfRows=10&pageNo=1
-    private void loadCommonInfo(final String subcontentid, final TouristCoursePlace place, final MutableLiveData<TouristCourse> touristCourse) {
-        String requestUrl = "https://apis.data.go.kr/B551011/KorService1/detailCommon1?serviceKey=jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D&MobileOS=ETC&MobileApp=AppTest&contentId=" + subcontentid + "&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&addrinfoYN=Y&mapinfoYN=Y";
+private void loadCommonInfo(final String subcontentid, final TouristCoursePlace place, final MutableLiveData<TouristCourse> touristCourse) {
+    String requestUrl = "https://apis.data.go.kr/B551011/KorService1/detailCommon1?serviceKey=YOUR_API_KEY&MobileOS=ETC&MobileApp=AppTest&contentId=" + subcontentid + "&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&addrinfoYN=Y&mapinfoYN=Y";
 
-        InputStreamRequest request = new InputStreamRequest(Request.Method.GET, requestUrl,
-                new Response.Listener<InputStream>() {
-                    @Override
-                    public void onResponse(InputStream response) {
-                        TouristCoursePlace place2=courseXmlParser.parseCommonInfo(response, place);
+    InputStreamRequest request = new InputStreamRequest(Request.Method.GET, requestUrl,
+            new Response.Listener<InputStream>() {
+                @Override
+                public void onResponse(InputStream response) {
+                    courseXmlParser.parseCommonInfo(response, place);
+                    Log.d("firstimage1", place.getSubname() + place.getFirstimage());
+                    // 업데이트된 정보를 반영하여 LiveData를 갱신
+                    touristCourse.setValue(touristCourse.getValue());
+                }
+            },
+            new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    // Handle error
+                }
+            });
 
-                        Log.d("firstimage1", place.getSubname()+place.getFirstimage());
-                        // 업데이트된 정보를 반영하여 LiveData를 갱신
-                        touristCourse.setValue(touristCourse.getValue());
-//                        place2.setSubname(place2.getSubname());
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // Handle error
-                    }
-                });
+    requestQueue.add(request);
+}
 
-        requestQueue.add(request);
-    }
 
 }

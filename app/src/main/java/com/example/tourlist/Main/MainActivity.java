@@ -31,7 +31,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity{
 
     private BottomNavigationView bottomNavigationView;
     private FragmentManager fm;
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private DrawerLayout drawerLayout;
     private View drawerView;
 
-    private Context mContext;
+
     private FloatingActionButton fab_main, fab_sub1, fab_sub2;
     private Animation fab_open, fab_close;
     private boolean isFabOpen = false;
@@ -66,17 +66,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return insets;
         });
 
-        mContext = getApplicationContext();
-        fab_open = AnimationUtils.loadAnimation(mContext, R.anim.fab_open);
-        fab_close = AnimationUtils.loadAnimation(mContext, R.anim.fab_close);
-
-        fab_main = (FloatingActionButton)findViewById(R.id.fab_main);
-        fab_sub1 = (FloatingActionButton)findViewById(R.id.fab_sub1);
-        fab_sub2 = (FloatingActionButton)findViewById(R.id.fab_sub2);
-
-        fab_main.setOnClickListener(this);
-        fab_sub1.setOnClickListener(this);
-        fab_sub2.setOnClickListener(this);
 
         frag5_login = new Frag5_Login();
         frag5_register = new Frag5_Register();
@@ -281,56 +270,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
             mAuth.signOut(); // 유저 있으면 로그아웃
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        /*switch (v.getId()) {
-            case R.id.fab_main:
-                toggleFab();
-                break;
-            case R.id.fab_sub1:
-                toggleFab();
-                Toast.makeText(this, "Camera Open-!", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.fab_sub2:
-                toggleFab();
-                Toast.makeText(this, "Map Open-!", Toast.LENGTH_SHORT).show();
-                break;
-        }*/
-        int id = v.getId();
-        if(id == R.id.fab_main)
-        {
-            toggleFab();
-        }
-        else if(id == R.id.fab_sub1)
-        {
-            toggleFab();
-            Toast.makeText(this, "Camera Open-!", Toast.LENGTH_SHORT).show();
-        }
-        else if(id == R.id.fab_sub2)
-        {
-            toggleFab();
-            Toast.makeText(this, "Map Open-!", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void toggleFab() {
-        if (isFabOpen) {
-            fab_main.setImageResource(R.drawable.ic_add);
-            fab_sub1.startAnimation(fab_close);
-            fab_sub2.startAnimation(fab_close);
-            fab_sub1.setClickable(false);
-            fab_sub2.setClickable(false);
-            isFabOpen = false;
-        } else {
-            fab_main.setImageResource(R.drawable.ic_close);
-            fab_sub1.startAnimation(fab_open);
-            fab_sub2.startAnimation(fab_open);
-            fab_sub1.setClickable(true);
-            fab_sub2.setClickable(true);
-            isFabOpen = true;
         }
     }
 }

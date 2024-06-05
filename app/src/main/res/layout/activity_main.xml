@@ -1,9 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="rebuild.com.floatingactionbutton.MainActivity">
+    tools:context=".Main.MainActivity">
 
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawer_layout"
@@ -66,49 +67,6 @@
         <include layout="@layout/activity_drawer" />
 
     </androidx.drawerlayout.widget.DrawerLayout>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_sub1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/fab_sub2"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="25dp"
-        android:layout_marginRight="20dp"
-        android:backgroundTint="#ffffff"
-        android:src="@drawable/ic_camera"
-        android:visibility="invisible"
-        android:contentDescription="@string/fab_sub1_description"
-        app:borderWidth="0dp"
-        app:fabSize="normal" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_sub2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/fab_main"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="25dp"
-        android:layout_marginRight="20dp"
-        android:backgroundTint="#ffffff"
-        android:src="@drawable/ic_map"
-        android:visibility="invisible"
-        android:contentDescription="@string/fab_sub2_description"
-        app:borderWidth="0dp"
-        app:fabSize="normal" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_main"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="200dp"
-        android:layout_marginRight="20dp"
-        android:backgroundTint="#009688"
-        android:src="@drawable/ic_add"
-        android:contentDescription="@string/fab_main_description"
-        app:borderWidth="0dp"
-        app:fabSize="normal" />
-
 </RelativeLayout>
+
+

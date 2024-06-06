@@ -668,7 +668,7 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
                                     infoDescription.setText(place.getDescription());
                                     infoAddress.setText(place.getAddress());
                                     loadPlaceImage(place);
-                                    String s= String.format("%.2f", distance/1000);
+                                    String s= String.format("%.0f", distance/1000);
                                     tv_dist.setText(s+"Km");
 
                                     selectedPlace = place;

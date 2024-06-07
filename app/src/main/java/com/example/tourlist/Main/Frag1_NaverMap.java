@@ -676,7 +676,12 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback {
                                 return true; // true로 설정하여 기본 마커 클릭 동작을 유지하지 않음
                             }
                         });
-
+                        mMap.setOnMapClickListener(new NaverMap.OnMapClickListener() {
+                            @Override
+                            public void onMapClick(@NonNull PointF pointF, @NonNull LatLng latLng) {
+                                infoCard.setVisibility(View.GONE);
+                            }
+                        });
 
                         Log.d(TAG, "Tourist place marker added for: " + placeName + " at: " + latLng.toString());
                     } catch (Exception e) {

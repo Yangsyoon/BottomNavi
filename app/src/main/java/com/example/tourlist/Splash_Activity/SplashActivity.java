@@ -6,15 +6,16 @@ import android.os.Handler;
 import android.view.ViewTreeObserver;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
+import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import android.widget.FrameLayout;
 
 import com.example.tourlist.Main.MainActivity;
-import com.example.tourlist.R;//찝찝
+import com.example.tourlist.R;
 
 public class SplashActivity extends AppCompatActivity {
 
-    private static int SPLASH_TIME_OUT = 3000; // 스플래시 화면 표시 시간 (5초)
+    private static int SPLASH_TIME_OUT = 3000; // 스플래시 화면 표시 시간 (3초)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +23,7 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         final ImageView splashImage = findViewById(R.id.splashImage);
+        final TextView splashText = findViewById(R.id.splashText);
         final FrameLayout parentLayout = (FrameLayout) splashImage.getParent();
 
         // 뷰 레이아웃 초기화 완료 후 실행

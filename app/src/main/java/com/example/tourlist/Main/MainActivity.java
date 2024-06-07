@@ -1,5 +1,6 @@
 package com.example.tourlist.Main;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -93,6 +94,13 @@ public class MainActivity extends AppCompatActivity {
                 } else if(nextTabId == R.id.action_tourist_search) {
                     setFrag(2, forward);
                 }
+                // 선택된 메뉴 아이템의 색상 변경
+                MenuItem selectedItem = bottomNavigationView.getMenu().findItem(nextTabId);
+                selectedItem.setIconTintList(ColorStateList.valueOf(getResources().getColor(R.color.selected_color)));
+
+                // 이전에 선택된 메뉴 아이템의 색상 원래대로 변경
+                MenuItem previousItem = bottomNavigationView.getMenu().findItem(currentTabId);
+                previousItem.setIconTintList(ColorStateList.valueOf(getResources().getColor(R.color.white)));
 
                 currentTabId = nextTabId;
                 return true;

@@ -248,8 +248,8 @@ public class MainActivity extends AppCompatActivity{
 
 
             case 2:
-//                ft.replace(R.id.main_frame, frag3_TouristSearch);
-                ft.replace(R.id.main_frame, frag_course_list);
+                ft.replace(R.id.main_frame, frag3_TouristSearch);
+                //ft.replace(R.id.main_frame, frag_course_list);
                 ft.addToBackStack(null);
                 removeResizableFragment(); // ResizableFragment 제거
                 break;

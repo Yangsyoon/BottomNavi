@@ -1,7 +1,17 @@
 package com.example.tourlist.Main;
 
-
-
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
+import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.OnCompleteListener;
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -26,7 +36,6 @@ import com.example.tourlist.Tourist_Detail_Activity.Detail_files.TouristPlaceDat
 import com.example.tourlist.Tourist_Detail_Activity.TouristPlaceDetailActivity;
 import com.example.tourlist.Tourist_Detail_Activity.Detail_files.TouristViewModel;
 import com.google.android.libraries.places.api.model.AutocompletePrediction;
-//
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,26 +46,19 @@ import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
-
 import java.io.ByteArrayOutputStream;
 
-
-import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.PhotoMetadata;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.FetchPhotoRequest;
 import com.google.android.libraries.places.api.net.FetchPlaceRequest;
-import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
-import com.google.android.libraries.places.api.net.PlacesClient;
-
 
 import com.example.tourlist.Course.CourseAdapter;
 import com.example.tourlist.Course.CourseViewModel;
 import com.example.tourlist.Course.TouristCourse;
 
-
 public class Frag3_Tourist_Search extends Fragment {
-    private static final String TAG = "Frag4_GoogleMap";
+    private static final String TAG = "Frag3_Tourist_Search";
 
     private List<TouristAttraction> attractions;
     private List<TouristAttraction> filteredAttractions;
@@ -98,6 +100,12 @@ public class Frag3_Tourist_Search extends Fragment {
         filteredAttractions = new ArrayList<>();
         adapter = new AttractionAdapter(filteredAttractions);
         recyclerView1_placelist.setAdapter(adapter);
+
+        // Places API 초기화 - 사진
+        if (!Places.isInitialized()) {
+            Places.initialize(requireContext(), "AIzaSyBtOchZ5iZsWKxjBayu8q2Qe3oQQQBgp9k");
+        }
+        placesClient = Places.createClient(requireContext());
 
         // 설정된 ViewModel을 가져옴
         TouristViewModel viewModel = new ViewModelProvider(requireActivity()).get(TouristViewModel.class);
@@ -214,27 +222,41 @@ public class Frag3_Tourist_Search extends Fragment {
             return attractions.size();
         }
 
-        class AttractionViewHolder extends RecyclerView.ViewHolder {
+        public class AttractionViewHolder extends RecyclerView.ViewHolder {
 
-            Button attractionButton;
+            CardView attractionButton;
+            ImageView ivPicture;
+            TextView tvName;
+            TextView tvDescription;
+            TextView tvAddress;
 
             AttractionViewHolder(View itemView) {
                 super(itemView);
                 attractionButton = itemView.findViewById(R.id.attractionButton);
+                ivPicture = itemView.findViewById(R.id.iv_picture);
+                tvName = itemView.findViewById(R.id.tv_name);
+                tvDescription = itemView.findViewById(R.id.tv_description);
+                tvAddress = itemView.findViewById(R.id.tv_address);
             }
 
             void bind(final TouristAttraction attraction) {
-                attractionButton.setText(attraction.getName());
+                // TextView 및 ImageView에 데이터를 설정
+                tvName.setText(attraction.getName());
+                tvDescription.setText(attraction.getDescription());
+                tvAddress.setText(attraction.getAddress());
+
                 attractionButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        TouristPlace place = new TouristPlace(attraction.getName(), attraction.getlatitude(), attraction.getlongitude(), attraction.getAddress(), attraction.getDescription(), attraction.getPhone());
+                        TouristPlace place = new TouristPlace(attraction.getName(), attraction.getlatitude(), attraction.getlongitude(),attraction.getAddress(), attraction.getDescription(), attraction.getPhone());
                         TouristPlaceDataHolder.getInstance().setPlace(place);
 
-                        Toast.makeText(getContext(), "openTour " + place.getPlaceName(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(itemView.getContext(), "openTour " + place.getPlaceName(), Toast.LENGTH_SHORT).show();
 
-                        Places.initialize(getContext(), "AIzaSyAlkrLP2vM_bjmH2vFcRjNSQNN4IZkBKD4");
-                        placesClient = Places.createClient(getContext());
+                        if (placesClient == null) {
+                            Log.e(TAG, "PlacesClient가 초기화되지 않았습니다.");
+                            return;
+                        }
 
                         searchPlaceIdByName(place.getPlaceName(), place);
                     }
@@ -244,10 +266,14 @@ public class Frag3_Tourist_Search extends Fragment {
     }
 
     private void searchPlaceIdByName(String placeName, TouristPlace place) {
+        if (placesClient == null) {
+            Log.e(TAG, "PlacesClient가 초기화되지 않았습니다.");
+            return;
+        }
+
         FindAutocompletePredictionsRequest request = FindAutocompletePredictionsRequest.builder()
                 .setQuery(placeName)
                 .build();
-        Log.d(TAG, "No predictions found for place: " + placeName);
 
         placesClient.findAutocompletePredictions(request).addOnSuccessListener((response) -> {
             if (!response.getAutocompletePredictions().isEmpty()) {

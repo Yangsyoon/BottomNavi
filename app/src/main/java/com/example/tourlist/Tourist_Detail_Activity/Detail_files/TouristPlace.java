@@ -19,6 +19,14 @@ public class TouristPlace {
         this.phone = phone;
     }
 
+    //long lang 의문의 오류 떠서 이렇게 생성자
+    public TouristPlace(String placeName, String address, String description, String phone) {
+        this.placeName = placeName;
+        this.address = address;
+        this.description = description;
+        this.phone = phone;
+    }
+
     public String getPlaceName() {
         return placeName;
     }

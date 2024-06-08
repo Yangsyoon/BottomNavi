@@ -198,12 +198,14 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
         fab_sub1.setOnClickListener(this);
         fab_sub2.setOnClickListener(this);
 
+
         try {
-            // Places SDK 초기화
+            // Places SDK 초기화 - 사진
             if (getActivity() != null) {
                 Context context = getActivity().getApplicationContext();
-                Places.initialize(context, "AIzaSyAlkrLP2vM_bjmH2vFcRjNSQNN4IZkBKD4");
-                placesClient = Places.createClient(context);
+                Places.initialize(context, "AIzaSyBtOchZ5iZsWKxjBayu8q2Qe3oQQQBgp9k");
+
+
                 Log.d(TAG, "Places SDK 초기화 성공");
             } else {
                 Log.e(TAG, "getActivity()가 null입니다.");
@@ -211,7 +213,7 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
         } catch (Exception e) {
             Log.e(TAG, "Places SDK 초기화 실패", e);
         }
-
+        placesClient = Places.createClient(requireContext());
 
 
         startButton=view.findViewById(R.id.start_button);

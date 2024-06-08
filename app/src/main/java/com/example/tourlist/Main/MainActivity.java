@@ -1,6 +1,6 @@
 package com.example.tourlist.Main;
 
-import android.content.Context;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity{
     private FragmentTransaction ft;
     private Frag5_Login frag5_login;
     private Frag5_Register frag5_register;
-    private Frag2_FavoriteList frag2_favoriteList;
+    private Slide2_FavoriteList slide2_favoriteList;
     private Frag1_NaverMap frag1_NaverMap;
     private Frag4_Gpt frag4_Gpt;
     private Frag3_Tourist_Search frag3_TouristSearch;
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity{
 
         frag5_login = new Frag5_Login();
         frag5_register = new Frag5_Register();
-        frag2_favoriteList = new Frag2_FavoriteList();
+        slide2_favoriteList = new Slide2_FavoriteList();
         frag1_NaverMap = new Frag1_NaverMap();
         frag4_Gpt = new Frag4_Gpt();
         frag3_TouristSearch = new Frag3_Tourist_Search();
@@ -108,6 +108,13 @@ public class MainActivity extends AppCompatActivity{
                 } else if (nextTabId == R.id.action_tourist_search) {
                     setFrag(2, forward);
                 }
+                // 선택된 메뉴 아이템의 색상 변경
+                MenuItem selectedItem = bottomNavigationView.getMenu().findItem(nextTabId);
+                selectedItem.setIconTintList(ColorStateList.valueOf(getResources().getColor(R.color.selected_color)));
+
+                // 이전에 선택된 메뉴 아이템의 색상 원래대로 변경
+                MenuItem previousItem = bottomNavigationView.getMenu().findItem(currentTabId);
+                previousItem.setIconTintList(ColorStateList.valueOf(getResources().getColor(R.color.white)));
 
                 currentTabId = nextTabId;
                 return true;
@@ -128,7 +135,7 @@ public class MainActivity extends AppCompatActivity{
                 if (currentFragment != null) {
                     if (currentFragment instanceof Frag5_Login) {
                         tag = "Login";
-                    } else if (currentFragment instanceof Frag2_FavoriteList) {
+                    } else if (currentFragment instanceof Slide2_FavoriteList) {
                         tag = "Favorite";
                     } else if (currentFragment instanceof Frag1_NaverMap) {
                         tag = "NaverMap";
@@ -243,13 +250,13 @@ public class MainActivity extends AppCompatActivity{
             case 1:
                 ft.replace(R.id.main_frame, frag1_NaverMap);
                 ft.addToBackStack(null);
-                addNewResizableFragment(Frag2_FavoriteList.class);
+                addNewResizableFragment(Slide2_FavoriteList.class);
                 break;
 
 
             case 2:
                 ft.replace(R.id.main_frame, frag3_TouristSearch);
-                //ft.replace(R.id.main_frame, frag_course_list);
+//                ft.replace(R.id.main_frame, frag_course_list);
                 ft.addToBackStack(null);
                 removeResizableFragment(); // ResizableFragment 제거
                 break;

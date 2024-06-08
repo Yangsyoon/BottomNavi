@@ -6,6 +6,7 @@ public class TouristCourse {
 
     private String content_id;
     private String course_title;
+    private String areacode;
     private List<TouristCoursePlace> places;
 
     // 기본 생성자
@@ -16,12 +17,19 @@ public class TouristCourse {
     public TouristCourse(String content_id, String course_title) {
         this.content_id = content_id;
         this.course_title = course_title;
-        this.places = places;
     }
-    public TouristCourse(String content_id, String course_title, List<TouristCoursePlace> places) {
+
+    public TouristCourse(String content_id, String course_title, String areacode, List<TouristCoursePlace> places) {
         this.content_id = content_id;
         this.course_title = course_title;
+        this.areacode = areacode;
         this.places = places;
+    }
+
+    public TouristCourse(String content_id, String course_title, String areacode) {
+        this.content_id = content_id;
+        this.course_title = course_title;
+        this.areacode = areacode;
     }
 
     // Getter 메소드
@@ -31,6 +39,10 @@ public class TouristCourse {
 
     public String getCourse_title() {
         return course_title;
+    }
+
+    public String getAreacode() {
+        return areacode;
     }
 
     public List<TouristCoursePlace> getPlaces() {
@@ -44,6 +56,10 @@ public class TouristCourse {
 
     public void setCourse_title(String course_title) {
         this.course_title = course_title;
+    }
+
+    public void setAreacode(String areacode) {
+        this.areacode = areacode;
     }
 
     public void setPlaces(List<TouristCoursePlace> places) {

@@ -17,8 +17,6 @@ import android.view.ViewGroup;
 
 import com.example.tourlist.R;
 
-import java.lang.reflect.InvocationTargetException;
-
 public class ResizableFragment extends Fragment {
 
     private static final String TAG = "ResizableFragment";
@@ -120,10 +118,10 @@ public class ResizableFragment extends Fragment {
     private Fragment getChildFragment(String fragmentClassName) {
         // 전달된 클래스 이름에 따라 자식 Fragment를 생성합니다.
         try {
-            if (fragmentClassName.equals(Frag2_FavoriteList.class.getName())) {
+            if (fragmentClassName.equals(Slide2_FavoriteList.class.getName())) {
                 Log.d(TAG, "1");
 
-                return new Frag2_FavoriteList();
+                return new Slide2_FavoriteList();
 
             } else if (fragmentClassName.equals(Frag3_Tourist_Search.class.getName())) {
                 Log.d(TAG, "2");

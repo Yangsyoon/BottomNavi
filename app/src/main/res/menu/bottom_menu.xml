@@ -44,7 +44,7 @@
         android:title="내 계정"
         android:menuCategory="secondary"
         />
-<!--    android:icon="@drawable/user_pen"-->
+    <!--    android:icon="@drawable/user_pen"-->
 
     <!--<item
         android:id="@+id/action_favorite"

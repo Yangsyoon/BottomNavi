@@ -1,15 +1,13 @@
 package com.example.tourlist.Tourist_Detail_Activity.Detail_files;
 
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tourlist.R;
-import com.example.tourlist.Tourist_Detail_Activity.TouristPlaceDetailActivity;
 
 import java.util.List;
 
@@ -24,7 +22,7 @@ public class AttractionAdapter extends RecyclerView.Adapter<AttractionViewHolder
     @NonNull
     @Override
     public AttractionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.frag4_item_attraction, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.frag3_item_attraction, parent, false);
         return new AttractionViewHolder(view);
     }
 

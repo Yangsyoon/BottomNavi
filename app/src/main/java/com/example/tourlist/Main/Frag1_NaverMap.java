@@ -203,9 +203,8 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
             // Places SDK 초기화 - 사진
             if (getActivity() != null) {
                 Context context = getActivity().getApplicationContext();
-                Places.initialize(context, "AIzaSyBtOchZ5iZsWKxjBayu8q2Qe3oQQQBgp9k");
-
-
+                Places.initialize(context, "AIzaSyAYCIPa5wxH3mYY0BhHj2sm-3i_QDaODw0");
+                placesClient = Places.createClient(context);
                 Log.d(TAG, "Places SDK 초기화 성공");
             } else {
                 Log.e(TAG, "getActivity()가 null입니다.");
@@ -213,7 +212,7 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
         } catch (Exception e) {
             Log.e(TAG, "Places SDK 초기화 실패", e);
         }
-        placesClient = Places.createClient(requireContext());
+
 
 
         startButton=view.findViewById(R.id.start_button);
@@ -297,6 +296,12 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
         favoriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                FirebaseUser user = mAuth.getCurrentUser();
+                if(user==null){
+                    Toast.makeText(getContext(), "즐겨찾기 기능은 로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
+
+                }
                 if (selectedMarker != null) {
                     // 데이터베이스에 위도 경도 추가 함수...
                     addFavoriteLocation(selectedMarker.getCaptionText(),selectedMarker.getPosition().latitude,selectedMarker.getPosition().longitude);
@@ -330,7 +335,7 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
         FirebaseUser user = mAuth.getCurrentUser();
 
         //로그인 안했으면 익명 로그인
-        if (user == null) {
+        /*if (user == null) {
 
             mAuth.signInAnonymously().addOnCompleteListener(getActivity(), task -> {
                 if (task.isSuccessful()) {
@@ -342,7 +347,7 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
                 }
             });
 
-        }
+        }*/
         //
 
         //버튼들
@@ -670,7 +675,7 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
                                     infoDescription.setText(place.getDescription());
                                     infoAddress.setText(place.getAddress());
                                     loadPlaceImage(place);
-                                    String s= String.format("%.2f", distance/1000);
+                                    String s= String.format("%.0f", distance/1000);
                                     tv_dist.setText(s+"Km");
 
                                     selectedPlace = place;
@@ -695,7 +700,12 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
                                 return true; // true로 설정하여 기본 마커 클릭 동작을 유지하지 않음
                             }
                         });
-
+                        mMap.setOnMapClickListener(new NaverMap.OnMapClickListener() {
+                            @Override
+                            public void onMapClick(@NonNull PointF pointF, @NonNull LatLng latLng) {
+                                infoCard.setVisibility(View.GONE);
+                            }
+                        });
 
                         Log.d(TAG, "Tourist place marker added for: " + placeName + " at: " + latLng.toString());
                     } catch (Exception e) {

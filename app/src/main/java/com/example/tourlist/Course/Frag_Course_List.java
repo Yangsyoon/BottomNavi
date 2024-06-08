@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,20 +64,20 @@ public class Frag_Course_List extends Fragment {
             }
         });
 
-        Button allButton = view.findViewById(R.id.allButton);
-        Button seoulButton = view.findViewById(R.id.seoulButton);
-        Button daeguButton = view.findViewById(R.id.daeguButton);
-        Button busanButton = view.findViewById(R.id.busanButton);
-        Button incheonButton = view.findViewById(R.id.incheonButton);
-        Button ulsanButton = view.findViewById(R.id.ulsanButton);
-        Button daejeonButton = view.findViewById(R.id.daejeonButton);
-        Button gyeonggiButton = view.findViewById(R.id.gyeonggiButton);
-        Button jeonButton = view.findViewById(R.id.jeonButton);
-        Button chungButton = view.findViewById(R.id.chungButton);
-        Button gyeongButton = view.findViewById(R.id.gyeongButton);
-        Button gangwonButton = view.findViewById(R.id.gangwonButton);
-        Button jejuButton = view.findViewById(R.id.jejuButton);
-        Button gpsButton = view.findViewById(R.id.mylocation);
+        Button allButton = view.findViewById(R.id.all_Button);
+        Button seoulButton = view.findViewById(R.id.seoul_Button);
+        Button daeguButton = view.findViewById(R.id.daegu_Button);
+        Button busanButton = view.findViewById(R.id.busan_Button);
+        Button incheonButton = view.findViewById(R.id.incheon_Button);
+        Button ulsanButton = view.findViewById(R.id.ulsan_Button);
+        Button daejeonButton = view.findViewById(R.id.daejeon_Button);
+        Button gyeonggiButton = view.findViewById(R.id.gyeonggi_Button);
+        Button jeonButton = view.findViewById(R.id.jeon_Button);
+        Button chungButton = view.findViewById(R.id.chung_Button);
+        Button gyeongButton = view.findViewById(R.id.gyeong_Button);
+        Button gangwonButton = view.findViewById(R.id.gangwon_Button);
+        Button jejuButton = view.findViewById(R.id.jeju_Button);
+        Button gpsButton = view.findViewById(R.id.my_location);
 
         getCurrentLocation();
 

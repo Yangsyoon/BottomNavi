@@ -1,6 +1,5 @@
 package com.example.tourlist.Main;
 
-import android.content.Context;
 import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,21 +8,17 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.tourlist.Course.Frag_Course_List;
@@ -31,7 +26,6 @@ import com.example.tourlist.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainActivity extends AppCompatActivity{
 
@@ -40,7 +34,7 @@ public class MainActivity extends AppCompatActivity{
     private FragmentTransaction ft;
     private Frag5_Login frag5_login;
     private Frag5_Register frag5_register;
-    private Frag2_FavoriteList frag2_favoriteList;
+    private Slide2_FavoriteList slide2_favoriteList;
     private Frag1_NaverMap frag1_NaverMap;
     private Frag4_Gpt frag4_Gpt;
     private Frag3_Tourist_Search frag3_TouristSearch;
@@ -80,7 +74,7 @@ public class MainActivity extends AppCompatActivity{
 
         frag5_login = new Frag5_Login();
         frag5_register = new Frag5_Register();
-        frag2_favoriteList = new Frag2_FavoriteList();
+        slide2_favoriteList = new Slide2_FavoriteList();
         frag1_NaverMap = new Frag1_NaverMap();
         frag4_Gpt = new Frag4_Gpt();
         frag3_TouristSearch = new Frag3_Tourist_Search();
@@ -128,7 +122,7 @@ public class MainActivity extends AppCompatActivity{
                 if (currentFragment != null) {
                     if (currentFragment instanceof Frag5_Login) {
                         tag = "Login";
-                    } else if (currentFragment instanceof Frag2_FavoriteList) {
+                    } else if (currentFragment instanceof Slide2_FavoriteList) {
                         tag = "Favorite";
                     } else if (currentFragment instanceof Frag1_NaverMap) {
                         tag = "NaverMap";
@@ -243,13 +237,13 @@ public class MainActivity extends AppCompatActivity{
             case 1:
                 ft.replace(R.id.main_frame, frag1_NaverMap);
                 ft.addToBackStack(null);
-                addNewResizableFragment(Frag2_FavoriteList.class);
+                addNewResizableFragment(Slide2_FavoriteList.class);
                 break;
 
 
             case 2:
-//                ft.replace(R.id.main_frame, frag3_TouristSearch);
-                ft.replace(R.id.main_frame, frag_course_list);
+                ft.replace(R.id.main_frame, frag3_TouristSearch);
+//                ft.replace(R.id.main_frame, frag_course_list);
                 ft.addToBackStack(null);
                 removeResizableFragment(); // ResizableFragment 제거
                 break;

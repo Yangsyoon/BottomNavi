@@ -31,7 +31,7 @@ public class CourseDetail_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_detail);
-
+        Log.d("1", "3");
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         placeAdapter = new PlaceAdapter();
@@ -40,14 +40,17 @@ public class CourseDetail_Activity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(PlaceViewModel.class);
 
         String contentId = getIntent().getStringExtra("CONTENT_ID");
+        Log.d("1", "1contentId: " + contentId);
 
         viewModel.loadTouristCoursePlaces(contentId);
+        Log.d("1", "2contentId: " + contentId);
 
         viewModel.getPlaces().observe(this, new Observer<List<TouristCoursePlace>>() {
             @Override
             public void onChanged(List<TouristCoursePlace> places) {
                 if (places != null) {
                     placeAdapter.setPlaces(places);
+                    Log.d("1", "4contentId: " + contentId);
                 }
             }
         });

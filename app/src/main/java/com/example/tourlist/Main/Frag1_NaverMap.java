@@ -295,6 +295,12 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
         favoriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                FirebaseUser user = mAuth.getCurrentUser();
+                if(user==null){
+                    Toast.makeText(getContext(), "즐겨찾기 기능은 로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
+
+                }
                 if (selectedMarker != null) {
                     // 데이터베이스에 위도 경도 추가 함수...
                     addFavoriteLocation(selectedMarker.getCaptionText(),selectedMarker.getPosition().latitude,selectedMarker.getPosition().longitude);
@@ -328,7 +334,7 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
         FirebaseUser user = mAuth.getCurrentUser();
 
         //로그인 안했으면 익명 로그인
-        if (user == null) {
+        /*if (user == null) {
 
             mAuth.signInAnonymously().addOnCompleteListener(getActivity(), task -> {
                 if (task.isSuccessful()) {
@@ -340,7 +346,7 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
                 }
             });
 
-        }
+        }*/
         //
 
         //버튼들

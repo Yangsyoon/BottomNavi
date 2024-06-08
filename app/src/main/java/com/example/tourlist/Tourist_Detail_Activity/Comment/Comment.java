@@ -1,17 +1,30 @@
 package com.example.tourlist.Tourist_Detail_Activity.Comment;
+
 public class Comment {
+    private String commentId;
     private String userId;
     private String userName;
     private String content;
     private long timestamp;
+    private String placeName;
 
     public Comment() {}
 
-    public Comment(String userId, String userName, String content, long timestamp) {
+    public Comment(String commentId, String userId, String userName, String content, long timestamp, String placeName) {
+        this.commentId = commentId;
         this.userId = userId;
         this.userName = userName;
         this.content = content;
         this.timestamp = timestamp;
+        this.placeName = placeName;
+    }
+
+    public String getCommentId() {
+        return commentId;
+    }
+
+    public void setCommentId(String commentId) {
+        this.commentId = commentId;
     }
 
     public String getUserId() {
@@ -44,5 +57,13 @@ public class Comment {
 
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public String getPlaceName() {
+        return placeName;
+    }
+
+    public void setPlaceName(String placeName) {
+        this.placeName = placeName;
     }
 }

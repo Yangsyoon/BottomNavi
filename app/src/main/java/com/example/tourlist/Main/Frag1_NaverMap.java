@@ -17,6 +17,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -50,6 +52,7 @@ import com.google.android.libraries.places.api.net.FetchPhotoRequest;
 import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -101,7 +104,7 @@ import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.List;
 
-public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback {
+public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View.OnClickListener{
     private String fragmentTag="NaverMap";
 
     public void setFragmentTag(String tag) {
@@ -121,6 +124,7 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
     private FusedLocationSource locationSource;
 
+    private boolean isFabOpen = false; // FAB 상태를 나타내는 변수
 
 
     private static final String TAG = "Frag3_GoogleMap";
@@ -132,7 +136,8 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback {
 
 
 
-
+    private FloatingActionButton fab_main, fab_sub1, fab_sub2;
+    private Animation fab_open, fab_close;
 
 
 
@@ -174,12 +179,24 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback {
 
     private Location currentLocation;
     private TouristPlace selectedPlace;
+    private Context mContext;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.frag1_navermap,container,false);
 
+        Context mContext = getContext();
+        fab_open = AnimationUtils.loadAnimation(mContext, R.anim.fab_open);
+        fab_close = AnimationUtils.loadAnimation(mContext, R.anim.fab_close);
+
+        fab_main = view.findViewById(R.id.fab_main);
+        fab_sub1 = view.findViewById(R.id.fab_sub1);
+        fab_sub2 = view.findViewById(R.id.fab_sub2);
+
+        fab_main.setOnClickListener(this);
+        fab_sub1.setOnClickListener(this);
+        fab_sub2.setOnClickListener(this);
 
         try {
             // Places SDK 초기화
@@ -278,6 +295,12 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback {
         favoriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                FirebaseUser user = mAuth.getCurrentUser();
+                if(user==null){
+                    Toast.makeText(getContext(), "즐겨찾기 기능은 로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
+
+                }
                 if (selectedMarker != null) {
                     // 데이터베이스에 위도 경도 추가 함수...
                     addFavoriteLocation(selectedMarker.getCaptionText(),selectedMarker.getPosition().latitude,selectedMarker.getPosition().longitude);
@@ -311,7 +334,7 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback {
         FirebaseUser user = mAuth.getCurrentUser();
 
         //로그인 안했으면 익명 로그인
-        if (user == null) {
+        /*if (user == null) {
 
             mAuth.signInAnonymously().addOnCompleteListener(getActivity(), task -> {
                 if (task.isSuccessful()) {
@@ -323,7 +346,7 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback {
                 }
             });
 
-        }
+        }*/
         //
 
         //버튼들
@@ -651,7 +674,7 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback {
                                     infoDescription.setText(place.getDescription());
                                     infoAddress.setText(place.getAddress());
                                     loadPlaceImage(place);
-                                    String s= String.format("%.2f", distance/1000);
+                                    String s= String.format("%.0f", distance/1000);
                                     tv_dist.setText(s+"Km");
 
                                     selectedPlace = place;
@@ -1024,10 +1047,61 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback {
 
         }
     }
+    @Override
+    public void onClick(View v) {
+        /*switch (v.getId()) {
+            case R.id.fab_main:
+                toggleFab();
+                break;
+            case R.id.fab_sub1:
+                toggleFab();
+                Toast.makeText(this, "Camera Open-!", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.fab_sub2:
+                toggleFab();
+                Toast.makeText(this, "Map Open-!", Toast.LENGTH_SHORT).show();
+                break;
+        }*/
+        int id = v.getId();
+        if(id == R.id.fab_main)
+        {
+            toggleFab();
+        }
+        else if(id == R.id.fab_sub1)
+        {
+            toggleFab();
+            Toast.makeText(getContext(), "Camera Open-!", Toast.LENGTH_SHORT).show();
+        }
+        else if(id == R.id.fab_sub2)
+        {
+            toggleFab();
+            Toast.makeText(getContext(), "Map Open-!", Toast.LENGTH_SHORT).show();
+        }
+    }
 
-
-
+    private void toggleFab() {
+        if (isFabOpen) {
+            fab_main.setImageResource(R.drawable.ic_add);
+            fab_sub1.startAnimation(fab_close);
+            fab_sub2.startAnimation(fab_close);
+            fab_sub1.setClickable(false);
+            fab_sub2.setClickable(false);
+            isFabOpen = false;
+        } else {
+            fab_main.setImageResource(R.drawable.ic_close);
+            fab_sub1.startAnimation(fab_open);
+            fab_sub2.startAnimation(fab_open);
+            fab_sub1.setClickable(true);
+            fab_sub2.setClickable(true);
+            isFabOpen = true;
+        }
+    }
 }
+
+
+
+
+
 
 
 

@@ -8,4 +8,7 @@
         <item name="android:textColorHint">#888888</item>
         <item name="android:padding">10dp</item>
     </style>
+    <style name="PopupMenuStyle" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@drawable/popup_background</item>
+    </style>
 </resources>

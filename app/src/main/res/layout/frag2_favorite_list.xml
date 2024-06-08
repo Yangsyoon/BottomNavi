@@ -15,12 +15,12 @@
     <TextView
         android:id="@+id/tv"
         android:layout_width="match_parent"
-        android:layout_height="74dp"
-        android:gravity="center"
-        android:text="Favorite"
-        android:textSize="20sp"
+        android:layout_height="50dp"
+        android:gravity="center_horizontal"
+        android:paddingTop="5dp"
 
-        >
+        android:text="Favorite"
+        android:textSize="20sp">
 
     </TextView>
 

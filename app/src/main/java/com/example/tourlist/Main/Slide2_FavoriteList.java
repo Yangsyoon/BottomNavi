@@ -34,7 +34,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Frag2_FavoriteList extends Fragment {
+public class Slide2_FavoriteList extends Fragment {
 
     private String fragmentTag = "Favorite";
 

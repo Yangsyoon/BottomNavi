@@ -1,10 +1,9 @@
 package com.example.tourlist.Course;
 
+import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
-
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.tourlist.R;
 
 class CourseViewHolder extends RecyclerView.ViewHolder {
@@ -17,14 +16,13 @@ class CourseViewHolder extends RecyclerView.ViewHolder {
     }
 
     void bind(final TouristCourse course) {
-        courseButton.setText(course.getName());
+        courseButton.setText(course.getCourse_title());
         courseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                    Intent intent = new Intent(itemView.getContext(), TouristPlaceDetailActivity.class);
-//                    intent.putExtra("PLACE_NAME", course.getName());
-//                    intent.putExtra("PLACE_ADDRESS", course.getAddress());
-//                    itemView.getContext().startActivity(intent);
+                Intent intent = new Intent(itemView.getContext(), CourseDetail_Activity.class);
+                intent.putExtra("CONTENT_ID", course.getContent_id());
+                itemView.getContext().startActivity(intent);
             }
         });
     }

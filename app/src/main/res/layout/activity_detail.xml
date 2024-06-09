@@ -55,7 +55,10 @@
                     android:layout_height="200dp"
                     android:layout_marginTop="16dp"
                     android:scaleType="centerCrop"
-                    android:contentDescription="Place Image" />
+                    android:background="@drawable/image_view_border"
+                    android:contentDescription="Place Image"
+                    android:clipToOutline="true"/> <!-- 이 속성이 있어야 이미지가 둥글게 클립됩니다 -->
+
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>

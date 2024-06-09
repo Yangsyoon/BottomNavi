@@ -6,106 +6,209 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Main.Frag5_Login"
-    android:background="@color/white"
+    android:background="@color/white">
 
-    >
-
-<!--   textemail~ 키보드에 @버튼 등. 편하게 세팅. -->
-    <EditText
-        android:id="@+id/et_email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="200dp"
-
-        android:layout_marginEnd="100dp"
-        android:ems="10"
-
-        android:hint='이메일을 입력하세요'
-        android:inputType="textEmailAddress"
-
-
-
+    <!-- 로고 이미지 -->
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="170dp"
+        android:layout_height="176dp"
+        android:layout_marginTop="60dp"
+        android:src="@mipmap/ic_launcher"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-    <!--android:inputType="textEmailAddress" 키보드... 뜸.-->
 
-    <EditText
-        android:id="@+id/et_pwd"
-        android:layout_width="wrap_content"
+    <!-- 로고 이미지를 @drawable 폴더에 넣고 경로를 설정해주세요 -->
+    <!-- 이메일 입력 필드 -->
+    <!-- CardView로 감싸서 선이 보이도록 함 -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-
-        android:layout_marginTop="100dp"
-        android:layout_marginEnd="100dp"
-        android:ems="10"
-
-        android:hint='비밀번호을 입력하세요'
-        android:inputType="textPersonName"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginTop="24dp"
+        app:cardElevation="2dp"
+        app:cardCornerRadius="8dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_email"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/logo">
 
-        />
+        <LinearLayout
+            android:id="@+id/linear_layout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:background="@drawable/image_view_border"
+            >
 
-    <Button
-        android:id="@+id/btn_guest_login"
-        android:layout_width="189dp"
-        android:layout_height="49dp"
-        android:layout_margin="8dp"
-        android:layout_marginBottom="88dp"
-        android:backgroundTint="@color/darkblue"
-        android:text="게스트 로그인"
-        app:layout_constraintBottom_toTopOf="@+id/btn_login"
-        app:layout_constraintEnd_toEndOf="@+id/btn_login"
-        app:layout_constraintStart_toStartOf="@+id/btn_login"
+            <!-- 이메일 입력 필드 -->
+            <EditText
+                android:id="@+id/et_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="아이디"
+                android:inputType="textEmailAddress"
+                android:drawableLeft="@drawable/user_24"
+                android:drawablePadding="10dp"
+                android:padding="10dp"
+                android:background="@null"
+                />
 
-        />
+            <!-- 비밀번호 입력 필드 -->
+            <EditText
+                android:id="@+id/et_pwd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="비밀번호"
+                android:inputType="textPassword"
+                android:drawableLeft="@drawable/user_24"
+                android:drawablePadding="10dp"
+                android:padding="10dp"
+                android:background="@null"
+                android:layout_marginTop="16dp"
+                />
 
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- 로그인 버튼 -->
     <Button
         android:id="@+id/btn_login"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="70dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="32dp"
+        android:backgroundTint="#C5CCD2"
         android:text="로그인"
-        android:layout_margin="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btn_register"
-        app:layout_constraintStart_toStartOf="parent"
-        android:backgroundTint="@color/darkblue"
-
-        />
-
-
-    <Button
-        android:id="@+id/btn_signout"
-        android:layout_width="188dp"
-        android:layout_height="47dp"
-        android:layout_margin="8dp"
-
-        android:layout_marginBottom="10dp"
-        android:backgroundTint="@color/blue"
-        android:text="로그아웃"
-        app:layout_constraintBottom_toTopOf="@+id/btn_register"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.73"
-        app:layout_constraintStart_toEndOf="@+id/btn_guest_login"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/card_view" />
 
-        />
-
-    <Button
-        android:id="@+id/btn_register"
+    <!-- 비밀번호 찾기, 아이디 찾기, 회원가입 -->
+    <LinearLayout
+        android:id="@+id/linear_layout2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:backgroundTint="@color/blue"
+        android:layout_marginTop="35dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_login">
 
-        android:text="회원가입"
+        <TextView
+            android:id="@+id/tv_find_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="sans-serif-medium"
+            android:text="비밀번호 찾기"
+            android:textColor="#929292"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_find_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="sans-serif-medium"
+            android:text="아이디 찾기"
+            android:textColor="#929292"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/btn_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="sans-serif-medium"
+            android:text="회원가입"
+            android:textColor="#4284f4"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/linear_layout3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="150dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linear_layout2">
+
+        <TextView
+            android:id="@+id/account_manage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="sans-serif-medium"
+            android:text="계정 관리"
+            android:textColor="#868686"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="0dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="sans-serif-medium"
+            android:text="고객센터"
+            android:textColor="#868686"
+            android:textStyle="bold"
+
+            />
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/tv_naver_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:gravity="center"
+        android:text="Tourist"
+        android:textColor="#B2B2B2"
+        android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btn_login" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linear_layout3"
+        app:layout_constraintVertical_bias="0.157" />
 
+
+    <!--    <Button-->
+<!--        android:id="@+id/btn_signout"-->
+<!--        android:layout_width="188dp"-->
+<!--        android:layout_height="47dp"-->
+<!--        android:layout_margin="8dp"-->
+
+<!--        android:layout_marginBottom="10dp"-->
+<!--        android:backgroundTint="@color/blue"-->
+<!--        android:text="로그아웃"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/btn_register"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.73"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/btn_guest_login"-->
+
+<!--        />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

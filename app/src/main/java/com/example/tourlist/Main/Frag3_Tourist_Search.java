@@ -103,7 +103,8 @@ public class Frag3_Tourist_Search extends Fragment {
 
         // Places API 초기화 - 사진
         if (!Places.isInitialized()) {
-            Places.initialize(requireContext(), "AIzaSyBtOchZ5iZsWKxjBayu8q2Qe3oQQQBgp9k");
+            // 형준 : AIzaSyAlkrLP2vM_bjmH2vFcRjNSQNN4IZkBKD4
+            Places.initialize(requireContext(), "AIzaSyAlkrLP2vM_bjmH2vFcRjNSQNN4IZkBKD4");
         }
         placesClient = Places.createClient(requireContext());
 

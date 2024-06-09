@@ -4,6 +4,10 @@
     <color name="white">#FFFFFFFF</color>
     <color name="darkblue">#243773</color>
     <color name="blue">#3E649F</color>
+    <color name="blue2">#4285f4</color>
+    <color name="gray">#737373</color>
+    <color name="login_gray">#C5CCD2</color>
+    <color name="login_blue">#478DEC</color>
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>

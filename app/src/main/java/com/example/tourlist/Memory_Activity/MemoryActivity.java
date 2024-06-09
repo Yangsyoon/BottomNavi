@@ -75,9 +75,10 @@ public class MemoryActivity extends AppCompatActivity {
 //        loadMemoryText(locationKey);
 
         // Firebase에서 저장된 텍스트와 이미지 불러오기
-        loadMemoryText(locationKey);
+        loadMemoryText(locationName);
 //        loadMemoryImage(locationKey);
-        getFireBaseProfileImage(locationKey);
+        //이미지
+        getFireBaseProfileImage(locationName);
 
 
         //하단 글 텍스트뷰
@@ -94,7 +95,8 @@ public class MemoryActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                save_Text(locationKey);
+//                save_Text(locationKey);
+                save_Text(locationName);
 
                 uploadImage(imageUri);
             }
@@ -103,7 +105,7 @@ public class MemoryActivity extends AppCompatActivity {
     }
 
 
-private void save_Text(String locationKey) {
+private void save_Text(String locationName) {
     String text = memory_EditText.getText().toString();
     FirebaseUser user = mAuth.getCurrentUser();
 
@@ -116,7 +118,7 @@ private void save_Text(String locationKey) {
         Log.d("MemoryActivity3", "Memory ...database");
 
 
-        mDatabase.child(user.getEmail()).child(locationKey).child("text").setValue(text)
+        mDatabase.child(user.getUid()).child(locationName).child("text").setValue(text)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Log.d("MemoryActivity", "Memory saved");
@@ -158,7 +160,9 @@ private void loadMemoryText(String locationKey) {
 
 
                 } else {
-                    memory_TextView.setText("Click to add a memory");
+                    String s=getIntent().getStringExtra("location_name");
+                    memory_TextView.setText("Click to add a memory"+s);
+//                    memory_TextView.setText("Click to add a memory");
                 }
 
 
@@ -244,7 +248,7 @@ private void getFireBaseProfileImage(String locationKey) {
     FirebaseUser user = mAuth.getCurrentUser();
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageReference = storage.getReference();
-    StorageReference pathReference = storageReference.child("memories").child(user.getEmail()).child(locationKey);//.child("1.jpg");
+    StorageReference pathReference = storageReference.child("memories").child(user.getUid()).child(locationKey);//.child("1.jpg");
     if (pathReference == null) {
         Toast.makeText(MemoryActivity.this, "저장소에 사진이 없습니다." ,Toast.LENGTH_SHORT).show();
         Log.d("check1", "저장소사진없."+locationKey);
@@ -370,9 +374,10 @@ private void uploadImage(Uri imageUri) {
     FirebaseUser user = mAuth.getCurrentUser();
     if (user != null) {
         mStorage = FirebaseStorage.getInstance().getReference();
-        String locationKey = getIntent().getStringExtra("location_key");
+        String locationName = getIntent().getStringExtra("location_name");
+//        String locationKey = getIntent().getStringExtra("location_key");
 
-        StorageReference fileReference = mStorage.child("memories").child(user.getUid()).child(locationKey).child("1.jpg");
+        StorageReference fileReference = mStorage.child("memories").child(user.getUid()).child(locationName).child("1.jpg");
 //        StorageReference fileReference = mStorage.child("memories").child(user.getUid()).child(locationKey).child("imageUrl").child(System.currentTimeMillis() + ".jpg");
         fileReference.putFile(imageUri)
                 .addOnSuccessListener(taskSnapshot -> fileReference.getDownloadUrl().addOnSuccessListener(uri -> {
@@ -389,22 +394,24 @@ private void saveMemoryWithImage(String imageUrl) {
     String text = memory_EditText.getText().toString();
     FirebaseUser user = mAuth.getCurrentUser();
 
-    if (user != null && !text.isEmpty()) {
-        String userId = user.getUid();
-        String locationKey = getIntent().getStringExtra("location_key");
-        String key = mDatabase.child("memories").child(userId).child(locationKey).push().getKey();
-
-        Memory memory = new Memory(text, imageUrl);
-
-        mDatabase.child("memories").child(userId).child(locationKey).child(key).setValue(memory)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Toast.makeText(MemoryActivity.this, "Memory saved", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(MemoryActivity.this, "Failed to save memory", Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
+//    if (user != null && !text.isEmpty()) {
+//        String userId = user.getUid();
+////        String locationKey = getIntent().getStringExtra("location_key");
+//        String locationKey = getIntent().getStringExtra("location_name");
+////        String key = mDatabase.child("memories").child(userId).child(locationKey).push().getKey();
+//        String key = mDatabase.child("memories").child(userId).child(locationKey).push().getKey();
+//
+//        Memory memory = new Memory(text, imageUrl);
+//
+//        mDatabase.child("memories").child(userId).child(locationKey).child(key).setValue(memory)
+//                .addOnCompleteListener(task -> {
+//                    if (task.isSuccessful()) {
+//                        Toast.makeText(MemoryActivity.this, "Memory saved", Toast.LENGTH_SHORT).show();
+//                    } else {
+//                        Toast.makeText(MemoryActivity.this, "Failed to save memory", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//    }
 }
 
 

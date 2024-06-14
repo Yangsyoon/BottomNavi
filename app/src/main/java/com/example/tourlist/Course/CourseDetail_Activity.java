@@ -1,13 +1,18 @@
 package com.example.tourlist.Course;
 
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,7 +23,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.tourlist.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 
 public class CourseDetail_Activity extends AppCompatActivity {
@@ -54,7 +63,19 @@ public class CourseDetail_Activity extends AppCompatActivity {
                 }
             }
         });
+
+        FloatingActionButton fab = findViewById(R.id.pathButton);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(CourseDetail_Activity.this, RouteActivity.class);
+                intent.putExtra("placesList", (Serializable) placeAdapter.getPlaces());
+                startActivity(intent);
+            }
+        });
+
     }
+
 
     public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.PlaceViewHolder> {
 
@@ -65,6 +86,10 @@ public class CourseDetail_Activity extends AppCompatActivity {
             notifyDataSetChanged();
         }
 
+        // getPlaces 메서드 추가
+        public List<TouristCoursePlace> getPlaces() {
+            return places;
+        }
         @NonNull
         @Override
         public PlaceViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

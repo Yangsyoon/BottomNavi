@@ -1,6 +1,8 @@
 package com.example.tourlist.Course;
 
-public class TouristCoursePlace {
+import java.io.Serializable;
+
+public class TouristCoursePlace implements Serializable {
 
     private String subcontentid;
     private String subname;
@@ -13,6 +15,8 @@ public class TouristCoursePlace {
     private String addr1;
     private double mapx;
     private double mapy;
+    private double latitude;
+    private double longitude;
 
     // 기본 생성자
     public TouristCoursePlace() {
@@ -120,5 +124,20 @@ public class TouristCoursePlace {
 
     public void setMapy(double mapy) {
         this.mapy = mapy;
+    }
+
+    // 위도와 경도를 받는 생성자 추가
+    public TouristCoursePlace(String subname, double latitude, double longitude) {
+        this.subname = subname;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
     }
 }

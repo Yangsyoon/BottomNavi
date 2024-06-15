@@ -1,4 +1,4 @@
-package com.example.tourlist.Course;
+package com.example.tourlist.A_Course;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -6,7 +6,6 @@ import com.android.volley.toolbox.HttpHeaderParser;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 
 public class InputStreamRequest extends Request<InputStream> {
     private final Response.Listener<InputStream> listener;

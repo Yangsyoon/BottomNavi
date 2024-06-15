@@ -1,4 +1,4 @@
-package com.example.tourlist.Course;
+package com.example.tourlist.Main;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -19,6 +19,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.tourlist.A_Course.CourseAdapter;
+import com.example.tourlist.A_Course.Course;
+import com.example.tourlist.A_Course.CourseViewModel;
 import com.example.tourlist.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -28,13 +31,13 @@ import com.google.android.gms.tasks.Task;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Frag_Course_List extends Fragment {
+public class Slide1_Course_List extends Fragment {
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
     private CourseViewModel courseViewModel;
     private CourseAdapter courseAdapter;
-    private List<TouristCourse> courses;
+    private List<Course> courses;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private String currentLatitude;
     private String currentLongitude;
@@ -42,7 +45,7 @@ public class Frag_Course_List extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.frag_course_list, container, false);
+        View view = inflater.inflate(R.layout.slide1_course_list, container, false);
 
         RecyclerView recyclerView2_course = view.findViewById(R.id.recyclerView2);
         recyclerView2_course.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -55,11 +58,11 @@ public class Frag_Course_List extends Fragment {
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity());
 
-        courseViewModel.getTouristCourses().observe(getViewLifecycleOwner(), new Observer<List<TouristCourse>>() {
+        courseViewModel.getTouristCourses().observe(getViewLifecycleOwner(), new Observer<List<Course>>() {
             @Override
-            public void onChanged(List<TouristCourse> touristCourses) {
-                courses.clear();
-                courses.addAll(touristCourses);
+            public void onChanged(List<Course> courses) {
+                Slide1_Course_List.this.courses.clear();
+                Slide1_Course_List.this.courses.addAll(courses);
                 courseAdapter.notifyDataSetChanged();
             }
         });

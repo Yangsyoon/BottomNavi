@@ -1,18 +1,12 @@
-package com.example.tourlist.Course;
+package com.example.tourlist.A_Course;
 
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
-
-import java.io.IOException;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
 class XmlParser1 {
 
-    public List<TouristCourse> parse(String xmlData) {
-        List<TouristCourse> courses = new ArrayList<>();
+    public List<Course> parse(String xmlData) {
+        List<Course> courses = new ArrayList<>();
 
 //        try {
 //            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();

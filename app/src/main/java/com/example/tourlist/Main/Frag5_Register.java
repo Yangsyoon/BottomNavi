@@ -1,6 +1,9 @@
 package com.example.tourlist.Main;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,6 +55,42 @@ public class Frag5_Register extends Fragment {
         mEtPwd=view.findViewById(R.id.et_pwd);
         mEtnickname=view.findViewById(R.id.et_nickname);
         mBtnRegister=view.findViewById(R.id.btn_register);
+
+        mEtPwd.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // 입력 전 처리할 로직
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // 입력 중 처리할 로직
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // 입력 후 처리할 로직
+                // 여기서 입력한 내용이 보이도록 할 필요는 없습니다.
+                // 기본적으로 입력한 내용이 보입니다.
+            }
+        });
+
+        Button buttonToggle = view.findViewById(R.id.buttonToggle);
+
+        buttonToggle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mEtPwd.getInputType() == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD)) {
+                    mEtPwd.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    buttonToggle.setText("Hide");
+                } else {
+                    mEtPwd.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    buttonToggle.setText("Show");
+                }
+                // 커서 위치를 끝으로 이동
+                mEtPwd.setSelection(mEtPwd.getText().length());
+            }
+        });
 
         mBtnRegister.setOnClickListener(new View.OnClickListener() {
             @Override

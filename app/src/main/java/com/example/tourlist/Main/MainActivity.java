@@ -9,29 +9,23 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.tourlist.Course.Frag_Course_List;
 import com.example.tourlist.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainActivity extends AppCompatActivity{
 
@@ -44,10 +38,9 @@ public class MainActivity extends AppCompatActivity{
     private Frag1_NaverMap frag1_NaverMap;
     private Frag4_Gpt frag4_Gpt;
     private Frag3_Tourist_Search frag3_TouristSearch;
-    private Frag_Course_List frag_course_list;
+    private Slide1_Course_List slide1_course_list;
     private ResizableFragment resizableFragment;
 
-    private Slide1 slide1;
     private FirebaseAuth mAuth;
     private boolean isUserInteraction = false;
     private int currentTabId = R.id.action_account; // 현재 탭을 추적
@@ -85,8 +78,7 @@ public class MainActivity extends AppCompatActivity{
         frag4_Gpt = new Frag4_Gpt();
         frag3_TouristSearch = new Frag3_Tourist_Search();
         resizableFragment = new ResizableFragment();
-        slide1 = new Slide1();
-        frag_course_list=new Frag_Course_List();
+        slide1_course_list =new Slide1_Course_List();
 
         bottomNavigationView = findViewById(R.id.bottomNavi);
         bottomNavigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
@@ -244,7 +236,8 @@ public class MainActivity extends AppCompatActivity{
             case 0:
                 ft.replace(R.id.main_frame, frag1_NaverMap);
                 ft.addToBackStack(null);
-                addNewResizableFragment(Frag3_Tourist_Search.class); // ResizableFragment 추가
+//                addNewResizableFragment(Slide1_Course_List.class); // ResizableFragment 추가
+                addNewResizableFragment(Slide1_Place_List.class); // ResizableFragment 추가
                 break;
 
             case 1:

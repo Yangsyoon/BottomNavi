@@ -1,4 +1,4 @@
-package com.example.tourlist.Course;
+package com.example.tourlist.A_Course;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 class Course_XmlParser {
-    public List<TouristCourse> parse(InputStream inputStream) {
-        List<TouristCourse> courses = new ArrayList<>();
+    public List<Course> parse(InputStream inputStream) {
+        List<Course> courses = new ArrayList<>();
 
         try (BufferedReader bufreader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
             StringBuilder xmlData = new StringBuilder();
@@ -59,7 +59,7 @@ class Course_XmlParser {
                         eventType = parser.next();
                     }
 //                    courses.add(new TouristCourse(subname, subdetailoverview));
-                    courses.add(new TouristCourse(contentid, course_title,areacode));
+                    courses.add(new Course(contentid, course_title,areacode));
                 }
                 eventType = parser.next();
             }
@@ -70,8 +70,8 @@ class Course_XmlParser {
         return courses;
     }
 
-    public TouristCourse parseDetail(InputStream inputStream) {
-        TouristCourse course = new TouristCourse();
+    public Course parseDetail(InputStream inputStream) {
+        Course course = new Course();
         List<TouristCoursePlace> places = new ArrayList<>();
 
         try (BufferedReader bufreader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {

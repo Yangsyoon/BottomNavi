@@ -1,4 +1,4 @@
-package com.example.tourlist.Course;
+package com.example.tourlist.A_Course;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
@@ -8,12 +8,12 @@ import androidx.lifecycle.MutableLiveData;
 
 import java.util.List;
 
-public class PlaceViewModel extends AndroidViewModel {
+public class PlaceViewModel_course extends AndroidViewModel {
 
     private MutableLiveData<List<TouristCoursePlace>> places;
     private TouristCourseRepository repository;
 
-    public PlaceViewModel(@NonNull Application application) {
+    public PlaceViewModel_course(@NonNull Application application) {
         super(application);
         repository = TouristCourseRepository.getInstance(application);
     }
@@ -26,7 +26,7 @@ public class PlaceViewModel extends AndroidViewModel {
     }
 
     public void loadTouristCoursePlaces(String contentId) {
-        MutableLiveData<TouristCourse> touristCourse = new MutableLiveData<>();
+        MutableLiveData<Course> touristCourse = new MutableLiveData<>();
         repository.loadTouristCourseDetails(contentId, touristCourse);
 
         touristCourse.observeForever(course -> {

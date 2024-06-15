@@ -3,9 +3,7 @@ package com.example.tourlist.Main;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
-import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.OnCompleteListener;
+
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import android.view.ViewGroup;
@@ -18,10 +16,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import androidx.annotation.NonNull;
+
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -44,18 +41,16 @@ import java.util.List;
 import android.graphics.Bitmap;
 import android.util.Base64;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 
 import com.google.android.libraries.places.api.model.PhotoMetadata;
-import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.FetchPhotoRequest;
 import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 
-import com.example.tourlist.Course.CourseAdapter;
-import com.example.tourlist.Course.CourseViewModel;
-import com.example.tourlist.Course.TouristCourse;
+import com.example.tourlist.A_Course.CourseAdapter;
+import com.example.tourlist.A_Course.CourseViewModel;
+import com.example.tourlist.A_Course.Course;
 
 public class Frag3_Tourist_Search extends Fragment {
     private static final String TAG = "Frag3_Tourist_Search";
@@ -70,7 +65,7 @@ public class Frag3_Tourist_Search extends Fragment {
 
     private CourseViewModel courseViewModel;
     private CourseAdapter courseAdapter;
-    private List<TouristCourse> courses;
+    private List<Course> courses;
 
     @Nullable
     @Override
@@ -78,7 +73,7 @@ public class Frag3_Tourist_Search extends Fragment {
         View view = inflater.inflate(R.layout.frag3_tourist_search, container, false);
 
         RecyclerView recyclerView1_placelist = view.findViewById(R.id.recyclerView1);
-        RecyclerView recyclerView2_course = view.findViewById(R.id.recyclerView2);
+//        RecyclerView recyclerView2_course = view.findViewById(R.id.recyclerView2);
         searchEditText = view.findViewById(R.id.searchEditText);
         Button seoulButton = view.findViewById(R.id.seoulButton);
         Button daeguButton = view.findViewById(R.id.daeguButton);
@@ -95,7 +90,7 @@ public class Frag3_Tourist_Search extends Fragment {
         Button allButton = view.findViewById(R.id.allButton);
 
         recyclerView1_placelist.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView2_course.setLayoutManager(new LinearLayoutManager(getContext()));
+//        recyclerView2_course.setLayoutManager(new LinearLayoutManager(getContext()));
 
         filteredAttractions = new ArrayList<>();
         adapter = new AttractionAdapter(filteredAttractions);
@@ -119,19 +114,19 @@ public class Frag3_Tourist_Search extends Fragment {
         });
 
         // CourseViewModel 설정
-        courseViewModel = new ViewModelProvider(requireActivity()).get(CourseViewModel.class);
-        courses = new ArrayList<>();
-        courseAdapter = new CourseAdapter(courses);
-        recyclerView2_course.setAdapter(courseAdapter);
+//        courseViewModel = new ViewModelProvider(requireActivity()).get(CourseViewModel.class);
+//        courses = new ArrayList<>();
+//        courseAdapter = new CourseAdapter(courses);
+//        recyclerView2_course.setAdapter(courseAdapter);
 
-        courseViewModel.getTouristCourses().observe(getViewLifecycleOwner(), new Observer<List<TouristCourse>>() {
+       /* courseViewModel.getTouristCourses().observe(getViewLifecycleOwner(), new Observer<List<Course>>() {
             @Override
-            public void onChanged(List<TouristCourse> touristCourses) {
+            public void onChanged(List<Course> places) {
                 courses.clear();
-                courses.addAll(touristCourses);
+                courses.addAll(places);
                 courseAdapter.notifyDataSetChanged();
             }
-        });
+        });*/
 
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -291,12 +286,12 @@ public class Frag3_Tourist_Search extends Fragment {
     }
 
     private void fetchPlaceDetails(String placeId, TouristPlace place) {
-        List<Place.Field> placeFields = Arrays.asList(Place.Field.NAME, Place.Field.PHOTO_METADATAS);
+        List<com.google.android.libraries.places.api.model.Place.Field> placeFields = Arrays.asList(com.google.android.libraries.places.api.model.Place.Field.NAME, com.google.android.libraries.places.api.model.Place.Field.PHOTO_METADATAS);
 
         FetchPlaceRequest request = FetchPlaceRequest.builder(placeId, placeFields).build();
 
         placesClient.fetchPlace(request).addOnSuccessListener((response) -> {
-            Place fetchedPlace = response.getPlace();
+            com.google.android.libraries.places.api.model.Place fetchedPlace = response.getPlace();
             String name = fetchedPlace.getName();
             Log.d(TAG, "Place name: " + name);
 

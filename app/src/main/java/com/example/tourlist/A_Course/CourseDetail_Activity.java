@@ -1,4 +1,4 @@
-package com.example.tourlist.Course;
+package com.example.tourlist.A_Course;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,7 +24,7 @@ import java.util.List;
 public class CourseDetail_Activity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private PlaceViewModel viewModel;
+    private PlaceViewModel_course viewModel;
     private PlaceAdapter placeAdapter;
 
     @Override
@@ -37,7 +37,7 @@ public class CourseDetail_Activity extends AppCompatActivity {
         placeAdapter = new PlaceAdapter();
         recyclerView.setAdapter(placeAdapter);
 
-        viewModel = new ViewModelProvider(this).get(PlaceViewModel.class);
+        viewModel = new ViewModelProvider(this).get(PlaceViewModel_course.class);
 
         String contentId = getIntent().getStringExtra("CONTENT_ID");
         Log.d("1", "1contentId: " + contentId);

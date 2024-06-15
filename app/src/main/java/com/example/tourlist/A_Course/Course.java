@@ -1,8 +1,8 @@
-package com.example.tourlist.Course;
+package com.example.tourlist.A_Course;
 
 import java.util.List;
 
-public class TouristCourse {
+public class Course {
 
     private String content_id;
     private String course_title;
@@ -10,23 +10,23 @@ public class TouristCourse {
     private List<TouristCoursePlace> places;
 
     // 기본 생성자
-    public TouristCourse() {
+    public Course() {
     }
 
     // 생성자 추가
-    public TouristCourse(String content_id, String course_title) {
+    public Course(String content_id, String course_title) {
         this.content_id = content_id;
         this.course_title = course_title;
     }
 
-    public TouristCourse(String content_id, String course_title, String areacode, List<TouristCoursePlace> places) {
+    public Course(String content_id, String course_title, String areacode, List<TouristCoursePlace> places) {
         this.content_id = content_id;
         this.course_title = course_title;
         this.areacode = areacode;
         this.places = places;
     }
 
-    public TouristCourse(String content_id, String course_title, String areacode) {
+    public Course(String content_id, String course_title, String areacode) {
         this.content_id = content_id;
         this.course_title = course_title;
         this.areacode = areacode;

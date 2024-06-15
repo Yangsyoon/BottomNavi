@@ -1,7 +1,6 @@
-package com.example.tourlist.Course;
+package com.example.tourlist.A_Course;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -12,7 +11,7 @@ import java.util.List;
 
 public class CourseViewModel extends AndroidViewModel {
 
-    private MutableLiveData<List<TouristCourse>> touristCourses;
+    private MutableLiveData<List<Course>> touristCourses;
     private TouristCourseRepository repository;
 
     public CourseViewModel(@NonNull Application application) {
@@ -20,7 +19,7 @@ public class CourseViewModel extends AndroidViewModel {
         repository = TouristCourseRepository.getInstance(application);
     }
 
-    public LiveData<List<TouristCourse>> getTouristCourses() {
+    public LiveData<List<Course>> getTouristCourses() {
         if (touristCourses == null) {
             touristCourses = new MutableLiveData<>();
             repository.loadTouristCourses(touristCourses);
@@ -49,7 +48,7 @@ public class CourseViewModel extends AndroidViewModel {
 
 
 
-    public LiveData<List<TouristCourse>> getFilteredCourses(String areaCode) {
+    public LiveData<List<Course>> getFilteredCourses(String areaCode) {
 //        MutableLiveData<List<TouristCourse>> filteredCourses = new MutableLiveData<>();
 //        repository.loadFilteredCourses(areaCode, filteredCourses);
 //        return filteredCourses;

@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import androidx.annotation.NonNull;
@@ -32,6 +33,7 @@ public class ResizableFragment extends Fragment {
 
         final FrameLayout resizableView = view.findViewById(R.id.resizable_view);
         ImageButton dragButton = view.findViewById(R.id.drag_button);
+        Button change_button=view.findViewById(R.id.change_button);
 
 //        // Frag2_FavoriteList를 추가합니다.
 //        Frag2_FavoriteList frag2_favoriteList = new Frag2_FavoriteList();
@@ -47,6 +49,14 @@ public class ResizableFragment extends Fragment {
             public void run() {
                 maxHeight = view.getHeight();
                 Log.d(TAG, "Max height set to " + maxHeight);
+            }
+        });
+
+        change_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
             }
         });
 
@@ -123,7 +133,18 @@ public class ResizableFragment extends Fragment {
 
                 return new Slide2_FavoriteList();
 
-            } else if (fragmentClassName.equals(Frag3_Tourist_Search.class.getName())) {
+            } else if (fragmentClassName.equals(Slide1_Course_List.class.getName())) {
+                Log.d(TAG, "2");
+
+                return new Slide1_Course_List();
+
+            }
+             else if (fragmentClassName.equals(Slide1_Place_List.class.getName())) {
+                Log.d(TAG, "2");
+
+                return new Slide1_Place_List();
+            }
+            else if (fragmentClassName.equals(Frag3_Tourist_Search.class.getName())) {
                 Log.d(TAG, "2");
 
                 return new Frag3_Tourist_Search();

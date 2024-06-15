@@ -59,7 +59,13 @@
 
 
     <activity
-        android:name=".Course.CourseDetail_Activity"
+        android:name=".A_Course.CourseDetail_Activity"
+        android:exported="true"
+
+        >
+    </activity>
+    <activity
+        android:name=".A_Place.Place_DetailActivity"
         android:exported="true"
 
         >

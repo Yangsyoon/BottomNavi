@@ -659,9 +659,9 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
 
                                     distance = currentLocation.distanceTo(markerLocation);
                                     float distanceInKm = distance / 1000;
-                                    Toast.makeText(getContext(), "Distance: " + distanceInKm + " km", Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(getContext(), "Distance: " + distanceInKm + " km", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    Toast.makeText(getContext(), "Current location not available", Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(getContext(), "Current location not available", Toast.LENGTH_SHORT).show();
                                 }
 
 
@@ -676,8 +676,17 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
                                     infoDescription.setText(place.getDescription());
                                     infoAddress.setText(place.getAddress());
                                     loadPlaceImage(place);
-                                    String s= String.format("%.0f", distance/1000);
-                                    tv_dist.setText(s+"Km");
+                                    if(distance>=1000){
+
+                                        String s= String.format("%.0f", distance/1000);
+                                        tv_dist.setText(s+"Km");
+
+                                    }
+                                    else{
+                                        String s= String.format("%.0f", distance);
+                                        tv_dist.setText(s+"m");
+
+                                    }
 
                                     selectedPlace = place;
 //                                    placeNameButton.setText(place.getPlaceName());

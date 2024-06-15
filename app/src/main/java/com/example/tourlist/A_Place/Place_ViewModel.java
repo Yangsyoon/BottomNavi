@@ -1,41 +1,46 @@
-package com.example.tourlist.A_Course;
+package com.example.tourlist.A_Place;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-
 import java.util.List;
 
-public class CourseViewModel extends AndroidViewModel {
+public class Place_ViewModel extends AndroidViewModel {
 
-    private MutableLiveData<List<Course>> touristCourses;
-    private TouristCourseRepository repository;
-    private FusedLocationProviderClient fusedLocationClient;
-    private double currentLatitude;
-    private double currentLongitude;
+    private MutableLiveData<List<Place>> touristPlaces;
+    private MutableLiveData<Place> placeDetail;
+    private TouristPlaceRepository_call_parser repository;
 
-    public CourseViewModel(@NonNull Application application) {
+    public Place_ViewModel(@NonNull Application application) {
         super(application);
-        repository = TouristCourseRepository.getInstance(application);
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(application);
+        repository = TouristPlaceRepository_call_parser.getInstance(application);
     }
 
-    public LiveData<List<Course>> getTouristCourses() {
-        if (touristCourses == null) {
-            touristCourses = new MutableLiveData<>();
-            repository.loadTouristCourses(touristCourses);
-
-
+    public LiveData<List<Place>> getTouristPlaces() {
+        if (touristPlaces == null) {
+            touristPlaces = new MutableLiveData<>();
+            repository.loadTouristPlaces(touristPlaces);
         }
-        return touristCourses;
+        return touristPlaces;
     }
+
+    public LiveData<Place> getPlacedetail(String contentId) {
+        placeDetail = new MutableLiveData<>();
+        repository.loadCommonInfo(contentId, placeDetail);
+        return placeDetail;
+    }
+
+//    public LiveData<Place> getPlacedetail() {
+//        if (touristPlaces == null) {
+//            touristPlaces = new MutableLiveData<>();
+//            repository.loadcommoninfo(touristPlaces);
+//        }
+//        return touristPlaces;
+//    }
 
 //    public LiveData<List<TouristCourse>> getTouristCoursesByGps(String latitude, String longitude) {
 //        if (touristCourses == null) {
@@ -58,7 +63,7 @@ public class CourseViewModel extends AndroidViewModel {
 
 
 
-    public LiveData<List<Course>> getFilteredCourses(String areaCode) {
+    /*public LiveData<List<Course>> getFilteredCourses(String areaCode) {
 //        MutableLiveData<List<TouristCourse>> filteredCourses = new MutableLiveData<>();
 //        repository.loadFilteredCourses(areaCode, filteredCourses);
 //        return filteredCourses;
@@ -76,7 +81,7 @@ public class CourseViewModel extends AndroidViewModel {
     }
 
     public void filterCoursesByGps(String latitude, String longitude) {
-        Log.d("p", "5");
+//        Log.d("CourseViewModel", latitude);
         repository.loadFilteredGps(latitude, longitude, touristCourses);
-    }
+    }*/
 }

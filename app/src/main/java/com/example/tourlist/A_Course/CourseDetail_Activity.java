@@ -42,6 +42,7 @@ public class CourseDetail_Activity extends AppCompatActivity {
         String contentId = getIntent().getStringExtra("CONTENT_ID");
         Log.d("1", "1contentId: " + contentId);
 
+        Log.d("p", "2contentId: " + contentId);
         viewModel.loadTouristCoursePlaces(contentId);
         Log.d("1", "2contentId: " + contentId);
 

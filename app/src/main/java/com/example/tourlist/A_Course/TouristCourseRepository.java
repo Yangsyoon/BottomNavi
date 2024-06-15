@@ -52,7 +52,7 @@ public class TouristCourseRepository {
 
 
         String serviceType = "areaBasedList1";
-        String numOfRows = "20";
+        String numOfRows = "10";
         String pageNo = "1";
         String mobileOS = "AND";
         String mobileApp = "AppTest";
@@ -122,7 +122,7 @@ public class TouristCourseRepository {
                     public void onResponse(InputStream response) {
                         Course course = courseXmlParser.parseDetail(response);
                         touristCourse.setValue(course);
-
+                        Log.d("p", course.getCourse_title());
                         for (TouristCoursePlace place : course.getPlaces()) {
                             loadCommonInfo(place.getSubcontentid(), place, touristCourse);
                         }
@@ -147,7 +147,10 @@ public class TouristCourseRepository {
                 new Response.Listener<InputStream>() {
                     @Override
                     public void onResponse(InputStream response) {
+                        Log.d("firstimage1", place.getSubname() + place.getFirstimage());
+
                         courseXmlParser.parseCommonInfo(response, place);
+
                         Log.d("firstimage1", place.getSubname() + place.getFirstimage());
                         touristCourse.setValue(touristCourse.getValue());
                     }
@@ -186,35 +189,79 @@ public class TouristCourseRepository {
     }
 
     public void loadFilteredGps(final String latitude, final String longitude, final MutableLiveData<List<Course>> filteredCourses) {
-        Log.d("latitude", latitude);
-//        String requestUrl = "https://apis.data.go.kr/B551011/KorService1/areaBasedList1?serviceKey=YOUR_API_KEY&numOfRows=10&pageNo=1&MobileOS=ETC&MobileApp=AppTest&listYN=Y&arrange=O&contentTypeId=25&areaCode=" + areaCode;
-        String requestUrl = "https://apis.data.go.kr/B551011/KorService1/locationBasedList1?serviceKey=jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D&numOfRows=15&pageNo=1&MobileOS=ETC&MobileApp=AppTest&listYN=Y&arrange=O&mapX="+longitude+"&mapY="+latitude+"&radius=20000&contentTypeId=25";
+         try{
 
-//        https://apis.data.go.kr/B551011/KorService1/locationBasedList1?serviceKey=jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D&numOfRows=10&pageNo=1&MobileOS=ETC&MobileApp=AppTest&listYN=Y&arrange=O&mapX=128.6102797&mapY=35.8889217&radius=20000&contentTypeId=25
+            String requestUrl = "https://apis.data.go.kr/B551011/KorService1/";
+            String serviceKey = "jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D";
+            String serviceType = "locationBasedList1";
+            String numOfRows = "10";
+            String pageNo = "1";
+            String mobileOS = "ETC";
+            String mobileApp = "AppTest";
+            String listYN = "Y";
+            String arrange = "O";
+             // 예시 latitude, 실제 사용 시 동적으로 설정 필요
+            String radius = "20000";
+            String contentTypeId = "25";
 
-//        https://apis.data.go.kr/B551011/KorService1/locationBasedList1?serviceKey=&numOfRows=10&pageNo=1&MobileOS=ETC&MobileApp=AppTest&listYN=Y&arrange=O&mapX=128.6102797&mapY=35.8889217&radius=20000&contentTypeId=25
-//        https://apis.data.go.kr/B551011/KorService1/locationBasedList1?serviceKey=jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D&numOfRows=10&pageNo=1&MobileOS=ETC&MobileApp=AppTest&listYN=Y&arrange=O&mapX=128.6102797&mapY=35.8889217&radius=20000&contentTypeId=25
+            StringBuilder urlBuilder = new StringBuilder(requestUrl);
+            urlBuilder.append(URLEncoder.encode(serviceType, "UTF-8"));
+            urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=" + serviceKey);
+            urlBuilder.append("&" + URLEncoder.encode("numOfRows", "UTF-8") + "=" + URLEncoder.encode(numOfRows, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("pageNo", "UTF-8") + "=" + URLEncoder.encode(pageNo, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("MobileOS", "UTF-8") + "=" + URLEncoder.encode(mobileOS, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("MobileApp", "UTF-8") + "=" + URLEncoder.encode(mobileApp, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("listYN", "UTF-8") + "=" + URLEncoder.encode(listYN, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("arrange", "UTF-8") + "=" + URLEncoder.encode(arrange, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("mapX", "UTF-8") + "=" + URLEncoder.encode(longitude, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("mapY", "UTF-8") + "=" + URLEncoder.encode(latitude, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("radius", "UTF-8") + "=" + URLEncoder.encode(radius, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("contentTypeId", "UTF-8") + "=" + URLEncoder.encode(contentTypeId, "UTF-8"));
+
+//             urlBuilder.append(URLEncoder.encode(serviceType, "UTF-8"));
+//             urlBuilder.append("?" + URLEncoder.encode("ServiceKey", "UTF-8") + "="+serviceKey);
+//             urlBuilder.append("&" + URLEncoder.encode("numOfRows", "UTF-8") + "=" + URLEncoder.encode(numOfRows, "UTF-8"));
+//             urlBuilder.append("&" + URLEncoder.encode("pageNo", "UTF-8") + "=" + URLEncoder.encode(pageNo, "UTF-8"));
+//             urlBuilder.append("&" + URLEncoder.encode("MobileOS", "UTF-8") + "=" + URLEncoder.encode(mobileOS, "UTF-8"));
+//             urlBuilder.append("&" + URLEncoder.encode("MobileApp", "UTF-8") + "=" + URLEncoder.encode(mobileApp, "UTF-8"));
+//             urlBuilder.append("&" + URLEncoder.encode("listYN", "UTF-8") + "=" + URLEncoder.encode(listYN, "UTF-8"));
+//             urlBuilder.append("&" + URLEncoder.encode("arrange", "UTF-8") + "=" + URLEncoder.encode(arrange, "UTF-8"));
+//             urlBuilder.append("&" + URLEncoder.encode("contentTypeId", "UTF-8") + "=" + URLEncoder.encode(contentTypeId, "UTF-8"));
+//            urlBuilder.append("&" + URLEncoder.encode("mapX", "UTF-8") + "=" + URLEncoder.encode(latitude, "UTF-8"));
+//            urlBuilder.append("&" + URLEncoder.encode("mapY", "UTF-8") + "=" + URLEncoder.encode(longitude, "UTF-8"));
+
+
+            requestUrl = urlBuilder.toString();
+
+             Log.d("p", requestUrl);
 
 
 
+            InputStreamRequest request = new InputStreamRequest(Request.Method.GET, requestUrl,
+                    new Response.Listener<InputStream>() {
+                        @Override
+                        public void onResponse(InputStream response) {
+                            Log.d("p", "123");
 
-
-        InputStreamRequest request = new InputStreamRequest(Request.Method.GET, requestUrl,
-                new Response.Listener<InputStream>() {
-                    @Override
-                    public void onResponse(InputStream response) {
                         List<Course> courses = courseXmlParser.parse(response);
                         filteredCourses.setValue(courses);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // Handle error
-                    }
-                });
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // Handle error
+                        }
+                    });
 
-        requestQueue.add(request);
+            requestQueue.add(request);
+
+        }
+        catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            // 예외를 처리할 다른 방법을 추가할 수 있습니다.
+            Log.d("error", "UnsupportedEncodingException");
+        }
     }
 
 

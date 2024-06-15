@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -26,7 +28,9 @@ import com.example.tourlist.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.naver.maps.map.util.FusedLocationSource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,14 +42,24 @@ public class Slide1_Course_List extends Fragment {
     private CourseViewModel courseViewModel;
     private CourseAdapter courseAdapter;
     private List<Course> courses;
-    private FusedLocationProviderClient fusedLocationProviderClient;
+    private FusedLocationProviderClient fusedLocationClient;
     private String currentLatitude;
     private String currentLongitude;
+    private Location currentLocation;
+    private FusedLocationSource locationSource;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.slide1_course_list, container, false);
+
+        //이거 현재 위치로 갈때 필요한거.
+        locationSource = new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE);
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
+
+        getCurrentLocation();
+
 
         RecyclerView recyclerView2_course = view.findViewById(R.id.recyclerView2);
         recyclerView2_course.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -54,9 +68,11 @@ public class Slide1_Course_List extends Fragment {
         courses = new ArrayList<>();
 
         courseAdapter = new CourseAdapter(courses);
+//        courseAdapter = new CourseAdapter(courses, currentLocation);
         recyclerView2_course.setAdapter(courseAdapter);
-
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity());
+        if(currentLocation!=null) {
+            Log.d("PP", "CourseAdapter: 123" + currentLocation.getLatitude());
+        }
 
         courseViewModel.getTouristCourses().observe(getViewLifecycleOwner(), new Observer<List<Course>>() {
             @Override
@@ -82,7 +98,6 @@ public class Slide1_Course_List extends Fragment {
         Button jejuButton = view.findViewById(R.id.jeju_Button);
         Button gpsButton = view.findViewById(R.id.my_location);
 
-        getCurrentLocation();
 
         gpsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,6 +106,9 @@ public class Slide1_Course_List extends Fragment {
                     requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
                 } else {
                 }
+                Log.d("p", "3");
+                Log.d("p", currentLatitude);
+
                 courseViewModel.filterCoursesByGps(currentLatitude, currentLongitude);
 
             }
@@ -190,7 +208,13 @@ public class Slide1_Course_List extends Fragment {
         return view;
     }
 
-    private void getCurrentLocation() {
+    /*private void getCurrentLocation(View view) {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // 권한 요청
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+            return;
+        }
         fusedLocationProviderClient.getLastLocation()
                 .addOnCompleteListener(new OnCompleteListener<Location>() {
                     @Override
@@ -199,26 +223,55 @@ public class Slide1_Course_List extends Fragment {
                             Location location = task.getResult();
                             currentLatitude = Double.toString(location.getLatitude());
                             currentLongitude = Double.toString(location.getLongitude());
+                            currentLocation = location;
+                            Log.d("PP", "현재 위치: " + currentLatitude + ", " + currentLongitude);
+                            Log.d("PP", "현재 위치: " + location.getLatitude() + ", " + location.getLongitude());
 
                             // 현재 위치를 사용하여 필요한 작업을 수행
                             // 예: 현재 위치 기반으로 코스를 필터링하거나 다른 작업 수행
-//                            Toast.makeText(getContext(), "현재 위치: " + currentLatitude + ", " + currentLongitude, Toast.LENGTH_LONG).show();
+                            courseAdapter = new CourseAdapter(courses, currentLocation);
+                            RecyclerView recyclerView2_course = view.findViewById(R.id.recyclerView2);
+                            recyclerView2_course.setAdapter(courseAdapter);
                         } else {
-//                            Toast.makeText(getContext(), "위치를 가져올 수 없습니다.", Toast.LENGTH_SHORT).show();
+                            Log.d("PP", "위치를 가져올 수 없습니다.");
                         }
                     }
                 });
-    }
+    }*/
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getCurrentLocation();
-            } else {
-                Toast.makeText(getContext(), "위치 권한이 거부되었습니다.", Toast.LENGTH_SHORT).show();
+    private void getCurrentLocation() {
+        try {
+            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                fusedLocationClient.getLastLocation().addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        if (location != null) {
+                            currentLocation = location;
+                            currentLatitude = Double.toString(location.getLatitude());
+                            currentLongitude = Double.toString(location.getLongitude());
+                            courseAdapter.setCurrentLocation(location);
+                            Log.d("PP","ok");
+//                            Toast.makeText(getContext(), "Current location acquired", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
             }
+        } catch (SecurityException e) {
+            e.printStackTrace();
+            Toast.makeText(getContext(), "Location permission not granted", Toast.LENGTH_SHORT).show();
         }
     }
+
+
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+//            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                getCurrentLocation(view);
+//            } else {
+//                Toast.makeText(getContext(), "위치 권한이 거부되었습니다.", Toast.LENGTH_SHORT).show();
+//            }
+//        }
+//    }
 }

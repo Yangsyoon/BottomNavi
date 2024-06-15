@@ -29,7 +29,7 @@ public class ResizableFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView: called");
-        View view = inflater.inflate(R.layout.fragment_resizable, container, false);
+        View view = inflater.inflate(R.layout.resizable_fragment, container, false);
 
         final FrameLayout resizableView = view.findViewById(R.id.resizable_view);
         ImageButton dragButton = view.findViewById(R.id.drag_button);
@@ -55,7 +55,7 @@ public class ResizableFragment extends Fragment {
         change_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                changeChildFragment();
 
             }
         });
@@ -165,5 +165,18 @@ public class ResizableFragment extends Fragment {
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.frameLayout_drag_button_below, fragment);
         transaction.commit();
+    }
+
+    private void changeChildFragment() {
+        Fragment currentFragment = getChildFragmentManager().findFragmentById(R.id.frameLayout_drag_button_below);
+        if (currentFragment != null) {
+            Fragment newFragment;
+            if (currentFragment instanceof Slide1_Place_List) {
+                newFragment = new Slide1_Course_List();
+            } else {
+                newFragment = new Slide1_Place_List();
+            }
+            addChildFragment(newFragment);
+        }
     }
 }

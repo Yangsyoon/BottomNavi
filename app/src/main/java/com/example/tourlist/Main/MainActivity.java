@@ -2,28 +2,20 @@ package com.example.tourlist.Main;
 
 import android.content.res.ColorStateList;
 import android.os.Bundle;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.tourlist.Course.Frag_Course_List;
@@ -31,9 +23,8 @@ import com.example.tourlist.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigationView;
     private FragmentManager fm;
@@ -46,37 +37,28 @@ public class MainActivity extends AppCompatActivity{
     private Frag3_Tourist_Search frag3_TouristSearch;
     private Frag_Course_List frag_course_list;
     private ResizableFragment resizableFragment;
-
     private Slide1 slide1;
+    private Frag_Profile fragProfile;
     private FirebaseAuth mAuth;
     private boolean isUserInteraction = false;
-    private int currentTabId = R.id.action_account; // 현재 탭을 추적
+    private int currentTabId = R.id.action_account;
 
     private DrawerLayout drawerLayout;
     private View drawerView;
 
-
-    private FloatingActionButton fab_main, fab_sub1, fab_sub2;
-    private Animation fab_open, fab_close;
-    private boolean isFabOpen = false;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            v.setPadding(insets.getInsets(WindowInsetsCompat.Type.systemBars()).left,
+                    insets.getInsets(WindowInsetsCompat.Type.systemBars()).top,
+                    insets.getInsets(WindowInsetsCompat.Type.systemBars()).right,
+                    insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom);
             return insets;
         });
 
-        // 최하단 네비게이션 바. 색상
-//        Window window = getWindow();
-//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//        window.setNavigationBarColor(ContextCompat.getColor(this, R.color.darkblue));
-
-//
+        mAuth = FirebaseAuth.getInstance();
 
         frag5_login = new Frag5_Login();
         frag5_register = new Frag5_Register();
@@ -86,7 +68,8 @@ public class MainActivity extends AppCompatActivity{
         frag3_TouristSearch = new Frag3_Tourist_Search();
         resizableFragment = new ResizableFragment();
         slide1 = new Slide1();
-        frag_course_list=new Frag_Course_List();
+        frag_course_list = new Frag_Course_List();
+        fragProfile = new Frag_Profile();
 
         bottomNavigationView = findViewById(R.id.bottomNavi);
         bottomNavigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
@@ -98,7 +81,12 @@ public class MainActivity extends AppCompatActivity{
                 boolean forward = nextTabId > currentTabId;
 
                 if (nextTabId == R.id.action_account) {
-                    setFrag(4, forward);
+                    FirebaseUser currentUser = mAuth.getCurrentUser();
+                    if (currentUser != null) {
+                        setFrag(5, forward);
+                    } else {
+                        setFrag(4, forward);
+                    }
                 } else if (nextTabId == R.id.action_memory) {
                     setFrag(1, forward);
                 } else if (nextTabId == R.id.action_map) {
@@ -108,11 +96,10 @@ public class MainActivity extends AppCompatActivity{
                 } else if (nextTabId == R.id.action_tourist_search) {
                     setFrag(2, forward);
                 }
-                // 선택된 메뉴 아이템의 색상 변경
+
                 MenuItem selectedItem = bottomNavigationView.getMenu().findItem(nextTabId);
                 selectedItem.setIconTintList(ColorStateList.valueOf(getResources().getColor(R.color.selected_color)));
 
-                // 이전에 선택된 메뉴 아이템의 색상 원래대로 변경
                 MenuItem previousItem = bottomNavigationView.getMenu().findItem(currentTabId);
                 previousItem.setIconTintList(ColorStateList.valueOf(getResources().getColor(R.color.white)));
 
@@ -159,7 +146,7 @@ public class MainActivity extends AppCompatActivity{
                             case "Gpt":
                                 bottomNavigationView.setSelectedItemId(R.id.action_gpt);
                                 break;
-                            case "Tourist_Search":
+                            case "Tourist":
                                 bottomNavigationView.setSelectedItemId(R.id.action_tourist_search);
                                 break;
                         }
@@ -171,7 +158,7 @@ public class MainActivity extends AppCompatActivity{
         });
 
         if (savedInstanceState == null) {
-            setFrag(0, true); // 첫 프래그먼트 화면을 무엇으로 지정해줄 것인지 선택
+            setFrag(4, true); // 앱 시작 시 무조건 로그인 프래그먼트를 표시
         }
 
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -185,7 +172,7 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
-        drawerLayout.setDrawerListener(listener);
+        drawerLayout.addDrawerListener(listener);
         drawerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -205,28 +192,23 @@ public class MainActivity extends AppCompatActivity{
                 drawerLayout.closeDrawer(drawerView);
             }
         });
-
     }
 
     DrawerLayout.DrawerListener listener = new DrawerLayout.DrawerListener() {
         @Override
         public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
-            // 슬라이드 했을 때
         }
 
         @Override
         public void onDrawerOpened(@NonNull View drawerView) {
-            // 드로어가 오픈됐을 때
         }
 
         @Override
         public void onDrawerClosed(@NonNull View drawerView) {
-            // 드로어가 닫혔을 때
         }
 
         @Override
         public void onDrawerStateChanged(int newState) {
-            // 드로어 상태가 바뀌었을 때
         }
     };
 
@@ -239,24 +221,18 @@ public class MainActivity extends AppCompatActivity{
             // ft.setCustomAnimations(R.anim.slide_in_from_left, R.anim.slide_out_to_right);
         }
         switch (n) {
-
-
             case 0:
                 ft.replace(R.id.main_frame, frag1_NaverMap);
                 ft.addToBackStack(null);
                 addNewResizableFragment(Frag3_Tourist_Search.class); // ResizableFragment 추가
                 break;
-
             case 1:
                 ft.replace(R.id.main_frame, frag1_NaverMap);
                 ft.addToBackStack(null);
                 addNewResizableFragment(Slide2_FavoriteList.class);
                 break;
-
-
             case 2:
                 ft.replace(R.id.main_frame, frag3_TouristSearch);
-//                ft.replace(R.id.main_frame, frag_course_list);
                 ft.addToBackStack(null);
                 removeResizableFragment(); // ResizableFragment 제거
                 break;
@@ -265,12 +241,14 @@ public class MainActivity extends AppCompatActivity{
                 ft.addToBackStack(null);
                 removeResizableFragment(); // ResizableFragment 제거
                 break;
-
             case 4:
                 ft.replace(R.id.main_frame, frag5_login);
                 removeResizableFragment(); // ResizableFragment 제거
                 break;
-
+            case 5:
+                ft.replace(R.id.main_frame, fragProfile);
+                removeResizableFragment(); // ResizableFragment 제거
+                break;
         }
         ft.commit();
     }
@@ -279,7 +257,6 @@ public class MainActivity extends AppCompatActivity{
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         ResizableFragment newResizableFragment = new ResizableFragment();
         Bundle bundle = new Bundle();
-        // 자식 Fragment 클래스 이름을 번들에 추가
         bundle.putString("child_fragment_class", fragmentClass.getName());
         newResizableFragment.setArguments(bundle);
         fragmentTransaction.replace(R.id.overlay_frame, newResizableFragment);

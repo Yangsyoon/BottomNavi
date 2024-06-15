@@ -23,7 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class Frag5_Login extends Fragment {
-    private String fragmentTag="Login";
+    private String fragmentTag = "Login";
 
     public void setFragmentTag(String tag) {
         this.fragmentTag = tag;
@@ -35,169 +35,101 @@ public class Frag5_Login extends Fragment {
 
     private View view;
 
-    private FirebaseAuth mAuth; //파이어베이스 인증.
-    //이것만으로도 회원가입은 구현 가능. 근데 데이터베이스로 관리해야...
-
-    private DatabaseReference mDatabaseReference; //실시간 데이터베이스. 서버연동.
-    private EditText mEtEmail, mEtPwd; // 로그인 입력필드
+    private FirebaseAuth mAuth; // 파이어베이스 인증.
+    private DatabaseReference mDatabaseReference; // 실시간 데이터베이스. 서버연동.
+    private EditText mEtEmail, mEtPwd; // 로그인 입력 필드
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.frag5_login,container,false);
+        view = inflater.inflate(R.layout.frag5_login, container, false);
 
-
-        mAuth = FirebaseAuth.getInstance();//google
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference("hongdroid");//실시간 데이터베이스.=Fireb
-        // 앱이름 보통 넣어준다. 근데 길어서 hongdroid로 넣어준다..
+        mAuth = FirebaseAuth.getInstance();
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference("hongdroid");
 
         mEtEmail = view.findViewById(R.id.et_email);
         mEtPwd = view.findViewById(R.id.et_pwd);
 
-
         Button btn_login = view.findViewById(R.id.btn_login);
-
         btn_login.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
-                // 로그인 요청.
-                String email = mEtEmail.getText().toString(); //사용자가 입력한 값을 가져온다. 문자열로 변환
+                String email = mEtEmail.getText().toString();
                 String pwd = mEtPwd.getText().toString();
 
                 mAuth.signInWithEmailAndPassword(email, pwd).addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-
-                                if(task.isSuccessful()){
-                                    //로그인 성공
-//
-
-                                    FirebaseUser user = mAuth.getCurrentUser();
-
-                                    if (user != null && user.isEmailVerified()) {
-                                        // 이메일 인증 완료
-                                        Toast.makeText(getContext(), "로그인 성공", Toast.LENGTH_SHORT).show();
-
-                                        //로그인 성공
-
-                                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                                        Frag1_NaverMap frag1_NaverMap = new Frag1_NaverMap();
-                                        //main_layout에 homeFragment로 transaction 한다.
-                                        transaction.replace(R.id.main_frame, frag1_NaverMap);
-
-                                        // 백 스택에 추가합니다.
-                                        transaction.addToBackStack(null);
-                                        //꼭 commit을 해줘야 바뀐다.
-                                        transaction.commit();
-
-                                    } else {
-                                        // 이메일 인증 미완료
-                                        Toast.makeText(getContext(), "Please verify your email address", Toast.LENGTH_SHORT).show();
-                                        mAuth.signOut();
-                                    }
-
-
-                                }
-                                else{
-                                    //로그인 실패
-                                    Toast.makeText(getContext(), "로그인 실패", Toast.LENGTH_SHORT).show();
-
-                                }
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            if (user != null && user.isEmailVerified()) {
+                                Toast.makeText(getContext(), "로그인 성공", Toast.LENGTH_SHORT).show();
+                                navigateToProfile();
+                            } else {
+                                Toast.makeText(getContext(), "이메일 인증을 완료해주세요.", Toast.LENGTH_SHORT).show();
+                                mAuth.signOut();
                             }
+                        } else {
+                            Toast.makeText(getContext(), "로그인 실패", Toast.LENGTH_SHORT).show();
                         }
-                );
-
+                    }
+                });
             }
-
-
-
         });
 
-        Button btn_register=view.findViewById(R.id.btn_register);
+        Button btn_register = view.findViewById(R.id.btn_register);
         btn_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                 Frag5_Register frag5_register = new Frag5_Register();
-                //main_layout에 homeFragment로 transaction 한다.
                 transaction.replace(R.id.main_frame, frag5_register);
-                //꼭 commit을 해줘야 바뀐다.
                 transaction.commit();
             }
         });
-/////////////////////////////////////////////////////
 
-        //게스트 로그인.
-        Button btn_guest_login=view.findViewById(R.id.btn_guest_login);
-
+        Button btn_guest_login = view.findViewById(R.id.btn_guest_login);
         btn_guest_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 FirebaseUser user = mAuth.getCurrentUser();
-
-                //로그인 안했으면 익명 로그인
                 if (user == null) {
-
                     mAuth.signInAnonymously().addOnCompleteListener(getActivity(), task -> {
                         if (task.isSuccessful()) {
-                            // 익명 로그인 성공
                             Toast.makeText(getContext(), "게스트 로그인 성공", Toast.LENGTH_SHORT).show();
-
-                            //로그인 성공
-
-                            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                            Frag1_NaverMap frag1_NaverMap = new Frag1_NaverMap();
-                            //main_layout에 homeFragment로 transaction 한다.
-                            transaction.replace(R.id.main_frame, frag1_NaverMap);
-
-                            // 백 스택에 추가합니다.
-                            transaction.addToBackStack(null);
-                            //꼭 commit을 해줘야 바뀐다.
-                            transaction.commit();
+                            navigateToProfile();
                         } else {
-                            // 익명 로그인 실패
                             Toast.makeText(getContext(), "게스트 로그인 실패", Toast.LENGTH_SHORT).show();
                         }
                     });
-
-                }
-                else{
-                    Toast.makeText(getContext(), "로그아웃 해야함.frag1_login", Toast.LENGTH_SHORT).show();
-
-
+                } else {
+                    Toast.makeText(getContext(), "로그아웃이 필요합니다.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        //로그아웃
-        Button btn_signout=view.findViewById(R.id.btn_signout);
+        Button btn_signout = view.findViewById(R.id.btn_signout);
         btn_signout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mAuth.signOut();
                 Toast.makeText(getContext(), "로그아웃", Toast.LENGTH_SHORT).show();
-
             }
         });
 
-
-
-
-
         return view;
+    }
 
+    private void navigateToProfile() {
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        Frag1_NaverMap frag1_NaverMap = new Frag1_NaverMap();
+        transaction.replace(R.id.main_frame, frag1_NaverMap);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-
     }
-
-
-
 }
-
-

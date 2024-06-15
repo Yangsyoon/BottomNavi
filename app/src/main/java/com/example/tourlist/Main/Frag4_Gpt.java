@@ -1,6 +1,7 @@
 package com.example.tourlist.Main;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,6 +68,7 @@ public class Frag4_Gpt extends Fragment {
         view = inflater.inflate(R.layout.frag4_gpt,container,false);
 
         Message message;
+        Log.d("m", "onCreateView: 4");
 
 
         messageList = new ArrayList<>();

@@ -71,7 +71,7 @@ public class Frag3_Tourist_Search extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag3_tourist_search, container, false);
-
+    Log.d("m", "onCreateView: 3");
         RecyclerView recyclerView1_placelist = view.findViewById(R.id.recyclerView1);
 //        RecyclerView recyclerView2_course = view.findViewById(R.id.recyclerView2);
         searchEditText = view.findViewById(R.id.searchEditText);

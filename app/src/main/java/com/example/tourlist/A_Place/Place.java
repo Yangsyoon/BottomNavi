@@ -25,6 +25,12 @@ public class Place {
     private String mlevel;
     private String overview;
 
+
+
+
+
+    private String dist;
+
     // 기본 생성자
     public Place() {
     }
@@ -56,6 +62,9 @@ public class Place {
     }
 
     // Getter 메소드
+    public String getDist() {
+        return dist;
+    }
     public String getContentid() {
         return contentid;
     }
@@ -145,6 +154,10 @@ public class Place {
     }
 
     // Setter 메소드
+
+    public void setDist(String dist) {
+        this.dist = dist;
+    }
     public void setContentid(String contentid) {
         this.contentid = contentid;
     }

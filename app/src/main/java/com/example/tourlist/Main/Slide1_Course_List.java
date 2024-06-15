@@ -59,6 +59,7 @@ public class Slide1_Course_List extends Fragment {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
 
         getCurrentLocation();
+        Log.d("m","8");
 
 
         RecyclerView recyclerView2_course = view.findViewById(R.id.recyclerView2);
@@ -107,7 +108,9 @@ public class Slide1_Course_List extends Fragment {
                 } else {
                 }
                 Log.d("p", "3");
-                Log.d("p", currentLatitude);
+
+                getCurrentLocation();
+                Log.d("p", currentLatitude + " " + currentLongitude);
 
                 courseViewModel.filterCoursesByGps(currentLatitude, currentLongitude);
 
@@ -208,6 +211,15 @@ public class Slide1_Course_List extends Fragment {
         return view;
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+//이거 현재 위치로 갈때 필요한거.
+
+
+    }
+
+
     /*private void getCurrentLocation(View view) {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -250,6 +262,7 @@ public class Slide1_Course_List extends Fragment {
                             currentLatitude = Double.toString(location.getLatitude());
                             currentLongitude = Double.toString(location.getLongitude());
                             courseAdapter.setCurrentLocation(location);
+
                             Log.d("PP","ok");
 //                            Toast.makeText(getContext(), "Current location acquired", Toast.LENGTH_SHORT).show();
                         }

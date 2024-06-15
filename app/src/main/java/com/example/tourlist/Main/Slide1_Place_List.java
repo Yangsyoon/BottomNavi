@@ -1,5 +1,6 @@
 package com.example.tourlist.Main;
 
+import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -24,8 +26,7 @@ import com.example.tourlist.A_Place.Place_ViewModel;
 import com.example.tourlist.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,10 +38,11 @@ public class Slide1_Place_List extends Fragment {
     private Place_ViewModel placeViewModel;
     private Place_Adapter placeAdapter;
     private List<Place> places;
-    private FusedLocationProviderClient fusedLocationProviderClient;
+    private FusedLocationProviderClient fusedLocationClient;
     private String currentLatitude;
     private String currentLongitude;
 
+    public Location currentLocation;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -53,11 +55,20 @@ public class Slide1_Place_List extends Fragment {
         places = new ArrayList<>();
 
         placeAdapter = new Place_Adapter(places);
-        Log.d("P", "onBindViewHolder: createview");
+        Log.d("m", "onBindViewHolder: createview");
 
         recyclerView_place.setAdapter(placeAdapter);
 
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity());
+        //이거 현재 위치로 갈때 필요한거.
+//        locationSource = new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE);
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
+
+
+
+
+
+
 
         placeViewModel.getTouristPlaces().observe(getViewLifecycleOwner(), new Observer<List<Place>>() {
             @Override
@@ -85,6 +96,9 @@ public class Slide1_Place_List extends Fragment {
         Button gangwonButton = view.findViewById(R.id.gangwon_Button);
         Button jejuButton = view.findViewById(R.id.jeju_Button);
 //        Button gpsButton = view.findViewById(R.id.my_location);
+
+
+
 
         /*getCurrentLocation();
 
@@ -194,7 +208,27 @@ public class Slide1_Place_List extends Fragment {
         return view;
     }
 
-    private void getCurrentLocation() {
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        getCurrentLocation();
+
+        Log.d("m","created slide place");
+//        Log.d("m", String.valueOf(currentLocation.getLatitude()));
+    }
+
+    /*private void getCurrentLocation() {
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         fusedLocationProviderClient.getLastLocation()
                 .addOnCompleteListener(new OnCompleteListener<Location>() {
                     @Override
@@ -203,7 +237,8 @@ public class Slide1_Place_List extends Fragment {
                             Location location = task.getResult();
                             currentLatitude = Double.toString(location.getLatitude());
                             currentLongitude = Double.toString(location.getLongitude());
-
+                            currentLocation=location;
+                            placeAdapter.setCurrentLocation(currentLocation);
                             // 현재 위치를 사용하여 필요한 작업을 수행
                             // 예: 현재 위치 기반으로 코스를 필터링하거나 다른 작업 수행
 //                            Toast.makeText(getContext(), "현재 위치: " + currentLatitude + ", " + currentLongitude, Toast.LENGTH_LONG).show();
@@ -212,7 +247,58 @@ public class Slide1_Place_List extends Fragment {
                         }
                     }
                 });
+
+    }*/
+
+    //방금
+    /*private void getCurrentLocation() {
+        try {
+            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                fusedLocationProviderClient.getLastLocation().addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        if (location != null) {
+                            currentLocation = location;
+                            currentLatitude = Double.toString(location.getLatitude());
+                            currentLongitude = Double.toString(location.getLongitude());
+                            placeAdapter.setCurrentLocation(location);
+
+                            Log.d("PP","ok2");
+//                            Toast.makeText(getContext(), "Current location acquired", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        } catch (SecurityException e) {
+            e.printStackTrace();
+            Toast.makeText(getContext(), "Location permission not granted", Toast.LENGTH_SHORT).show();
+        }
+    }*/
+
+    //이거 frag1 NaverMap에서 복북한건데 멤버변수 초기화 안된다.
+    public void getCurrentLocation() {
+        try {
+            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                fusedLocationClient.getLastLocation().addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        if (location != null) {
+                            currentLatitude = Double.toString(location.getLatitude());
+                            currentLongitude = Double.toString(location.getLongitude());
+                            currentLocation = location;
+                            placeAdapter.setCurrentLocation(location);
+                            Log.d("PP","ok2");
+                            Toast.makeText(getContext(), "Current location acquired", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        } catch (SecurityException e) {
+            e.printStackTrace();
+            Toast.makeText(getContext(), "Location permission not granted", Toast.LENGTH_SHORT).show();
+        }
     }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

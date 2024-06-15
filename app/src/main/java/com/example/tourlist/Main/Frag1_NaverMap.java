@@ -378,10 +378,13 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
 
 
         //지도 시작시, 현재 위치로.
-        getCurrentLocation();
+//        getCurrentLocation();
+        Log.d("m", "cur 1");
+//        Log.d("m", currentLocation.toString());
 
         map.setLocationSource(locationSource);
         map.setLocationTrackingMode(LocationTrackingMode.Follow);
+        Log.d("m", locationSource.toString());
 
         // 현재 위치로 버튼
         UiSettings uiSettings = map.getUiSettings();
@@ -650,6 +653,8 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
 //                                infoWindow.open(tourMarker);
 
                                 getCurrentLocation();
+                                Log.d("m", "cur 2");
+                                Log.d("m", currentLocation.toString());
 
                                     //거리 계산.
                                 if (currentLocation != null) {

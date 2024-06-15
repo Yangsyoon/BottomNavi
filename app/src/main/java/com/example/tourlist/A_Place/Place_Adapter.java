@@ -1,6 +1,7 @@
 package com.example.tourlist.A_Place;
 
 import android.content.Intent;
+import android.location.Location;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import java.util.List;
 public class Place_Adapter extends RecyclerView.Adapter<Place_Adapter.Place_ViewHolder> {
 
     public List<Place> places;
+    private Location currentLocation;
 
     public Place_Adapter(List<Place> places) {
         this.places = places;
@@ -51,6 +53,11 @@ public class Place_Adapter extends RecyclerView.Adapter<Place_Adapter.Place_View
     public int getItemCount() {
         return places.size();
     }
+    public void setCurrentLocation(Location currentLocation) {
+        this.currentLocation = currentLocation;
+        Log.d("PP", "bind: "+currentLocation.getLatitude());
+
+    }
 
 
     public class Place_ViewHolder extends RecyclerView.ViewHolder {
@@ -77,6 +84,27 @@ public class Place_Adapter extends RecyclerView.Adapter<Place_Adapter.Place_View
             tvDescription.setText(place.getOverview());
             tvAddress.setText(place.getAddr1());
 //            tvdist.setText(place.getDistance());
+
+
+            // 거리 계산
+//            if (currentLocation != null && place.getMapx() != null && place.getMapy() != null) {
+            if (currentLocation != null ) {
+                Location courseLocation = new Location("");
+                courseLocation.setLatitude(place.getMapy());
+                courseLocation.setLongitude(place.getMapx());
+                float distanceInMeters = currentLocation.distanceTo(courseLocation);
+                float distanceInKm = distanceInMeters / 1000;
+
+                if(distanceInKm >=1){
+                    tvdist.setText(String.format("%.0f km", distanceInKm));
+
+                }
+                else{
+                    tvdist.setText(String.format("%.1f m", distanceInKm*1000));
+                }
+            } else {
+                tvdist.setText("Unknown");
+            }
 
             String imageUrl = place.getFirstimage();
             if (imageUrl != null && !imageUrl.isEmpty()) {

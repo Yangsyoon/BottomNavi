@@ -25,6 +25,12 @@ public class ResizableFragment extends Fragment {
     private int maxHeight; // 화면 높이에 대한 최대 높이
     private int initialHeight; // px 단위의 초기 높이
 
+    private Slide1_Course_List slide1_course_list;
+
+    private Slide1_Place_List slide1_place_list;
+    private Fragment currentFragment;
+    private int currentFragidx=0;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -34,6 +40,11 @@ public class ResizableFragment extends Fragment {
         final FrameLayout resizableView = view.findViewById(R.id.resizable_view);
         ImageButton dragButton = view.findViewById(R.id.drag_button);
         Button change_button=view.findViewById(R.id.change_button);
+
+
+
+        slide1_course_list =new Slide1_Course_List();
+        slide1_place_list=new Slide1_Place_List();
 
 //        // Frag2_FavoriteList를 추가합니다.
 //        Frag2_FavoriteList frag2_favoriteList = new Frag2_FavoriteList();
@@ -118,9 +129,10 @@ public class ResizableFragment extends Fragment {
         if (args != null) {
             String fragmentClassName = args.getString("child_fragment_class");
             Fragment childFragment = getChildFragment(fragmentClassName);
+            currentFragment = getChildFragment(fragmentClassName);
             Log.d(TAG, "7 "+fragmentClassName);
             if (childFragment != null) {
-                addChildFragment(childFragment);
+                addChildFragment(childFragment,false);
             }
         }
     }
@@ -159,24 +171,48 @@ public class ResizableFragment extends Fragment {
         return null;
     }
 
-    public void addChildFragment(Fragment fragment) {
-        Log.d(TAG, "4");
+    public void addChildFragment(Fragment fragment,boolean addToBackStack) {
+        Log.d("k", "4");
 
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.frameLayout_drag_button_below, fragment);
+        transaction.addToBackStack(null);
+
+//        if (addToBackStack) {
+//            transaction.addToBackStack(null);
+//        }
+
         transaction.commit();
     }
 
     private void changeChildFragment() {
-        Fragment currentFragment = getChildFragmentManager().findFragmentById(R.id.frameLayout_drag_button_below);
-        if (currentFragment != null) {
-            Fragment newFragment;
-            if (currentFragment instanceof Slide1_Place_List) {
-                newFragment = new Slide1_Course_List();
-            } else {
-                newFragment = new Slide1_Place_List();
-            }
-            addChildFragment(newFragment);
+
+//        if (currentFragment != null) {
+//            Fragment newFragment;
+//            if (currentFragment instanceof Slide1_Place_List) {
+//                newFragment = slide1_course_list;
+//            } else {
+//                newFragment = slide1_place_list;
+//            }
+//            addChildFragment(newFragment, false); // 프래그먼트 교체 시 백스택에 추가하지 않음
+//            currentFragment = newFragment;
+
+//        }
+
+
+
+        if(currentFragidx==0){
+            addChildFragment(slide1_course_list,false);
+            currentFragidx=1;
+
+        }
+        else{
+            addChildFragment(slide1_place_list,false);
+            currentFragidx=0;
+
+
+            Log.d("k","5");
         }
     }
+
 }

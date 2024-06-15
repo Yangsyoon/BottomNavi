@@ -85,7 +85,6 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
 //            tvDescription.setText(course.getCourse_description());
             tvAddress.setText(course.getAddr1());
 
-            Log.d("PP", "bind: "+currentLocation.getLatitude());
 // 거리 계산
             // 거리 계산
             if (currentLocation != null && course.getMapx() != null && course.getMapy() != null) {

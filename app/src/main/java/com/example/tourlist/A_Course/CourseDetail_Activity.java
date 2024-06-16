@@ -47,6 +47,7 @@ public class CourseDetail_Activity extends AppCompatActivity {
         placeviewModel_course.loadTouristCoursePlaces(contentId);
         Log.d("1", "2contentId: " + contentId);
 //
+        //여기서  장소 1, 장소 2, 채워지면(사진 없는) =>어댑터, bind.
         placeviewModel_course.getPlaces().observe(this, new Observer<List<TouristCoursePlace>>() {
             @Override
             public void onChanged(List<TouristCoursePlace> places) {

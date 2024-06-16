@@ -40,6 +40,10 @@ public class TouristCourseRepository {
 
 //    jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D
 
+
+
+
+    //코스 제목. 아이디
     public void loadTouristCourses(final MutableLiveData<List<Course>> touristCourses) {
         try {
         // 코스 키
@@ -90,6 +94,10 @@ public class TouristCourseRepository {
                     @Override
                     public void onResponse(InputStream response) {
                         List<Course> courses = courseXmlParser.parse(response);
+
+                        for (Course course : courses) {
+
+                        }
                         touristCourses.setValue(courses);
                     }
                 },
@@ -112,6 +120,7 @@ public class TouristCourseRepository {
 //        Log.d("tt", requestUrl);
     }
 
+    //코스 반복 정보.각 장소들 나옴(사진 없다.)
     public void loadTouristCourseDetails(final String contentId, final MutableLiveData<Course> touristCourse) {
         String requestUrl = "https://apis.data.go.kr/B551011/KorService1/detailInfo1?serviceKey=jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D&MobileOS=ETC&MobileApp=AppTest&contentId=" + contentId + "&contentTypeId=25&numOfRows=10&pageNo=1";
 //        String requestUrl = "https://apis.data.go.kr/B551011/KorService1/detailInfo1?serviceKey=YOUR_API_KEY&MobileOS=ETC&MobileApp=AppTest&contentId=" + contentId + "&contentTypeId=25&numOfRows=10&pageNo=1";
@@ -129,7 +138,7 @@ public class TouristCourseRepository {
                         touristCourse.setValue(course);
 //                        Log.d("p", course.getCourse_title());
                         for (TouristCoursePlace place : course.getPlaces()) {
-                            loadCommonInfo(place.getSubcontentid(), place, touristCourse);
+                            loadDetailImage(place.getSubcontentid(), place, touristCourse);
                         }
                     }
                 },
@@ -143,32 +152,141 @@ public class TouristCourseRepository {
         requestQueue.add(request);
     }
 
-    private void loadCommonInfo(final String subcontentid, final TouristCoursePlace place, final MutableLiveData<Course> touristCourse) {
+    //장소 하나의 이미지. 상세이미지 요청 서비스. 공통정보 아님.
+    public void loadDetailImage(final String subcontentid, final TouristCoursePlace place, final MutableLiveData<Course> touristCourse) {
 //        String requestUrl = "https://apis.data.go.kr/B551011/KorService1/detailCommon1?serviceKey=YOUR_API_KEY&MobileOS=ETC&MobileApp=AppTest&contentId=" + subcontentid + "&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&addrinfoYN=Y&mapinfoYN=Y";
-        String requestUrl = "https://apis.data.go.kr/B551011/KorService1/detailImage1?serviceKey=jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D&MobileOS=ETC&MobileApp=AppTest&contentId=" + subcontentid + "&imageYN=Y&subImageYN=Y&numOfRows=10&pageNo=1";
-        //                   https://apis.data.go.kr/B551011/KorService1/detailImage1?serviceKey=jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D&MobileOS=ETC&MobileApp=AppTest&contentId=250121&imageYN=Y&subImageYN=Y&numOfRows=10&pageNo=1
+//        String  = "https://apis.data.go.kr/B551011/KorService1/detailImage1?serviceKey=jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D&MobileOS=ETC&MobileApp=AppTest&contentId=" + subcontentid + "&imageYN=Y&subImageYN=Y&numOfRows=10&pageNo=1";
+try {
+// 베이스 URL 설정
+    String requestUrl = "https://apis.data.go.kr/B551011/KorService1/";
 
-        InputStreamRequest request = new InputStreamRequest(Request.Method.GET, requestUrl,
-                new Response.Listener<InputStream>() {
-                    @Override
-                    public void onResponse(InputStream response) {
-                        Log.d("firstimage1", place.getSubname() + place.getFirstimage());
 
-                        courseXmlParser.parseCommonInfo(response, place);
+    String serviceKey = "jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D";
+    String serviceType = "detailImage1";
 
-                        Log.d("firstimage1", place.getSubname() + place.getFirstimage());
-                        touristCourse.setValue(touristCourse.getValue());
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // Handle error
-                    }
-                });
+    String mobileOS = "ETC";
+    String mobileApp = "AppTest";
+    String contentId = subcontentid; // subcontentid 변수를 사용
 
-        requestQueue.add(request);
+    String imageYN = "Y";
+    String subImageYN = "Y";
+    String numOfRows = "10";
+    String pageNo = "1";
+
+// URL 빌더 사용하여 URL 구성
+    StringBuilder urlBuilder = new StringBuilder(requestUrl);
+    urlBuilder.append(serviceType);
+    urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=" + serviceKey);
+
+    urlBuilder.append("&" + URLEncoder.encode("MobileOS", "UTF-8") + "=" + URLEncoder.encode(mobileOS, "UTF-8"));
+    urlBuilder.append("&" + URLEncoder.encode("MobileApp", "UTF-8") + "=" + URLEncoder.encode(mobileApp, "UTF-8"));
+    urlBuilder.append("&" + URLEncoder.encode("contentId", "UTF-8") + "=" + URLEncoder.encode(contentId, "UTF-8"));
+    urlBuilder.append("&" + URLEncoder.encode("imageYN", "UTF-8") + "=" + URLEncoder.encode(imageYN, "UTF-8"));
+    urlBuilder.append("&" + URLEncoder.encode("subImageYN", "UTF-8") + "=" + URLEncoder.encode(subImageYN, "UTF-8"));
+    urlBuilder.append("&" + URLEncoder.encode("numOfRows", "UTF-8") + "=" + URLEncoder.encode(numOfRows, "UTF-8"));
+    urlBuilder.append("&" + URLEncoder.encode("pageNo", "UTF-8") + "=" + URLEncoder.encode(pageNo, "UTF-8"));
+
+// 완성된 URL 출력
+    requestUrl = urlBuilder.toString();
+    Log.d("Generated URL", requestUrl);
+
+
+    Log.d("j", requestUrl);
+    InputStreamRequest request = new InputStreamRequest(Request.Method.GET, requestUrl,
+            new Response.Listener<InputStream>() {
+                @Override
+                public void onResponse(InputStream response) {
+                    Log.d("firstimage1", place.getSubname() + place.getFirstimage());
+
+                    courseXmlParser.parseCommonInfo(response, place);
+
+                    Log.d("firstimage1", place.getSubname() + place.getFirstimage());
+                    touristCourse.setValue(touristCourse.getValue());
+                }
+            },
+            new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    // Handle error
+                }
+            });
+
+    requestQueue.add(request);
+}
+catch(Exception e){
+
+
+}
     }
+
+    public void loadCommonInfo(final String subcontentid, final TouristCoursePlace place, final MutableLiveData<Course> touristCourse) {
+//        String requestUrl = "https://apis.data.go.kr/B551011/KorService1/detailCommon1?serviceKey=YOUR_API_KEY&MobileOS=ETC&MobileApp=AppTest&contentId=" + subcontentid + "&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&addrinfoYN=Y&mapinfoYN=Y";
+//        String  = "https://apis.data.go.kr/B551011/KorService1/detailImage1?serviceKey=jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D&MobileOS=ETC&MobileApp=AppTest&contentId=" + subcontentid + "&imageYN=Y&subImageYN=Y&numOfRows=10&pageNo=1";
+        try {
+// 베이스 URL 설정
+            String requestUrl = "https://apis.data.go.kr/B551011/KorService1/";
+
+
+            String serviceKey = "jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D";
+            String serviceType = "detailImage1";
+
+            String mobileOS = "ETC";
+            String mobileApp = "AppTest";
+            String contentId = subcontentid; // subcontentid 변수를 사용
+
+            String imageYN = "Y";
+            String subImageYN = "Y";
+            String numOfRows = "10";
+            String pageNo = "1";
+
+// URL 빌더 사용하여 URL 구성
+            StringBuilder urlBuilder = new StringBuilder(requestUrl);
+            urlBuilder.append(serviceType);
+            urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=" + serviceKey);
+
+            urlBuilder.append("&" + URLEncoder.encode("MobileOS", "UTF-8") + "=" + URLEncoder.encode(mobileOS, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("MobileApp", "UTF-8") + "=" + URLEncoder.encode(mobileApp, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("contentId", "UTF-8") + "=" + URLEncoder.encode(contentId, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("imageYN", "UTF-8") + "=" + URLEncoder.encode(imageYN, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("subImageYN", "UTF-8") + "=" + URLEncoder.encode(subImageYN, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("numOfRows", "UTF-8") + "=" + URLEncoder.encode(numOfRows, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("pageNo", "UTF-8") + "=" + URLEncoder.encode(pageNo, "UTF-8"));
+
+// 완성된 URL 출력
+            requestUrl = urlBuilder.toString();
+            Log.d("Generated URL", requestUrl);
+
+
+            Log.d("j", requestUrl);
+            InputStreamRequest request = new InputStreamRequest(Request.Method.GET, requestUrl,
+                    new Response.Listener<InputStream>() {
+                        @Override
+                        public void onResponse(InputStream response) {
+                            Log.d("firstimage1", place.getSubname() + place.getFirstimage());
+
+                            courseXmlParser.parseCommonInfo(response, place);
+
+                            Log.d("firstimage1", place.getSubname() + place.getFirstimage());
+                            touristCourse.setValue(touristCourse.getValue());
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // Handle error
+                        }
+                    });
+
+            requestQueue.add(request);
+        }
+        catch(Exception e){
+
+
+        }
+    }
+
+
+
 
     public void loadFilteredCourses(final String areaCode, final MutableLiveData<List<Course>> filteredCourses) {
 

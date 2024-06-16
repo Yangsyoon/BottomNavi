@@ -114,32 +114,6 @@ public class TouristPlaceRepository_call_parser {
 //        Log.d("tt", requestUrl);
     }
 
-    /*public void loadTouristCourseDetails(final String contentId, final MutableLiveData<Course> touristCourse) {
-        String requestUrl = "https://apis.data.go.kr/B551011/KorService1/detailInfo1?serviceKey=jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D&MobileOS=ETC&MobileApp=AppTest&contentId=" + contentId + "&contentTypeId=25&numOfRows=10&pageNo=1";
-//        String requestUrl = "https://apis.data.go.kr/B551011/KorService1/detailInfo1?serviceKey=YOUR_API_KEY&MobileOS=ETC&MobileApp=AppTest&contentId=" + contentId + "&contentTypeId=25&numOfRows=10&pageNo=1";
-
-        InputStreamRequest request = new InputStreamRequest(Request.Method.GET, requestUrl,
-                new Response.Listener<InputStream>() {
-                    @Override
-                    public void onResponse(InputStream response) {
-                        Course course = place_xmlParser.parseDetail(response);
-                        touristCourse.setValue(course);
-
-                        for (TouristCoursePlace place : course.getPlaces()) {
-                            loadCommonInfo(place.getSubcontentid(), place, touristCourse);
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // Handle error
-                    }
-                });
-
-        requestQueue.add(request);
-    }*/
-
     public void loadCommonInfo(final String contentid, final MutableLiveData<Place> placeDetail) {
         try {
 
@@ -222,6 +196,35 @@ public class TouristPlaceRepository_call_parser {
         }
         catch (UnsupportedEncodingException e) {}
     }
+
+
+
+    /*public void loadTouristCourseDetails(final String contentId, final MutableLiveData<Course> touristCourse) {
+        String requestUrl = "https://apis.data.go.kr/B551011/KorService1/detailInfo1?serviceKey=jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D&MobileOS=ETC&MobileApp=AppTest&contentId=" + contentId + "&contentTypeId=25&numOfRows=10&pageNo=1";
+//        String requestUrl = "https://apis.data.go.kr/B551011/KorService1/detailInfo1?serviceKey=YOUR_API_KEY&MobileOS=ETC&MobileApp=AppTest&contentId=" + contentId + "&contentTypeId=25&numOfRows=10&pageNo=1";
+
+        InputStreamRequest request = new InputStreamRequest(Request.Method.GET, requestUrl,
+                new Response.Listener<InputStream>() {
+                    @Override
+                    public void onResponse(InputStream response) {
+                        Course course = place_xmlParser.parseDetail(response);
+                        touristCourse.setValue(course);
+
+                        for (TouristCoursePlace place : course.getPlaces()) {
+                            loadCommonInfo(place.getSubcontentid(), place, touristCourse);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle error
+                    }
+                });
+
+        requestQueue.add(request);
+    }*/
+
 
    /* public void loadFilteredCourses(final String areaCode, final MutableLiveData<List<Course>> filteredCourses) {
 

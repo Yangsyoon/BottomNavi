@@ -30,6 +30,7 @@ public class PlaceViewModel_course extends AndroidViewModel {
     public void loadTouristCoursePlaces(String contentId) {
         MutableLiveData<Course> touristCourse = new MutableLiveData<>();
         Log.d("p","1");
+
         repository.loadTouristCourseDetails(contentId, touristCourse);
 
         touristCourse.observeForever(course -> {

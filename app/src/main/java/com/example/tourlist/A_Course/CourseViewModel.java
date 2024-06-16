@@ -33,6 +33,7 @@ public class CourseViewModel extends AndroidViewModel {
             repository.loadTouristCourses(touristCourses);
 
 
+
         }
         return touristCourses;
     }

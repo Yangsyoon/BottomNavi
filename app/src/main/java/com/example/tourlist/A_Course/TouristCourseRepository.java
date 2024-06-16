@@ -56,7 +56,7 @@ public class TouristCourseRepository {
 
 
         String serviceType = "areaBasedList1";
-        String numOfRows = "10";
+        String numOfRows = "3";
         String pageNo = "1";
         String mobileOS = "AND";
         String mobileApp = "AppTest";
@@ -122,7 +122,7 @@ public class TouristCourseRepository {
 
     //코스 반복 정보.각 장소들 나옴(사진 없다.)
     public void loadTouristCourseDetails(final String contentId, final MutableLiveData<Course> touristCourse) {
-        String requestUrl = "https://apis.data.go.kr/B551011/KorService1/detailInfo1?serviceKey=jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D&MobileOS=ETC&MobileApp=AppTest&contentId=" + contentId + "&contentTypeId=25&numOfRows=10&pageNo=1";
+        String requestUrl = "https://apis.data.go.kr/B551011/KorService1/detailInfo1?serviceKey=jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D&MobileOS=ETC&MobileApp=AppTest&contentId=" + contentId + "&contentTypeId=25&numOfRows=3&pageNo=1";
 //        String requestUrl = "https://apis.data.go.kr/B551011/KorService1/detailInfo1?serviceKey=YOUR_API_KEY&MobileOS=ETC&MobileApp=AppTest&contentId=" + contentId + "&contentTypeId=25&numOfRows=10&pageNo=1";
 
         InputStreamRequest request = new InputStreamRequest(Request.Method.GET, requestUrl,
@@ -170,7 +170,7 @@ try {
 
     String imageYN = "Y";
     String subImageYN = "Y";
-    String numOfRows = "10";
+    String numOfRows = "3";
     String pageNo = "1";
 
 // URL 빌더 사용하여 URL 구성
@@ -197,6 +197,8 @@ try {
                 @Override
                 public void onResponse(InputStream response) {
                     Log.d("firstimage1", place.getSubname() + place.getFirstimage());
+
+
 
                     courseXmlParser.parseCommonInfo(response, place);
 
@@ -236,7 +238,7 @@ catch(Exception e){
 
             String imageYN = "Y";
             String subImageYN = "Y";
-            String numOfRows = "10";
+            String numOfRows = "3";
             String pageNo = "1";
 
 // URL 빌더 사용하여 URL 구성
@@ -290,7 +292,7 @@ catch(Exception e){
 
     public void loadFilteredCourses(final String areaCode, final MutableLiveData<List<Course>> filteredCourses) {
 
-        String requestUrl = "https://apis.data.go.kr/B551011/KorService1/areaBasedList1?serviceKey=jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D&numOfRows=30&pageNo=1&MobileOS=ETC&MobileApp=AppTest&listYN=Y&arrange=O&contentTypeId=25&areaCode=" + areaCode;
+        String requestUrl = "https://apis.data.go.kr/B551011/KorService1/areaBasedList1?serviceKey=jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D&numOfRows=3&pageNo=1&MobileOS=ETC&MobileApp=AppTest&listYN=Y&arrange=O&contentTypeId=25&areaCode=" + areaCode;
 //        String requestUrl = "https://apis.data.go.kr/B551011/KorService1/areaBasedList1?serviceKey=YOUR_API_KEY&numOfRows=10&pageNo=1&MobileOS=ETC&MobileApp=AppTest&listYN=Y&arrange=O&contentTypeId=25&areaCode=" + areaCode;
 
         InputStreamRequest request = new InputStreamRequest(Request.Method.GET, requestUrl,
@@ -317,7 +319,7 @@ catch(Exception e){
             String requestUrl = "https://apis.data.go.kr/B551011/KorService1/";
             String serviceKey = "jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D";
             String serviceType = "locationBasedList1";
-            String numOfRows = "10";
+            String numOfRows = "3";
             String pageNo = "1";
             String mobileOS = "ETC";
             String mobileApp = "AppTest";

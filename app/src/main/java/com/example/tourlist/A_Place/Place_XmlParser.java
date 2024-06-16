@@ -1,5 +1,7 @@
 package com.example.tourlist.A_Place;
 
+import android.util.Log;
+
 import com.example.tourlist.A_Course.Course;
 import com.example.tourlist.A_Course.TouristCoursePlace;
 
@@ -223,10 +225,13 @@ class Place_XmlParser {
         return course;
     }*/
 
-    public Place parseCommonInfo(InputStream inputStream, Place place) {
+    public Place parseCommonInfo(InputStream inputStream) {
+        Place place = new Place();
+
         try (BufferedReader bufreader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
             StringBuilder xmlData = new StringBuilder();
             String line;
+            Log.d("P8", "1");
             while ((line = bufreader.readLine()) != null) {
                 xmlData.append(line);
             }
@@ -241,68 +246,71 @@ class Place_XmlParser {
                     String tagName = parser.getName();
                     switch (tagName) {
                         case "contentid":
+
                             place.setContentid(parser.nextText());
+                            Log.d("P8", place.getContentid());
                             break;
                         case "contenttypeid":
                             place.setContenttypeid(parser.nextText());
                             break;
                         case "title":
+
                             place.setTitle(parser.nextText());
                             break;
-                        case "createdtime":
-                            place.setCreatedtime(parser.nextText());
-                            break;
-                        case "modifiedtime":
-                            place.setModifiedtime(parser.nextText());
-                            break;
-                        case "tel":
-                            place.setTel(parser.nextText());
-                            break;
-                        case "homepage":
-                            place.setHomepage(parser.nextText());
-                            break;
-                        case "booktour":
-                            place.setBooktour(parser.nextText());
-                            break;
+//                        case "createdtime":
+//                            place.setCreatedtime(parser.nextText());
+//                            break;
+//                        case "modifiedtime":
+//                            place.setModifiedtime(parser.nextText());
+//                            break;
+//                        case "tel":
+//                            place.setTel(parser.nextText());
+//                            break;
+//                        case "homepage":
+//                            place.setHomepage(parser.nextText());
+//                            break;
+//                        case "booktour":
+//                            place.setBooktour(parser.nextText());
+//                            break;
                         case "firstimage":
                             place.setFirstimage(parser.nextText());
                             break;
-                        case "firstimage2":
-                            place.setFirstimage2(parser.nextText());
-                            break;
-                        case "cpyrhtDivCd":
-                            place.setCpyrhtDivCd(parser.nextText());
-                            break;
-                        case "areacode":
-                            place.setAreacode(parser.nextText());
-                            break;
-                        case "sigungucode":
-                            place.setSigungucode(parser.nextText());
-                            break;
-                        case "cat1":
-                            place.setCat1(parser.nextText());
-                            break;
-                        case "cat2":
-                            place.setCat2(parser.nextText());
-                            break;
-                        case "cat3":
-                            place.setCat3(parser.nextText());
-                            break;
+//                        case "firstimage2":
+//                            place.setFirstimage2(parser.nextText());
+//                            break;
+//                        case "cpyrhtDivCd":
+//                            place.setCpyrhtDivCd(parser.nextText());
+//                            break;
+//                        case "areacode":
+//                            place.setAreacode(parser.nextText());
+//                            break;
+//                        case "sigungucode":
+//                            place.setSigungucode(parser.nextText());
+//                            break;
+//                        case "cat1":
+//                            place.setCat1(parser.nextText());
+//                            break;
+//                        case "cat2":
+//                            place.setCat2(parser.nextText());
+//                            break;
+//                        case "cat3":
+//                            place.setCat3(parser.nextText());
+//                            break;
                         case "addr1":
                             place.setAddr1(parser.nextText());
                             break;
-                        case "zipcode":
-                            place.setZipcode(parser.nextText());
-                            break;
+//                        case "zipcode":
+//                            place.setZipcode(parser.nextText());
+//                            break;
                         case "mapx":
                             place.setMapx(Double.parseDouble(parser.nextText()));
                             break;
                         case "mapy":
                             place.setMapy(Double.parseDouble(parser.nextText()));
                             break;
-                        case "mlevel":
-                            place.setMlevel(parser.nextText());
-                            break;
+//                        case "mlevel":
+//                            place.setMlevel(parser.nextText());
+//                            break;
                         case "overview":
                             place.setOverview(parser.nextText());
                             break;

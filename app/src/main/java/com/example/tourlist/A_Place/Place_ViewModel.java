@@ -20,10 +20,105 @@ public class Place_ViewModel extends AndroidViewModel {
         repository = TouristPlaceRepository_call_parser.getInstance(application);
     }
 
-    public LiveData<List<Place>> getTouristPlaces() {
+    public void getTouristPlaces() {
+
+        MutableLiveData<List<Place>> newTouristPlaces = new MutableLiveData<>();
+
         if (touristPlaces == null) {
             touristPlaces = new MutableLiveData<>();
+            //밑에 해제하면 중간에 상세 뜸.
+//            repository.loadTouristPlaces(newTouristPlaces);
             repository.loadTouristPlaces(touristPlaces);
+//이게 첫 load.
+        }
+
+        //이거에 48시간 썼다.
+        /*newTouristPlaces.observeForever(new Observer<List<Place>>() {
+            @Override
+            public void onChanged(List<Place> places) {
+                List<Place> newPlaces = new ArrayList<>();
+                MutableLiveData<Place> place_mut = new MutableLiveData<>();
+//                Log.d("Place_ViewModel1", String.valueOf(places.size()));
+                for(Place place:places){
+//                    place_mut.setValue(place);
+                    repository.loadCommonInfo2(place.getContentid(),place_mut);
+
+                }
+                place_mut.observeForever(place->{
+                    Log.d("Place_ViewModel1", "onChanged: "+place.getOverview());
+
+                    newPlaces.add(place);
+
+
+                    if (newPlaces.size() == places.size()) {
+                        touristPlaces.setValue(newPlaces);
+                    }
+
+                });
+//                Log.d("Place_ViewModel2", "onChanged: "+newPlaces.get(0).getOverview());
+
+
+
+            }
+
+        });*/
+
+
+        touristPlaces.setValue(touristPlaces.getValue());
+    }
+
+    public LiveData<List<Place>> getTouristPlaces_observe() {
+
+        MutableLiveData<List<Place>> newTouristPlaces = new MutableLiveData<>();
+
+        if (touristPlaces == null) {
+            touristPlaces = new MutableLiveData<>();
+            //밑에 해제하면 중간에 상세 뜸.
+//            repository.loadTouristPlaces(newTouristPlaces);
+            repository.loadTouristPlaces(touristPlaces);
+//이게 첫 load.
+        }
+
+        //이거에 48시간 썼다.
+        /*newTouristPlaces.observeForever(new Observer<List<Place>>() {
+            @Override
+            public void onChanged(List<Place> places) {
+                List<Place> newPlaces = new ArrayList<>();
+                MutableLiveData<Place> place_mut = new MutableLiveData<>();
+//                Log.d("Place_ViewModel1", String.valueOf(places.size()));
+                for(Place place:places){
+//                    place_mut.setValue(place);
+                    repository.loadCommonInfo2(place.getContentid(),place_mut);
+
+                }
+                place_mut.observeForever(place->{
+                    Log.d("Place_ViewModel1", "onChanged: "+place.getOverview());
+
+                    newPlaces.add(place);
+
+
+                    if (newPlaces.size() == places.size()) {
+                        touristPlaces.setValue(newPlaces);
+                    }
+
+                });
+//                Log.d("Place_ViewModel2", "onChanged: "+newPlaces.get(0).getOverview());
+
+
+
+            }
+
+        });*/
+
+
+
+
+        return touristPlaces;
+    }
+
+    public LiveData<List<Place>> getPlaces() {
+        if (touristPlaces == null) {
+            touristPlaces = new MutableLiveData<>();
         }
         return touristPlaces;
     }
@@ -42,14 +137,14 @@ public class Place_ViewModel extends AndroidViewModel {
 //        return touristPlaces;
 //    }
 
-//    public LiveData<List<TouristCourse>> getTouristCoursesByGps(String latitude, String longitude) {
-//        if (touristCourses == null) {
-//            touristCourses = new MutableLiveData<>();
-//            Log.d("CourseViewModel", "getTouristCoursesByGps: ");
-//            repository.loadFilteredGps(latitude, longitude,touristCourses);
-//        }
-//        return touristCourses;
-//    }
+    /*public LiveData<List<TouristCourse>> getTouristCoursesByGps(String latitude, String longitude) {
+        if (touristCourses == null) {
+            touristCourses = new MutableLiveData<>();
+            Log.d("CourseViewModel", "getTouristCoursesByGps: ");
+            repository.loadFilteredGps(latitude, longitude,touristCourses);
+        }
+        return touristCourses;
+    }
 
 
 //    public LiveData<List<TouristCourse>> getGpsCourses() {
@@ -63,7 +158,7 @@ public class Place_ViewModel extends AndroidViewModel {
 
 
 
-    /*public LiveData<List<Course>> getFilteredCourses(String areaCode) {
+    public LiveData<List<Course>> getFilteredCourses(String areaCode) {
 //        MutableLiveData<List<TouristCourse>> filteredCourses = new MutableLiveData<>();
 //        repository.loadFilteredCourses(areaCode, filteredCourses);
 //        return filteredCourses;
@@ -72,16 +167,16 @@ public class Place_ViewModel extends AndroidViewModel {
             repository.loadFilteredCourses(areaCode,touristCourses);
         }
         return touristCourses;
-    }
-
-
-
-    public void filterCoursesByAreaCode(String areaCode) {
-        repository.loadFilteredCourses(areaCode, touristCourses);
-    }
-
-    public void filterCoursesByGps(String latitude, String longitude) {
-//        Log.d("CourseViewModel", latitude);
-        repository.loadFilteredGps(latitude, longitude, touristCourses);
     }*/
+
+
+
+    public void filterPlacesByAreaCode(String url) {
+        repository.loadFilteredPlaces(url, touristPlaces);
+    }
+
+    public void filterPlacesByGps(String latitude, String longitude,String contenttype) {
+//        Log.d("CourseViewModel", latitude);
+        repository.loadFilteredGps(latitude, longitude, touristPlaces,contenttype);
+    }
 }

@@ -16,6 +16,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.tourlist.A_Course.TouristCoursePlace;
 import com.example.tourlist.R;
 
 import java.util.List;
@@ -28,6 +29,10 @@ public class Place_Adapter extends RecyclerView.Adapter<Place_Adapter.Place_View
     public Place_Adapter(List<Place> places) {
         this.places = places;
 
+    }
+    public void setPlaces(List<Place> places) {
+        this.places = places;
+        notifyDataSetChanged();
     }
 
     @NonNull

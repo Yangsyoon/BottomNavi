@@ -50,12 +50,38 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <!--            <Button-->
-            <!--                android:id="@+id/my_location"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_margin="4dp"-->
-            <!--                android:text="근처 코스" />-->
+                        <Button
+                            android:id="@+id/my_location2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:text="근처 코스" />
+
+            <Button
+                android:id="@+id/language_Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:text="언어" />
+            <Button
+                android:id="@+id/contenttype_Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:text="관광타입" />
+            <Button
+                android:id="@+id/service_Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:text="서비스분류" />
+
+            <Button
+                android:id="@+id/area_Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:text="지역" />
 
             <Button
                 android:id="@+id/all_Button"
@@ -189,6 +215,13 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:text="음식점" />
+
+            <Button
+                android:id="@+id/search_Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:text="조회" />
 
 
 

@@ -63,6 +63,8 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
         // ViewModel 설정
         String contentId = getIntent().getStringExtra("CONTENT_ID");
 
+//        Log.d("b", "Content ID: " + contentId);
+
         viewModel = new ViewModelProvider(this).get(Place_ViewModel.class);
 
 
@@ -86,6 +88,7 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
         mapView.getMapAsync(this);
 
         // ViewModel에서 데이터 가져오기
+        //준비되면 getplace
         if (contentId != null) {
             viewModel.getPlacedetail(contentId).observe(this, new Observer<Place>() {
                 @Override

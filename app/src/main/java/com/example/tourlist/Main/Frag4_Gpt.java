@@ -70,6 +70,7 @@ public class Frag4_Gpt extends Fragment {
 
 
         messageList = new ArrayList<>();
+        messageList.add(new Message("Hi! I'm a chatbot. How can I help you?", Message.SENT_BY_BOT));
 
         recyclerView = view.findViewById(R.id.recycler_view);
         welcomeTextView = view.findViewById(R.id.welcome_text);

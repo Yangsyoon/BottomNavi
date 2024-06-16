@@ -157,9 +157,9 @@ class Course_XmlParser {
                         case "contentid":
                             course.setContent_id(parser.nextText());
                             break;
-                        case "title":
-                            course.setCourse_title(parser.nextText());
-                            break;
+//                        case "title":
+//                            course.setCourse_title(parser.nextText());
+//                            break;
                         case "item":
                             place = new TouristCoursePlace();
                             break;

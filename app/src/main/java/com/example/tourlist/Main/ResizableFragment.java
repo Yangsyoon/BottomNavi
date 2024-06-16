@@ -39,7 +39,7 @@ public class ResizableFragment extends Fragment {
 
         final FrameLayout resizableView = view.findViewById(R.id.resizable_view);
         ImageButton dragButton = view.findViewById(R.id.drag_button);
-        Button change_button=view.findViewById(R.id.change_button);
+//        Button change_button=view.findViewById(R.id.change_button);
 
 
 
@@ -63,13 +63,14 @@ public class ResizableFragment extends Fragment {
             }
         });
 
-        change_button.setOnClickListener(new View.OnClickListener() {
+        //오류 많아서 뻄.
+/*        change_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 changeChildFragment();
 
             }
-        });
+        });*/
 
         dragButton.setOnTouchListener(new OnTouchListener() {
             float initialY;

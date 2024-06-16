@@ -121,8 +121,13 @@ public class TouristCourseRepository {
                     @Override
                     public void onResponse(InputStream response) {
                         Course course = courseXmlParser.parseDetail(response);
+
+                        if(course!=null){
+                            Log.d("p", course.getContent_id());
+                        }
+
                         touristCourse.setValue(course);
-                        Log.d("p", course.getCourse_title());
+//                        Log.d("p", course.getCourse_title());
                         for (TouristCoursePlace place : course.getPlaces()) {
                             loadCommonInfo(place.getSubcontentid(), place, touristCourse);
                         }

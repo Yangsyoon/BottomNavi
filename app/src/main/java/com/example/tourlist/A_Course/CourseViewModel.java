@@ -37,6 +37,19 @@ public class CourseViewModel extends AndroidViewModel {
         return touristCourses;
     }
 
+    public void filterCoursesByAreaCode(String areaCode) {
+        repository.loadFilteredCourses(areaCode, touristCourses);
+    }
+
+    public void filterCoursesByGps(String latitude, String longitude) {
+        Log.d("p", "5");
+        repository.loadFilteredGps(latitude, longitude, touristCourses);
+    }
+
+
+
+/*
+
 //    public LiveData<List<TouristCourse>> getTouristCoursesByGps(String latitude, String longitude) {
 //        if (touristCourses == null) {
 //            touristCourses = new MutableLiveData<>();
@@ -69,14 +82,8 @@ public class CourseViewModel extends AndroidViewModel {
         return touristCourses;
     }
 
+*/
 
 
-    public void filterCoursesByAreaCode(String areaCode) {
-        repository.loadFilteredCourses(areaCode, touristCourses);
-    }
 
-    public void filterCoursesByGps(String latitude, String longitude) {
-        Log.d("p", "5");
-        repository.loadFilteredGps(latitude, longitude, touristCourses);
-    }
 }

@@ -378,7 +378,7 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
 
 
         //지도 시작시, 현재 위치로.
-//        getCurrentLocation();
+        getCurrentLocation();
         Log.d("m", "cur 1");
 //        Log.d("m", currentLocation.toString());
 
@@ -646,18 +646,22 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
                         tourMarker.setOnClickListener(new Overlay.OnClickListener() {
                             @Override
                             public boolean onClick(@NonNull Overlay overlay) {
+                                getCurrentLocation();
+
+
                                 Toast.makeText(getContext(), "마커 클릭됨 " + tourMarker.getCaptionText(), Toast.LENGTH_SHORT).show();
                                 selectedMarker = tourMarker;
 //                                tour = tourMarker;
 
 //                                infoWindow.open(tourMarker);
 
-                                getCurrentLocation();
+
                                 Log.d("m", "cur 2");
-                                Log.d("m", currentLocation.toString());
 
                                     //거리 계산.
                                 if (currentLocation != null) {
+//                                Log.d("m1", currentLocation.toString());
+
                                     Location markerLocation = new Location("");
                                     markerLocation.setLatitude(selectedMarker.getPosition().latitude);
                                     markerLocation.setLongitude(selectedMarker.getPosition().longitude);
@@ -681,6 +685,7 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
                                     infoDescription.setText(place.getDescription());
                                     infoAddress.setText(place.getAddress());
                                     loadPlaceImage(place);
+
                                     if(distance>=1000){
 
                                         String s= String.format("%.0f", distance/1000);
@@ -702,12 +707,6 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
                                     placeNameButton.setVisibility(View.GONE); // 버튼 숨기기
 
                                 }
-
-
-
-
-
-
 
 
 

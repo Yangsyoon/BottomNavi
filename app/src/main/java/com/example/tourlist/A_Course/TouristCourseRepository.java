@@ -96,7 +96,9 @@ public class TouristCourseRepository {
                         List<Course> courses = courseXmlParser.parse(response);
 
                         for (Course course : courses) {
-
+                            TouristCoursePlace place = new TouristCoursePlace();
+//                            place
+//                            loadCommonInfo1(course.getContent_id(),);
                         }
                         touristCourses.setValue(courses);
                     }
@@ -198,7 +200,7 @@ try {
                 public void onResponse(InputStream response) {
                     Log.d("firstimage1", place.getSubname() + place.getFirstimage());
 
-                    courseXmlParser.parseCommonInfo(response, place);
+                    courseXmlParser.parseDetailImg(response, place);
 
                     Log.d("firstimage1", place.getSubname() + place.getFirstimage());
                     touristCourse.setValue(touristCourse.getValue());
@@ -219,55 +221,54 @@ catch(Exception e){
 }
     }
 
-    public void loadCommonInfo(final String subcontentid, final TouristCoursePlace place, final MutableLiveData<Course> touristCourse) {
-//        String requestUrl = "https://apis.data.go.kr/B551011/KorService1/detailCommon1?serviceKey=YOUR_API_KEY&MobileOS=ETC&MobileApp=AppTest&contentId=" + subcontentid + "&defaultYN=Y&firstImageYN=Y&areacodeYN=Y&addrinfoYN=Y&mapinfoYN=Y";
-//        String  = "https://apis.data.go.kr/B551011/KorService1/detailImage1?serviceKey=jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D&MobileOS=ETC&MobileApp=AppTest&contentId=" + subcontentid + "&imageYN=Y&subImageYN=Y&numOfRows=10&pageNo=1";
+//새로만든 공통요청함수 _ 코스하나를 장소로 요청
+    public void loadCommonInfo1(final String subcontentid, final MutableLiveData<TouristCoursePlace> courseMutableLiveData) {
         try {
-// 베이스 URL 설정
-            String requestUrl = "https://apis.data.go.kr/B551011/KorService1/";
+            // 베이스 URL 설정
+            String requestUrl = "https://apis.data.go.kr/B551011/KorService1/detailCommon1";
 
-
+            // 서비스 키
             String serviceKey = "jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D";
-            String serviceType = "detailImage1";
-
             String mobileOS = "ETC";
             String mobileApp = "AppTest";
-            String contentId = subcontentid; // subcontentid 변수를 사용
-
-            String imageYN = "Y";
-            String subImageYN = "Y";
+            String contentTypeId = "25";
+            String defaultYN = "Y";
+            String firstImageYN = "Y";
+            String areacodeYN = "Y";
+            String catcodeYN = "Y";
+            String addrinfoYN = "Y";
+            String mapinfoYN = "Y";
+            String overviewYN = "Y";
             String numOfRows = "10";
             String pageNo = "1";
 
-// URL 빌더 사용하여 URL 구성
+            // URL 빌더 사용하여 URL 구성
             StringBuilder urlBuilder = new StringBuilder(requestUrl);
-            urlBuilder.append(serviceType);
             urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=" + serviceKey);
-
             urlBuilder.append("&" + URLEncoder.encode("MobileOS", "UTF-8") + "=" + URLEncoder.encode(mobileOS, "UTF-8"));
             urlBuilder.append("&" + URLEncoder.encode("MobileApp", "UTF-8") + "=" + URLEncoder.encode(mobileApp, "UTF-8"));
-            urlBuilder.append("&" + URLEncoder.encode("contentId", "UTF-8") + "=" + URLEncoder.encode(contentId, "UTF-8"));
-            urlBuilder.append("&" + URLEncoder.encode("imageYN", "UTF-8") + "=" + URLEncoder.encode(imageYN, "UTF-8"));
-            urlBuilder.append("&" + URLEncoder.encode("subImageYN", "UTF-8") + "=" + URLEncoder.encode(subImageYN, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("contentId", "UTF-8") + "=" + URLEncoder.encode(subcontentid, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("contentTypeId", "UTF-8") + "=" + URLEncoder.encode(contentTypeId, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("defaultYN", "UTF-8") + "=" + URLEncoder.encode(defaultYN, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("firstImageYN", "UTF-8") + "=" + URLEncoder.encode(firstImageYN, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("areacodeYN", "UTF-8") + "=" + URLEncoder.encode(areacodeYN, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("catcodeYN", "UTF-8") + "=" + URLEncoder.encode(catcodeYN, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("addrinfoYN", "UTF-8") + "=" + URLEncoder.encode(addrinfoYN, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("mapinfoYN", "UTF-8") + "=" + URLEncoder.encode(mapinfoYN, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("overviewYN", "UTF-8") + "=" + URLEncoder.encode(overviewYN, "UTF-8"));
             urlBuilder.append("&" + URLEncoder.encode("numOfRows", "UTF-8") + "=" + URLEncoder.encode(numOfRows, "UTF-8"));
             urlBuilder.append("&" + URLEncoder.encode("pageNo", "UTF-8") + "=" + URLEncoder.encode(pageNo, "UTF-8"));
 
-// 완성된 URL 출력
             requestUrl = urlBuilder.toString();
             Log.d("Generated URL", requestUrl);
 
-
-            Log.d("j", requestUrl);
             InputStreamRequest request = new InputStreamRequest(Request.Method.GET, requestUrl,
                     new Response.Listener<InputStream>() {
                         @Override
                         public void onResponse(InputStream response) {
-                            Log.d("firstimage1", place.getSubname() + place.getFirstimage());
-
-                            courseXmlParser.parseCommonInfo(response, place);
-
-                            Log.d("firstimage1", place.getSubname() + place.getFirstimage());
-                            touristCourse.setValue(touristCourse.getValue());
+                            TouristCoursePlace newPlace = courseXmlParser.parseCommonInfo(response, new TouristCoursePlace());
+                            courseMutableLiveData.setValue(newPlace);
+//                            Log.d("p1", newPlace.getSubname());
                         }
                     },
                     new Response.ErrorListener() {
@@ -278,13 +279,75 @@ catch(Exception e){
                     });
 
             requestQueue.add(request);
-        }
-        catch(Exception e){
-
-
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d("error", "Exception in loadCommonInfo2");
         }
     }
 
+    //장소
+    public void loadCommonInfo2(final String subcontentid, final MutableLiveData<TouristCoursePlace> placeLiveData) {
+        try {
+            // 베이스 URL 설정
+            String requestUrl = "https://apis.data.go.kr/B551011/KorService1/detailCommon1";
+
+            // 서비스 키
+            String serviceKey = "jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D";
+            String mobileOS = "ETC";
+            String mobileApp = "AppTest";
+            String contentTypeId = "12";
+            String defaultYN = "Y";
+            String firstImageYN = "Y";
+            String areacodeYN = "Y";
+            String catcodeYN = "Y";
+            String addrinfoYN = "Y";
+            String mapinfoYN = "Y";
+            String overviewYN = "Y";
+            String numOfRows = "10";
+            String pageNo = "1";
+
+            // URL 빌더 사용하여 URL 구성
+            StringBuilder urlBuilder = new StringBuilder(requestUrl);
+            urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=" + serviceKey);
+            urlBuilder.append("&" + URLEncoder.encode("MobileOS", "UTF-8") + "=" + URLEncoder.encode(mobileOS, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("MobileApp", "UTF-8") + "=" + URLEncoder.encode(mobileApp, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("contentId", "UTF-8") + "=" + URLEncoder.encode(subcontentid, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("contentTypeId", "UTF-8") + "=" + URLEncoder.encode(contentTypeId, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("defaultYN", "UTF-8") + "=" + URLEncoder.encode(defaultYN, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("firstImageYN", "UTF-8") + "=" + URLEncoder.encode(firstImageYN, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("areacodeYN", "UTF-8") + "=" + URLEncoder.encode(areacodeYN, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("catcodeYN", "UTF-8") + "=" + URLEncoder.encode(catcodeYN, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("addrinfoYN", "UTF-8") + "=" + URLEncoder.encode(addrinfoYN, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("mapinfoYN", "UTF-8") + "=" + URLEncoder.encode(mapinfoYN, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("overviewYN", "UTF-8") + "=" + URLEncoder.encode(overviewYN, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("numOfRows", "UTF-8") + "=" + URLEncoder.encode(numOfRows, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("pageNo", "UTF-8") + "=" + URLEncoder.encode(pageNo, "UTF-8"));
+
+            requestUrl = urlBuilder.toString();
+            Log.d("Generated URL", requestUrl);
+
+            InputStreamRequest request = new InputStreamRequest(Request.Method.GET, requestUrl,
+                    new Response.Listener<InputStream>() {
+                        @Override
+                        public void onResponse(InputStream response) {
+                            TouristCoursePlace newPlace = courseXmlParser.parseCommonInfo(response, new TouristCoursePlace());
+                            placeLiveData.setValue(newPlace);
+//                            Log.d("p1", newPlace.getSubname());
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // Handle error
+                        }
+                    });
+
+            requestQueue.add(request);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d("error", "Exception in loadCommonInfo2");
+        }
+    }
 
 
 

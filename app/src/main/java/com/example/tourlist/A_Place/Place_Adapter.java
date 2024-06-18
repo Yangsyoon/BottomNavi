@@ -125,6 +125,7 @@ public class Place_Adapter extends RecyclerView.Adapter<Place_Adapter.Place_View
                     Intent intent = new Intent(itemView.getContext(), Place_DetailActivity.class);
                     intent.putExtra("CONTENT_ID", place.getContentid());
                     itemView.getContext().startActivity(intent);
+                    Log.d("P", "onClick: "+place.getContentid());
                 }
             });
         }

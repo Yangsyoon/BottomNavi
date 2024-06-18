@@ -61,6 +61,7 @@ public class Slide1_Place_List extends Fragment {
     String cat2 = "";
     String cat3 = "";
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -111,29 +112,76 @@ public class Slide1_Place_List extends Fragment {
         Button foodButton = view.findViewById(R.id.food_Button);
         Button areaButton=view.findViewById(R.id.area_Button);
 
+        Button pagedownButton = view.findViewById(R.id.pagedown_Button);
+        Button pageupButton = view.findViewById(R.id.pageup_Button);
+
         Button searchButton = view.findViewById(R.id.search_Button);
 
 
-        Button contenttypeButton = view.findViewById(R.id.contenttype_Button);
 
-        contenttypeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showContentTypeDialog();
-            }
-        });
+
+        Button contenttypeButton = view.findViewById(R.id.contenttype_Button);
 
 
         getCurrentLocation();
 
         {
-        areaButton.setOnClickListener(new View.OnClickListener() {
+
+            // 페이지 다운 버튼 클릭 리스너
+            pagedownButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int currentPage = Integer.parseInt(pageNo);
+                    if (currentPage > 1) {
+                        currentPage--;
+                        pageNo = String.valueOf(currentPage);
+
+                        String serviceKey = "jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D";
+
+                        String requestUrl = buildRequestUrl(serviceType, serviceKey, numOfRows, pageNo, mobileOS, mobileApp, listYN, arrange, contentTypeId, areaCode, sigunguCode, cat1, cat2, cat3);
+
+                        placeViewModel.filterPlacesByAreaCode(requestUrl);
+                    } else {
+                        Toast.makeText(getActivity(), "첫 페이지입니다.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+// 페이지 업 버튼 클릭 리스너
+            pageupButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int currentPage = Integer.parseInt(pageNo);
+                    currentPage++;
+                    pageNo = String.valueOf(currentPage);
+
+                    String serviceKey = "jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D";
+
+                    String requestUrl = buildRequestUrl(serviceType, serviceKey, numOfRows, pageNo, mobileOS, mobileApp, listYN, arrange, contentTypeId, areaCode, sigunguCode, cat1, cat2, cat3);
+
+                    placeViewModel.filterPlacesByAreaCode(requestUrl);
+
+                }
+            });
+
+
+            contenttypeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showContentTypeDialog();
+                }
+            });
+
+
+            areaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showAreaDialog();
             }
         });
-        searchButton.setOnClickListener(new View.OnClickListener() {
+
+
+            searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String serviceKey = "jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D";
@@ -146,6 +194,7 @@ public class Slide1_Place_List extends Fragment {
                 cat2="";
                 cat3="";
                 areaCode="";
+                pageNo = "1";
 
                 // 필요한 로직 추가
                 // 예: placeViewModel.fetchPlaces(requestUrl);
@@ -180,18 +229,19 @@ public class Slide1_Place_List extends Fragment {
 
 
 
-        gpsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
-                } else {
-                     placeViewModel.filterPlacesByGps(currentLatitude, currentLongitude, "12");
+            gpsButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+                    } else {
+                        showContentTypeDialogForGps();
+                    }
                 }
-            }
-        });
+            });
 
-        allButton.setOnClickListener(new View.OnClickListener() {
+
+            allButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 areaCode = "";
@@ -463,6 +513,64 @@ public class Slide1_Place_List extends Fragment {
                 });
         builder.create().show();
     }
+
+
+
+    private void showContentTypeDialogForGps() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("콘텐츠 타입 선택")
+                .setItems(new String[]{"관광지", "문화시설", "축제공연행사", "여행코스", "레포츠", "숙박", "쇼핑", "음식점"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 항목 선택 시의 동작을 정의합니다.
+                        String selectedContentTypeId = "";
+                        switch (which) {
+                            case 0:
+                                // 관광지 선택됨
+                                selectedContentTypeId = "12";
+                                break;
+                            case 1:
+                                // 문화시설 선택됨
+                                selectedContentTypeId = "14";
+                                break;
+                            case 2:
+                                // 축제공연행사 선택됨
+                                selectedContentTypeId = "15";
+                                break;
+                            case 3:
+                                // 여행코스 선택됨
+                                selectedContentTypeId = "25";
+                                break;
+                            case 4:
+                                // 레포츠 선택됨
+                                selectedContentTypeId = "28";
+                                break;
+                            case 5:
+                                // 숙박 선택됨
+                                selectedContentTypeId = "32";
+                                break;
+                            case 6:
+                                // 쇼핑 선택됨
+                                selectedContentTypeId = "38";
+                                break;
+                            case 7:
+                                // 음식점 선택됨
+                                selectedContentTypeId = "39";
+                                break;
+                        }
+                        // 선택된 contentTypeId를 사용하여 필터링
+                        placeViewModel.filterPlacesByGps(currentLatitude, currentLongitude, selectedContentTypeId);
+                    }
+                })
+                .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // 취소 버튼 클릭 시 동작
+                        dialog.dismiss();
+                    }
+                });
+        builder.create().show();
+    }
+
 
 
 

@@ -257,45 +257,45 @@ class Place_XmlParser {
 
                             place.setTitle(parser.nextText());
                             break;
-//                        case "createdtime":
-//                            place.setCreatedtime(parser.nextText());
-//                            break;
-//                        case "modifiedtime":
-//                            place.setModifiedtime(parser.nextText());
-//                            break;
-//                        case "tel":
-//                            place.setTel(parser.nextText());
-//                            break;
-//                        case "homepage":
-//                            place.setHomepage(parser.nextText());
-//                            break;
-//                        case "booktour":
-//                            place.setBooktour(parser.nextText());
-//                            break;
+                        case "createdtime":
+                            place.setCreatedtime(parser.nextText());
+                            break;
+                        case "modifiedtime":
+                            place.setModifiedtime(parser.nextText());
+                            break;
+                        case "tel":
+                            place.setTel(parser.nextText());
+                            break;
+                        case "homepage":
+                            place.setHomepage(parser.nextText());
+                            break;
+                        case "booktour":
+                            place.setBooktour(parser.nextText());
+                            break;
                         case "firstimage":
                             place.setFirstimage(parser.nextText());
                             break;
-//                        case "firstimage2":
-//                            place.setFirstimage2(parser.nextText());
-//                            break;
-//                        case "cpyrhtDivCd":
-//                            place.setCpyrhtDivCd(parser.nextText());
-//                            break;
-//                        case "areacode":
-//                            place.setAreacode(parser.nextText());
-//                            break;
-//                        case "sigungucode":
-//                            place.setSigungucode(parser.nextText());
-//                            break;
-//                        case "cat1":
-//                            place.setCat1(parser.nextText());
-//                            break;
-//                        case "cat2":
-//                            place.setCat2(parser.nextText());
-//                            break;
-//                        case "cat3":
-//                            place.setCat3(parser.nextText());
-//                            break;
+                        case "firstimage2":
+                            place.setFirstimage2(parser.nextText());
+                            break;
+                        case "cpyrhtDivCd":
+                            place.setCpyrhtDivCd(parser.nextText());
+                            break;
+                        case "areacode":
+                            place.setAreacode(parser.nextText());
+                            break;
+                        case "sigungucode":
+                            place.setSigungucode(parser.nextText());
+                            break;
+                        case "cat1":
+                            place.setCat1(parser.nextText());
+                            break;
+                        case "cat2":
+                            place.setCat2(parser.nextText());
+                            break;
+                        case "cat3":
+                            place.setCat3(parser.nextText());
+                            break;
                         case "addr1":
                             place.setAddr1(parser.nextText());
                             break;

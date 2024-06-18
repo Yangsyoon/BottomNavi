@@ -5,22 +5,20 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Main.Frag5_Login"
+    tools:context=".Main.Frag1.Frag1_Register"
     android:background="@color/white">
 
     <!-- 로고 이미지 -->
     <ImageView
         android:id="@+id/logo"
-        android:layout_width="170dp"
-        android:layout_height="176dp"
-        android:layout_marginTop="60dp"
+        android:layout_width="154dp"
+        android:layout_height="146dp"
+        android:layout_marginTop="30dp"
         android:src="@mipmap/ic_launcher"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- 로고 이미지를 @drawable 폴더에 넣고 경로를 설정해주세요 -->
-    <!-- 이메일 입력 필드 -->
     <!-- CardView로 감싸서 선이 보이도록 함 -->
     <androidx.cardview.widget.CardView
         android:id="@+id/card_view"
@@ -41,8 +39,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="16dp"
-            android:background="@drawable/image_view_border"
-            >
+            android:background="@drawable/image_view_border">
 
             <!-- 이메일 입력 필드 -->
             <EditText
@@ -56,82 +53,152 @@
                 android:inputType="textEmailAddress"
                 android:padding="10dp" />
 
-            <!-- 비밀번호 입력 필드 -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp">
+
+                <EditText
+                    android:id="@+id/et_pwd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:drawableLeft="@drawable/user_24"
+                    android:drawablePadding="10dp"
+                    android:hint="비밀번호"
+                    android:inputType="textPassword"
+                    android:padding="10dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@+id/iv_toggle_pwd" />
+
+                <ImageView
+                    android:id="@+id/iv_toggle_pwd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:src="@drawable/user_24"
+                    android:scaleType="centerInside"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:clickable="true"
+                    android:focusable="true" />
+            </RelativeLayout>
+
+            <!-- 닉네임 입력 필드 -->
             <EditText
-                android:id="@+id/et_pwd"
+                android:id="@+id/et_nickname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:background="@null"
                 android:drawableLeft="@drawable/user_24"
                 android:drawablePadding="10dp"
-                android:hint="비밀번호"
-                android:inputType="textPassword"
+                android:hint="닉네임"
+                android:inputType="textPersonName"
                 android:padding="10dp" />
+
+            <!-- 생년월일 입력 필드 -->
+            <EditText
+                android:id="@+id/et_birthdate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@null"
+                android:drawableLeft="@drawable/user_24"
+                android:drawablePadding="10dp"
+                android:hint="생년월일 (YYYY-MM-DD)"
+                android:inputType="date"
+                android:padding="10dp" />
+
+            <!-- 성별 선택 필드 -->
+
+
+
+                <RadioGroup
+                    android:id="@+id/rg_gender"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp">
+
+                    <RadioButton
+                        android:id="@+id/rb_male"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="55dp"
+                        android:text="남자"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/rb_female"
+                        app:layout_constraintHorizontal_chainStyle="spread_inside"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <RadioButton
+                        android:id="@+id/rb_female"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="55dp"
+                        android:text="여자"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/rb_male"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </RadioGroup>
+
+
+
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- 로그인 버튼 -->
+    <!-- 가입 완료 버튼 -->
     <Button
-        android:id="@+id/btn_login"
+        android:id="@+id/btn_register"
         android:layout_width="0dp"
         android:layout_height="70dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="32dp"
         android:backgroundTint="#C5CCD2"
-        android:text="로그인"
+        android:text="가입 완료"
         android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/card_view" />
 
-    <!-- 비밀번호 찾기, 아이디 찾기, 회원가입 -->
+    <!-- 로그인 전환, 아이디 찾기, 비밀번호 찾기 -->
     <LinearLayout
         android:id="@+id/linear_layout2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="20dp"
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_login">
+        app:layout_constraintTop_toBottomOf="@id/btn_register">
 
         <TextView
-            android:id="@+id/tv_find_password"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:fontFamily="sans-serif-medium"
-            android:text="비밀번호 찾기"
-            android:textColor="#929292"
-            android:textStyle="normal" />
-
-        <TextView
-            android:id="@+id/tv_find_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:fontFamily="sans-serif-medium"
-            android:text="아이디 찾기"
-            android:textColor="#929292"
-            android:textStyle="normal" />
-
-        <TextView
-            android:id="@+id/btn_register"
+            android:id="@+id/tv_login_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
             android:focusable="true"
             android:fontFamily="sans-serif-medium"
-            android:text="회원가입"
+            android:text="로그인 전환"
             android:textColor="#4284f4"
             android:textStyle="normal" />
     </LinearLayout>
@@ -148,7 +215,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <TextView
-            android:id="@+id/account_manage"
+            android:id="@+id/tv_account_manage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -160,7 +227,7 @@
             android:textStyle="normal" />
 
         <TextView
-            android:id="@+id/center"
+            android:id="@+id/tv_customer_center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="0dp"
@@ -169,13 +236,10 @@
             android:fontFamily="sans-serif-medium"
             android:text="고객센터"
             android:textColor="#868686"
-            android:textStyle="normal"
-
-            />
-
+            android:textStyle="normal" />
     </LinearLayout>
 
-
+    <!-- "Tourist" 텍스트뷰 -->
     <TextView
         android:id="@+id/tv_naver_logo"
         android:layout_width="wrap_content"
@@ -190,22 +254,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-
-    <!--    <Button-->
-<!--        android:id="@+id/btn_signout"-->
-<!--        android:layout_width="188dp"-->
-<!--        android:layout_height="47dp"-->
-<!--        android:layout_margin="8dp"-->
-
-<!--        android:layout_marginBottom="10dp"-->
-<!--        android:backgroundTint="@color/blue"-->
-<!--        android:text="로그아웃"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/btn_register"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.73"-->
-<!--        app:layout_constraintStart_toEndOf="@+id/btn_guest_login"-->
-
-<!--        />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

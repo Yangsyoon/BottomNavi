@@ -179,7 +179,7 @@ public class TouristPlaceRepository_call_parser {
 //                            touristPlace.setValue(touristPlace.getValue());
                             Place place = place_xmlParser.parseCommonInfo(response);
                             placeDetail.setValue(place);
-//Log.d("place", place.getTitle());
+//Log.d("place", place.getFirstimage());
                         }
                     },
                     new Response.ErrorListener() {

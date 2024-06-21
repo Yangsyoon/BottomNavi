@@ -28,8 +28,7 @@
         android:layout_height="80dp"
         android:layout_alignParentBottom="true"
         android:background="#FDF6F6"
-        android:padding="8dp"
-        tools:ignore="ExtraText">
+        android:padding="8dp">
 
         <EditText
             android:id="@+id/message_edit_text"
@@ -37,12 +36,9 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_toLeftOf="@id/send_btn"
-            android:background="@drawable/rounded_corner2" <!-- 배경 설정 -->
+            android:background="@drawable/rounded_corner"
             android:hint="Write here "
-            android:padding="16dp"
-            android:textColor="@android:color/black" <!-- 텍스트 색상 설정 -->
-            android:hintTextColor="@android:color/darker_gray"/> <!-- 힌트 텍스트 색상 설정 -->
-
+            android:padding="16dp" />
 
         <ImageButton
             android:id="@+id/send_btn"
@@ -52,6 +48,7 @@
             android:layout_centerInParent="true"
             android:layout_marginStart="10dp"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="TODO"
             android:padding="8dp"
             android:src="@drawable/ic_baseline_send_24"
 

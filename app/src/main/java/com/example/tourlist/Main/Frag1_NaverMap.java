@@ -164,7 +164,7 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
     private float distance;
     ///////////////////////////////////////
 
-    private Button placeNameButton;
+//    private Button placeNameButton;
     private Button startButton;
     private Button destinationButton;
 
@@ -222,7 +222,7 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
 
         Button favoriteButton = view.findViewById(R.id.btn_fav);
 
-        placeNameButton = view.findViewById(R.id.place_name_button);
+//        placeNameButton = view.findViewById(R.id.place_name_button);
 
 
 
@@ -242,8 +242,7 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
         mapView.getMapAsync(this);
 
 
-
-        //이거 현재 위치로 갈때 필요한거.
+        //현재 위치 설정
         locationSource = new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
@@ -258,33 +257,24 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
                 if (selectedMarker == null) {
 
                     Toast.makeText(getContext(), "출발지 마커선택하세요 ", LENGTH_SHORT).show();
-
-
                 }
                 else{
                     startMarker = selectedMarker;
                     sourceLatLng = startMarker.getPosition();
                     sourceName = startMarker.getCaptionText();
                     Toast.makeText(getContext(), "출발지 마커 선택: " + startMarker.getCaptionText(), LENGTH_SHORT).show();
-
                 }
-
             }
-
         });
-
 
         destinationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (selectedMarker == null) {
                     Toast.makeText(getContext(), "도착지 마커 선택하세요: ", LENGTH_SHORT).show();
-
-
                 }
                 else{
                     destinationMarker = selectedMarker;
-
                     destinationLatLng = destinationMarker.getPosition();
                     destinationName = destinationMarker.getCaptionText();
                     Toast.makeText(getContext(), "도착지 마커 선택: " + destinationMarker.getCaptionText(), LENGTH_SHORT).show();
@@ -332,6 +322,8 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
 
 
         // jhj...
+
+        //
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
 
@@ -366,22 +358,20 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
 
         mMap = map;
 
-//        Toast.makeText(getContext(), "호롤ㄹ", Toast.LENGTH_SHORT).show();
-
         Log.d(TAG, "GoogleMap is ready");
 
-        /// 이거 왜 권한 요청 안뜨냐?/?
+        //위치 권한 요청 설정
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
         }
 
 
-        //지도 시작시, 현재 위치로.
+        //지도 시작시, 현재 위치 변수에 저장.
         getCurrentLocation();
         Log.d("m", "cur 1");
-//        Log.d("m", currentLocation.toString());
 
+        //내 위치 세팅
         map.setLocationSource(locationSource);
         map.setLocationTrackingMode(LocationTrackingMode.Follow);
         Log.d("m", locationSource.toString());
@@ -394,22 +384,18 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
         //setupPOI();
 
 
-
-
-
+        //맵 클릭 시 정보창 숨기기
         mMap.setOnMapClickListener(new NaverMap.OnMapClickListener() {
             @Override
             public void onMapClick(@NonNull PointF pointF, @NonNull LatLng latLng) {
-                // 이전에 생성된 마커가 있으면 제거
+// 이전에 생성된 마커가 있으면 제거
                 if (current_beforeMarker != null && selectedMarker!= current_beforeMarker) {
                     current_beforeMarker.setMap(null);
                 }
-
                 // 이전에 생성된 POI 마커가 있다면 제거합니다.
                 if (poiMarker != null) {
                     poiMarker.setMap(null);
                 }
-
                 //선택한 위치에 파란 마커 생성및, 다시 클릭시 '선택된 위치'라고 박스 뜸.
 
 //                currentMarker=new Marker();
@@ -418,13 +404,10 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
 //                currentMarker.setIconTintColor(0x478EEC);
 //                currentMarker.setMap(mMap);
 // 마커 클릭이 아닌 지도를 클릭했을 때 버튼 숨기기
-                placeNameButton.setVisibility(View.GONE);
+//                placeNameButton.setVisibility(View.GONE);
             }
 
         });
-
-
-
 
 
         //길찾기!!!
@@ -463,7 +446,6 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
             }
         });
 
-
         infoCard.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -480,15 +462,12 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
             }
         });
 
-
-
-
-
         // 공공데이터로부터 관광지 정보 받아오기
         loadTouristPlaces();
 
     }
 
+    //현재 위치 멤버 변수 currentLocation에 저장
     private void getCurrentLocation() {
         try {
             if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -599,43 +578,14 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
                     LatLng latLng = new LatLng(latitude[0], longitude[0]);
 
 
-//
-//                    Marker marker.setMap(new MarkerOptions()
-//                            .position(latLng)
-//                            .title(placeName[0])
-//                            .snippet(description[0])); // Description을 snippet에 저장
-//                    marker.setTag(new TouristPlace(placeName[0], latitude[0], longitude[0], address[0], description[0], phone[0])); // Tag에 객체 저장
-//
-
-
-
                     try {
 
 
+                        //파싱하면서 마커 당 장소를 저장
                         Marker tourMarker = new Marker();
 
                         tourMarker.setPosition(latLng);
                         tourMarker.setCaptionText(placeName[0]);
-//                        tourMarker.setTag(new TouristPlace(placeName[0], latitude[0], longitude[0], address[0], description[0], phone[0])); // Tag에 객체 저장
-
-
-
-                        // 정보창 생성
-                        InfoWindow infoWindow = new InfoWindow();
-                        infoWindow.setAdapter(new InfoWindow.DefaultTextAdapter(getContext()) {
-                            @NonNull
-                            @Override
-                            public CharSequence getText(@NonNull InfoWindow infoWindow) {
-                                return description[0];
-                            }
-                        });
-
-// 마커 클릭 리스너 설정
-//                        marker.setOnClickListener(overlay -> {
-//                            infoWindow.open(marker);
-//                            return true;
-//                        });
-
 
                         setupMarkerIcon(tourMarker);
 
@@ -647,20 +597,10 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
                             @Override
                             public boolean onClick(@NonNull Overlay overlay) {
                                 getCurrentLocation();
-
-
-                                Toast.makeText(getContext(), "마커 클릭됨 " + tourMarker.getCaptionText(), Toast.LENGTH_SHORT).show();
                                 selectedMarker = tourMarker;
-//                                tour = tourMarker;
-
-//                                infoWindow.open(tourMarker);
-
-
-                                Log.d("m", "cur 2");
 
                                     //거리 계산.
                                 if (currentLocation != null) {
-//                                Log.d("m1", currentLocation.toString());
 
                                     Location markerLocation = new Location("");
                                     markerLocation.setLatitude(selectedMarker.getPosition().latitude);
@@ -668,12 +608,8 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
 
                                     distance = currentLocation.distanceTo(markerLocation);
                                     float distanceInKm = distance / 1000;
-//                                    Toast.makeText(getContext(), "Distance: " + distanceInKm + " km", Toast.LENGTH_SHORT).show();
                                 } else {
-//                                    Toast.makeText(getContext(), "Current location not available", Toast.LENGTH_SHORT).show();
                                 }
-
-
 
                                 TouristPlace place = (TouristPlace) tourMarker.getTag();
                                 if (place != null) {
@@ -704,7 +640,7 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
                                 }
                                 else {
                                     selectedPlace = null; // place가 null일 경우 selectedPlace를 null로 설정
-                                    placeNameButton.setVisibility(View.GONE); // 버튼 숨기기
+//                                    placeNameButton.setVisibility(View.GONE); // 버튼 숨기기
 
                                 }
 

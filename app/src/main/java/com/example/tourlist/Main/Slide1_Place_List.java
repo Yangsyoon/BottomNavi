@@ -34,6 +34,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class Slide1_Place_List extends Fragment {
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
@@ -88,10 +89,11 @@ public class Slide1_Place_List extends Fragment {
                 Slide1_Place_List.this.places.clear();
                 Slide1_Place_List.this.places.addAll(places);
                 placeAdapter.notifyDataSetChanged();
+                Log.d("urlf", "onChanged: " + places.get(0).getContenttypeid());
             }
         });
 
-        Button allButton = view.findViewById(R.id.all_Button);
+        /*Button allButton = view.findViewById(R.id.all_Button);
 
         Button seoulButton = view.findViewById(R.id.seoul_Button);
         Button daeguButton = view.findViewById(R.id.daegu_Button);
@@ -104,7 +106,8 @@ public class Slide1_Place_List extends Fragment {
         Button chungButton = view.findViewById(R.id.chung_Button);
         Button gyeongButton = view.findViewById(R.id.gyeong_Button);
         Button gangwonButton = view.findViewById(R.id.gangwon_Button);
-        Button jejuButton = view.findViewById(R.id.jeju_Button);
+        Button jejuButton = view.findViewById(R.id.jeju_Button);*/
+
         Button gpsButton = view.findViewById(R.id.my_location2);
 
         Button placeButton = view.findViewById(R.id.place_Button);
@@ -114,6 +117,10 @@ public class Slide1_Place_List extends Fragment {
 
         Button pagedownButton = view.findViewById(R.id.pagedown_Button);
         Button pageupButton = view.findViewById(R.id.pageup_Button);
+
+        Button sort_early_Button = view.findViewById(R.id.sort_early_Button);
+        Button sort_title_Button = view.findViewById(R.id.sort_title_Button);
+
 
         Button searchButton = view.findViewById(R.id.search_Button);
 
@@ -161,6 +168,20 @@ public class Slide1_Place_List extends Fragment {
 
                     placeViewModel.filterPlacesByAreaCode(requestUrl);
 
+                }
+            });
+
+            sort_title_Button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    arrange="O";
+                }
+            });
+
+            sort_early_Button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    arrange="R";
                 }
             });
 
@@ -229,19 +250,19 @@ public class Slide1_Place_List extends Fragment {
 
 
 
-            gpsButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
-                    } else {
-                        showContentTypeDialogForGps();
-                    }
+        gpsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+                } else {
+                    showContentTypeDialogForGps();
                 }
-            });
+            }
+        });
 
 
-            allButton.setOnClickListener(new View.OnClickListener() {
+            /*allButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 areaCode = "";
@@ -344,7 +365,7 @@ public class Slide1_Place_List extends Fragment {
                 // placeViewModel.filterPlacesByAreaCode("39");
             }
         });
-
+*/
     }
 
 

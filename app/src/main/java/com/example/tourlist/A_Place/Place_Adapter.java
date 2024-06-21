@@ -48,7 +48,7 @@ public class Place_Adapter extends RecyclerView.Adapter<Place_Adapter.Place_View
     public void onBindViewHolder(@NonNull Place_ViewHolder holder, int position) {
         Place place = places.get(position);
 
-//        Log.d("P", "onBindViewHolder: " + place.getTitle());
+        Log.d("urlf", "onBindViewHolder: " + place.getContenttypeid());
         Log.d("P", "onBindViewHolder: ");
 
         holder.bind(place);
@@ -124,8 +124,13 @@ public class Place_Adapter extends RecyclerView.Adapter<Place_Adapter.Place_View
                 public void onClick(View v) {
                     Intent intent = new Intent(itemView.getContext(), Place_DetailActivity.class);
                     intent.putExtra("CONTENT_ID", place.getContentid());
+                    intent.putExtra("CONTENT_TYPE_ID", place.getContenttypeid());
+                    intent.putExtra("mapx", place.getMapx());
+                    intent.putExtra("mapy", place.getMapy());
+                    Log.d("urlf","clicked"+place.getContenttypeid());
+
+
                     itemView.getContext().startActivity(intent);
-                    Log.d("P", "onClick: "+place.getContentid());
                 }
             });
         }

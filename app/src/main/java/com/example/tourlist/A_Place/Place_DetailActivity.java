@@ -1,8 +1,11 @@
 package com.example.tourlist.A_Place;
 
+import static android.content.ContentValues.TAG;
+
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -20,9 +23,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.tourlist.Main.FavoriteLocation;
+import com.example.tourlist.Main.Frag5_Register;
 import com.example.tourlist.R;
 import com.example.tourlist.Tourist_Detail_Activity.Comment.Comment;
 import com.example.tourlist.Tourist_Detail_Activity.Comment.CommentsAdapter;
+import com.example.tourlist.Tourist_Detail_Activity.Detail_files.TouristPlaceDataHolder;
+import com.example.tourlist.Tourist_Detail_Activity.TouristPlaceDetailActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -63,39 +69,72 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_detail);
 
+        place=new Place();
+
+
+        try {
+            double mapX = getIntent().getDoubleExtra("mapx", 0.0);
+            double mapY = getIntent().getDoubleExtra("mapy", 0.0);
+            place.setMapx(mapX);
+            place.setMapy(mapY);
+            Log.d("PlaceDetailActivity",mapX+" "+mapY) ;
+
+
+        }catch (Exception e){
+            Log.d("PlaceDetailActivity", e.toString());
+        }
         // ViewModel 설정
         String contentId = getIntent().getStringExtra("CONTENT_ID");
+        String contenttypeid = getIntent().getStringExtra("CONTENT_TYPE_ID");
         viewModel = new ViewModelProvider(this).get(Place_ViewModel.class);
-
+        Log.d("PlaceDetailActivity",contentId);
+        Log.d("urlf","detail"+contenttypeid);
 
         // 뷰 찾기
         Button favoriteButton = findViewById(R.id.addfavoriteButton);
-//        TextView placeNameTextView = findViewById(R.id.placeNameTextView2);
-//        TextView locationTextView = findViewById(R.id.locationTextView);
-//        TextView addressTextView = findViewById(R.id.addressTextView);
-//        TextView descriptionTextView = findViewById(R.id.descriptionTextView);
-//        TextView phoneTextView = findViewById(R.id.phoneTextView);
-//        TextView commentsTitleTextView = findViewById(R.id.commentsTitleTextView);
 
-        mapView = findViewById(R.id.naver_map_view);
-        commentsRecyclerView = findViewById(R.id.commentsRecyclerView);
-        commentEditText = findViewById(R.id.commentEditText);
-        postCommentButton = findViewById(R.id.postCommentButton);
+        TextView descriptionTextView = findViewById(R.id.descriptionTextView);
+        TextView moreTextView = findViewById(R.id.moreTextView);
+        descriptionTextView.post(new Runnable() {
+            @Override
+            public void run() {
+                if (descriptionTextView.getLineCount() > 4) {
+                    moreTextView.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        moreTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (moreTextView.getText().equals("더보기")) {
+                    descriptionTextView.setMaxLines(Integer.MAX_VALUE);
+                    descriptionTextView.setEllipsize(null);
+                    moreTextView.setText("간략히");
+                } else {
+                    descriptionTextView.setMaxLines(4);
+                    descriptionTextView.setEllipsize(android.text.TextUtils.TruncateAt.END);
+                    moreTextView.setText("더보기");
+                }
+            }
+        });
+
+
 
 //        // 기타 초기 설정
         mAuth = FirebaseAuth.getInstance();
-        mapView.onCreate(savedInstanceState); // MapView 생명주기 메서드 호출
-        mapView.getMapAsync(this);
+//        mapView.onCreate(savedInstanceState); // MapView 생명주기 메서드 호출
 
         // ViewModel에서 데이터 가져오기
         if (contentId != null) {
-            viewModel.getPlacedetail(contentId).observe(this, new Observer<Place>() {
+            viewModel.getPlacedetail(contentId,contenttypeid).observe(this, new Observer<Place>() {
                 @Override
                 public void onChanged(Place place) {
                     if (place != null) {
+
                         updateUI(place);
 //                        placeNameTextView.setText(place.getTitle());
-//                        Log.d("PlaceDetailActivity", "Place name: " + place.getFirstimage());
+                        Log.d("PlaceDetailActivity3", "Place name: " + place.getAddr1());
 
                     }
                 }
@@ -111,32 +150,45 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
                 addFavoriteLocation(place.getTitle(), place.getMapx(), place.getMapy());
             }
         });
-//
-        // 댓글 작성 버튼 클릭 리스너 설정
-        postCommentButton.setOnClickListener(v -> postComment());
+
+        mapView = findViewById(R.id.naver_map_view2);
+        mapView.getMapAsync(this);
+
+        commentsRecyclerView = findViewById(R.id.commentsRecyclerView);
 
         // 댓글 리사이클러뷰 설정
         commentList = new ArrayList<>();
         commentsAdapter = new CommentsAdapter(commentList, this, this);
         commentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         commentsRecyclerView.setAdapter(commentsAdapter);
+
+
+        commentEditText = findViewById(R.id.commentEditText);
+        postCommentButton = findViewById(R.id.postCommentButton);
+        postCommentButton.setOnClickListener(v -> postComment());
+
+//
+        // 댓글 작성 버튼 클릭 리스너 설정
+
+
     }
 
     public void updateUI(Place place) {
         this.place = place;
 
         TextView placeNameTextView = findViewById(R.id.placeNameTextView2);
-        TextView locationTextView = findViewById(R.id.locationTextView);
-        TextView addressTextView = findViewById(R.id.addressTextView);
+//        TextView locationTextView = findViewById(R.id.locationTextView);
+        TextView addressTextView = findViewById(R.id.addressTextView2);
         TextView descriptionTextView = findViewById(R.id.descriptionTextView);
         TextView phoneTextView = findViewById(R.id.phoneTextView);
         ImageView imageView=findViewById(R.id.imageView);
 //
         placeNameTextView.setText(place.getTitle());
-        locationTextView.setText("Latitude: " + place.getMapx() + ", Longitude: " + place.getMapy());
+//        locationTextView.setText("Latitude: " + place.getMapx() + ", Longitude: " + place.getMapy());
         addressTextView.setText(place.getAddr1());
         descriptionTextView.setText(place.getOverview());
         phoneTextView.setText(place.getTel());
+        Log.d("PlaceDetailActivity2", "Place name: " + place.getContentid());
 
 
         String imageUrl = place.getFirstimage();
@@ -149,9 +201,34 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
 
 
 
+
 //
         placeLocation = new LatLng(place.getMapx(), place.getMapy());
         loadComments();
+    }
+
+    private void loadUserNickname() {
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("hongdroid").child("UserAccount").child(user.getUid());
+            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    Frag5_Register.UserAccount account = snapshot.getValue(Frag5_Register.UserAccount.class);
+                    if (account != null) {
+                        userName = account.getNickname();
+                        Toast.makeText(Place_DetailActivity.this, "Nickname loaded: " + userName, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Log.d(TAG, "User data not found");
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Log.e(TAG, "Failed to load user data", error.toException());
+                }
+            });
+        }
     }
 
     private void loadComments() {
@@ -224,17 +301,38 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
     @Override
     public void onMapReady(@NonNull NaverMap naverMap) {
         mMap = naverMap;
-//        placeLocation = new LatLng(place.getMapx(), place.getMapy());
+        if (place == null) {
+            Log.d("PlaceDetailActivity", "Place is null");
+            return;
+        }
+
+        placeLocation = new LatLng(place.getMapy(), place.getMapx());
+
+        Log.d("PlaceDetailActivity1", "Place location: " + placeLocation);
+
+        ////////////////////////////////////////
+//       ` // 임의의 위도와 경도를 설정
+//        double newLatitude = 35.87434;
+//        double newLongitude = 128.6394; // 경도를 임의로 설정
 //
-//        // 마커 설정
-//        Marker marker = new Marker();
-//        marker.setPosition(placeLocation);
-//        marker.setMap(naverMap);
-//        marker.setCaptionText(place.getTitle());
-//
-//        // 카메라 업데이트
-//        CameraUpdate cameraUpdate = CameraUpdate.scrollTo(placeLocation);
-//        naverMap.moveCamera(cameraUpdate);
+//        // 새로운 LatLng 객체 생성
+//        placeLocation = new LatLng(newLatitude, newLongitude);
+
+        // 마커 설정
+        Marker marker = new Marker();
+        marker.setPosition(placeLocation);
+        marker.setMap(naverMap);
+        marker.setCaptionText(place.getTitle());
+
+        // 카메라 업데이트
+        CameraUpdate cameraUpdate = CameraUpdate.scrollTo(placeLocation);
+        naverMap.moveCamera(cameraUpdate);
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        loadUserNickname(); // 사용자 닉네임을 onStart에서 불러오기
+        mapView.onStart();
     }
 
     @Override

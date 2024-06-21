@@ -48,14 +48,43 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
 
-                        <Button
-                            android:id="@+id/my_location2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="4dp"
-                            android:text="근처 코스" />
+            android:clipToPadding="false">
+
+
+            <Button
+                android:id="@+id/filter_Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:background="@color/login_gray"
+
+                android:elevation="4dp"
+                android:text="필터" />
+
+            <Button
+                android:id="@+id/place_Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:text="관광지" />
+
+            <Button
+                android:id="@+id/cafe_Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:text="카페" />
+
+            <Button
+                android:id="@+id/food_Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:text="음식점" />
+
+
 
             <Button
                 android:id="@+id/language_Button"
@@ -83,7 +112,7 @@
                 android:layout_margin="4dp"
                 android:text="지역" />
 
-            <Button
+            <!--<Button
                 android:id="@+id/all_Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -173,7 +202,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:text="제주" />
-
+-->
         </LinearLayout>
     </HorizontalScrollView>
 
@@ -188,12 +217,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <!--            <Button-->
-            <!--                android:id="@+id/my_location"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_margin="4dp"-->
-            <!--                android:text="근처 코스" />-->
+
 
 
             <Button
@@ -201,35 +225,36 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
-                android:text="이전 페이지" />
+                android:text="이전" />
 
             <Button
                 android:id="@+id/pageup_Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
-                android:text="다음 페이지" />
+                android:text="다음" />
 
             <Button
-                android:id="@+id/place_Button"
+                android:id="@+id/my_location2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
-                android:text="관광지" />
+                android:text="거리순" />
 
             <Button
-                android:id="@+id/cafe_Button"
+                android:id="@+id/sort_title_Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
-                android:text="카페" />
+                android:text="이름순" />
 
             <Button
-                android:id="@+id/food_Button"
+                android:id="@+id/sort_early_Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
-                android:text="음식점" />
+                android:text="최신순" />
+
 
             <Button
                 android:id="@+id/search_Button"

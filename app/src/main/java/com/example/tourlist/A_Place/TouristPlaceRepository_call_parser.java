@@ -10,7 +10,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
-import com.example.tourlist.A_Course.Course;
 import com.example.tourlist.A_Course.InputStreamRequest;
 
 import java.io.InputStream;
@@ -42,7 +41,7 @@ public class TouristPlaceRepository_call_parser {
 
 //    jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D
 
-    public void loadTouristPlaces(final MutableLiveData<List<Place>> touristPlaces) {
+    public void loadTouristPlaces_first(final MutableLiveData<List<Place>> touristPlaces) {
         try {
         // 코스 키
         //String requestUrl = "https://apis.data.go.kr/B551011/KorService1/areaBasedList1?numOfRows=30&pageNo=1&MobileOS=ETC&MobileApp=AppTest&ServiceKey=jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D&listYN=Y&arrange=O&contentTypeId=25&areaCode=&sigunguCode=&cat1=&cat2=&cat3=";
@@ -85,13 +84,17 @@ public class TouristPlaceRepository_call_parser {
 
             requestUrl = urlBuilder.toString();
 
+            Log.d("urlf", requestUrl);
+
 
         InputStreamRequest request = new InputStreamRequest(Request.Method.GET, requestUrl,
                 new Response.Listener<InputStream>() {
                     @Override
                     public void onResponse(InputStream response) {
-                        List<Place> places = place_xmlParser.parse(response);
+                        List<Place> places = place_xmlParser.parseCommon_return_List_Place(response);
                         touristPlaces.setValue(places);
+
+                        Log.d("urlf", places.get(0).getContenttypeid());
                     }
                 },
                 new Response.ErrorListener() {
@@ -112,7 +115,7 @@ public class TouristPlaceRepository_call_parser {
 //        Log.d("tt", requestUrl);
     }
 
-    public void loadCommonInfo(final String contentid, final MutableLiveData<Place> placeDetail) {
+    public void loadCommonInfo(final String contentid, final String contentTypeId,final MutableLiveData<Place> placeDetail) {
         try {
 
             String requestUrl = "https://apis.data.go.kr/B551011/KorService1/";
@@ -123,7 +126,6 @@ public class TouristPlaceRepository_call_parser {
             String serviceType = "detailCommon1";
             String mobileOS = "ETC";
             String mobileApp = "AppTest";
-            String contentTypeId = "12";
             String defaultYN = "Y";
             String firstImageYN = "Y";
             String areacodeYN = "Y";
@@ -170,6 +172,8 @@ public class TouristPlaceRepository_call_parser {
 
             requestUrl = urlBuilder.toString();
 
+            Log.d("url5", requestUrl);
+
             InputStreamRequest request = new InputStreamRequest(Request.Method.GET, requestUrl,
                     new Response.Listener<InputStream>() {
                         @Override
@@ -177,7 +181,7 @@ public class TouristPlaceRepository_call_parser {
 //                            place_xmlParser.parseCommonInfo(response, touristPlace);
 //                        Log.d("firstimage1", place.getSubname() + place.getFirstimage());
 //                            touristPlace.setValue(touristPlace.getValue());
-                            Place place = place_xmlParser.parseCommonInfo(response);
+                            Place place = place_xmlParser.parseCommonInfo_return_Place(response);
                             placeDetail.setValue(place);
 //Log.d("place", place.getFirstimage());
                         }
@@ -239,7 +243,7 @@ public class TouristPlaceRepository_call_parser {
                     new Response.Listener<InputStream>() {
                         @Override
                         public void onResponse(InputStream response) {
-                            Place tmp=place_xmlParser.parseCommonInfo(response);
+                            Place tmp=place_xmlParser.parseCommonInfo_return_Place(response);
                             // place 객체가 수정됨
                             place.setValue(tmp);
                         }
@@ -294,7 +298,7 @@ public class TouristPlaceRepository_call_parser {
                 new Response.Listener<InputStream>() {
                     @Override
                     public void onResponse(InputStream response) {
-                        List<Place> places = place_xmlParser.parse(response);
+                        List<Place> places = place_xmlParser.parseCommon_return_List_Place(response);
                         filteredPlaces.setValue(places);
                     }
                 },
@@ -326,7 +330,7 @@ public class TouristPlaceRepository_call_parser {
                 new Response.Listener<InputStream>() {
                     @Override
                     public void onResponse(InputStream response) {
-                        List<Place> places = place_xmlParser.parse(response);
+                        List<Place> places = place_xmlParser.parseCommon_return_List_Place(response);
                         filteredPlaces.setValue(places);
                     }
                 },

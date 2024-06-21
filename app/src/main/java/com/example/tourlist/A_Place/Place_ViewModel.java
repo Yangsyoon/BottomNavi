@@ -1,6 +1,7 @@
 package com.example.tourlist.A_Place;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -20,7 +21,17 @@ public class Place_ViewModel extends AndroidViewModel {
         repository = TouristPlaceRepository_call_parser.getInstance(application);
     }
 
-    public void getTouristPlaces() {
+///저장된 데이터 반환.
+    public LiveData<List<Place>> getPlaces() {
+        if (touristPlaces == null) {
+            touristPlaces = new MutableLiveData<>();
+        }
+        return touristPlaces;
+    }
+
+
+
+/*    public void getTouristPlaces() {
 
         MutableLiveData<List<Place>> newTouristPlaces = new MutableLiveData<>();
 
@@ -33,7 +44,7 @@ public class Place_ViewModel extends AndroidViewModel {
         }
 
         //이거에 48시간 썼다.
-        /*newTouristPlaces.observeForever(new Observer<List<Place>>() {
+        newTouristPlaces.observeForever(new Observer<List<Place>>() {
             @Override
             public void onChanged(List<Place> places) {
                 List<Place> newPlaces = new ArrayList<>();
@@ -61,11 +72,11 @@ public class Place_ViewModel extends AndroidViewModel {
 
             }
 
-        });*/
+        });
 
 
         touristPlaces.setValue(touristPlaces.getValue());
-    }
+    }*/
 
     public LiveData<List<Place>> getTouristPlaces_observe() {
 
@@ -75,7 +86,7 @@ public class Place_ViewModel extends AndroidViewModel {
             touristPlaces = new MutableLiveData<>();
             //밑에 해제하면 중간에 상세 뜸.
 //            repository.loadTouristPlaces(newTouristPlaces);
-            repository.loadTouristPlaces(touristPlaces);
+            repository.loadTouristPlaces_first(touristPlaces);
 //이게 첫 load.
         }
 
@@ -116,16 +127,13 @@ public class Place_ViewModel extends AndroidViewModel {
         return touristPlaces;
     }
 
-    public LiveData<List<Place>> getPlaces() {
-        if (touristPlaces == null) {
-            touristPlaces = new MutableLiveData<>();
-        }
-        return touristPlaces;
-    }
 
-    public LiveData<Place> getPlacedetail(String contentId) {
+
+    public LiveData<Place> getPlacedetail(String contentId,String contenttypeId) {
         placeDetail = new MutableLiveData<>();
-        repository.loadCommonInfo(contentId, placeDetail);
+        Log.d("url5", "content"+contenttypeId);
+        repository.loadCommonInfo(contentId,contenttypeId, placeDetail);
+
         return placeDetail;
     }
 

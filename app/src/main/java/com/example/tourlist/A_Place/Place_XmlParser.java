@@ -2,9 +2,6 @@ package com.example.tourlist.A_Place;
 
 import android.util.Log;
 
-import com.example.tourlist.A_Course.Course;
-import com.example.tourlist.A_Course.TouristCoursePlace;
-
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -19,7 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 class Place_XmlParser {
-    public List<Place> parse(InputStream inputStream) {
+
+    //공통정보 xml.
+    public List<Place> parseCommon_return_List_Place(InputStream inputStream) {
         List<Place> places = new ArrayList<>();
 
         try (BufferedReader bufreader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
@@ -225,7 +224,7 @@ class Place_XmlParser {
         return course;
     }*/
 
-    public Place parseCommonInfo(InputStream inputStream) {
+    public Place parseCommonInfo_return_Place(InputStream inputStream) {
         Place place = new Place();
 
         try (BufferedReader bufreader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {

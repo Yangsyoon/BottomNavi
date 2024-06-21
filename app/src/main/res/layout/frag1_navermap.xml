@@ -182,17 +182,25 @@
                     android:layout_height="match_parent"
                     android:text="경로" />
 
-                <Button
-                    android:id="@+id/btn_fav"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/rounded_button"
-                    android:elevation="4dp"
-                    android:text="즐겨찾기 추가"
-                    android:textColor="@android:color/white"
-                    android:textSize="16sp" />
 
                 <Button
+                    android:id="@+id/btn_fav"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="8dp"
+                    android:background="@drawable/rounded_button"
+                    android:backgroundTint="@color/white"
+
+
+                    android:elevation="8dp"
+                    android:gravity="center"
+                    android:text="1"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    tools:layout_editor_absoluteX="88dp"
+                    tools:layout_editor_absoluteY="683dp" />
+
+                <!--<Button
                     android:id="@+id/place_name_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -205,9 +213,11 @@
                     android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent" />-->
 
             </LinearLayout>
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.naver.maps.map.MapView>
 

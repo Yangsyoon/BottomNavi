@@ -26,28 +26,23 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
-                <Button
-                    android:id="@+id/addfavoriteButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="즐겨찾기 추가"
-                    />
-
                 <TextView
                     android:id="@+id/placeNameTextView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="장소명"
+                    android:textColor="@color/black"
                     android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black" />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/addressTextView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:textSize="16sp"
-                    android:textColor="@color/black" />
+                    android:text="주소"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
 
                 <!-- 아이콘 행 -->
                 <LinearLayout
@@ -81,7 +76,7 @@
                             android:textColor="@color/black" />
 
                         <ImageView
-                            android:id="@+id/viewIcon"
+                            android:id="@+id/viewcnt"
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/user_24"
@@ -89,7 +84,7 @@
                             android:layout_marginStart="16dp" />
 
                         <TextView
-                            android:id="@+id/viewCountTextView"
+                            android:id="@+id/commentcnt"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="1.1K"
@@ -128,7 +123,7 @@
                             android:layout_marginEnd="16dp" />
 
                         <ImageView
-                            android:id="@+id/shareIcon"
+                            android:id="@+id/shareicon"
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/user_24"

@@ -3,6 +3,9 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import com.example.tourlist.Main.ViewPager.Board.BoardFragment;
+import com.example.tourlist.Main.ViewPager.Calendar.CalendarFragment;
+
 
 public class ViewPagerAdapter extends FragmentStateAdapter {
 

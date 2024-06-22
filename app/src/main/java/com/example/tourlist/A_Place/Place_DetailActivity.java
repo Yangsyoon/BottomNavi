@@ -79,6 +79,7 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
     private TextView viewCountTextView;
     private ImageView bookmarkIcon;
     private ImageView mapIcon;
+    private ImageView shareIcon;
 
     private DatabaseReference likeRef;
 
@@ -103,6 +104,7 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
         viewCountTextView = findViewById(R.id.viewCountTextView); // 조회 수를
         bookmarkIcon = findViewById(R.id.bookmarkIcon); // 즐겨찾기 아이콘
         mapIcon = findViewById(R.id.mapIcon); // 지도 아이콘
+        shareIcon = findViewById(R.id.shareIcon); // 공유 아이콘
 
 
 
@@ -179,6 +181,7 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
         setMoreTextViewClickListener();
         setBookmark_ClickListener();// 즐겨찾기 버튼 클릭 리스너 설정
         setMapIcon_ClickListener(); // 지도 아이콘 클릭 리스너 설정
+        setShareIcon_ClickListener(); // 공유 아이콘 클릭 리스너 설정
         checkFavoriteStatus(); // 액티비티 실행 시 즐겨찾기 상태 확인
 
     }
@@ -256,6 +259,16 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
         return link != null ? link.attr("href") : "";
     }
 
+
+    private void setShareIcon_ClickListener() {
+        shareIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sharePlaceURL();
+            }
+        });
+    }
+
     private void setMapIcon_ClickListener() {
         mapIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -279,6 +292,7 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
 
                         String url = generatePlaceURL(destinationLatLng, destinationName);
                         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                        Log.d("PlaceDetailActivity", "d"+url);
                         startActivity(intent);
                     }
                 })
@@ -295,6 +309,22 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
             url += "&lng=" + latLng.longitude;
             url += "&name=" + URLEncoder.encode(placeName, "UTF-8"); // 이름에 공백 등이 있을 수 있으므로 인코딩
             url += "&appname=com.example.tourlist"; // 앱 이름 추가
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return url;
+    }
+
+    // 장소 정보를 웹 페이지 URL로 변환하는 메서드
+    private String generateWebMapURL(LatLng latLng, String placeName) {
+        String url = "https://map.naver.com/v5/search/";
+        try {
+            url += URLEncoder.encode(placeName, "UTF-8");
+            url += "/place/";
+            url += "?c=14128520.3803532,4508712.2741748,15,0,0,0,dh&placeId=";
+            url += "&placeType=SITE";
+            url += "&lat=" + latLng.latitude;
+            url += "&lng=" + latLng.longitude;
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -318,7 +348,20 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
     }
 
 
+    // 공유할 URL 생성 및 인텐트 생성
+    private void sharePlaceURL() {
+        LatLng destinationLatLng = placeLocation; // 목적지 좌표
+        String destinationName = place.getTitle(); // 목적지 이름
 
+        String url = generateWebMapURL(destinationLatLng, destinationName);
+
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "공유할 장소");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, url);
+
+        startActivity(Intent.createChooser(shareIntent, "공유"));
+    }
 
     private void setViewCountListener() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();

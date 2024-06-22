@@ -126,6 +126,8 @@
                             android:layout_height="24dp"
                             android:src="@drawable/user_24"
                             android:background="@android:color/transparent" />
+
+
                     </LinearLayout>
                 </LinearLayout>
 

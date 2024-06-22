@@ -254,7 +254,7 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
 
 
 
-
+//
         startButton.setOnClickListener(new View.OnClickListener() {
 
             @Override

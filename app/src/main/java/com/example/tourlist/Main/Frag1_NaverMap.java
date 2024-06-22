@@ -98,15 +98,18 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.naver.maps.map.util.MarkerIcons;
 
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View.OnClickListener{
     private String fragmentTag="NaverMap";
+    private List<Marker> markers = new ArrayList<>();
 
     public void setFragmentTag(String tag) {
         this.fragmentTag = tag;
@@ -123,6 +126,7 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
     private NaverMap mMap;
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
+    private static final double ZOOM_THRESHOLD = 7f;
     private FusedLocationSource locationSource;
 
     private boolean isFabOpen = false; // FAB 상태를 나타내는 변수
@@ -250,7 +254,7 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
 
 
 
-
+//
         startButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -351,28 +355,23 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
         return view;
 
     }
-
-
-
     @Override
-    public void onMapReady(@NonNull NaverMap map){
-
+    public void onMapReady(@NonNull NaverMap map) {
         mMap = map;
 
         Log.d(TAG, "GoogleMap is ready");
 
-        //위치 권한 요청 설정
+        // 위치 권한 요청 설정
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
         }
 
-
-        //지도 시작시, 현재 위치 변수에 저장.
+        // 지도 시작시, 현재 위치 변수에 저장.
         getCurrentLocation();
         Log.d("m", "cur 1");
 
-        //내 위치 세팅
+        // 내 위치 세팅
         map.setLocationSource(locationSource);
         map.setLocationTrackingMode(LocationTrackingMode.Follow);
         Log.d("m", locationSource.toString());
@@ -381,90 +380,75 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
         UiSettings uiSettings = map.getUiSettings();
         uiSettings.setLocationButtonEnabled(true);
 
-        // POI 설정
-        //setupPOI();
 
 
-        //맵 클릭 시 정보창 숨기기
-        mMap.setOnMapClickListener(new NaverMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(@NonNull PointF pointF, @NonNull LatLng latLng) {
-// 이전에 생성된 마커가 있으면 제거
-                if (current_beforeMarker != null && selectedMarker!= current_beforeMarker) {
-                    current_beforeMarker.setMap(null);
-                }
-                // 이전에 생성된 POI 마커가 있다면 제거합니다.
-                if (poiMarker != null) {
-                    poiMarker.setMap(null);
-                }
-                //선택한 위치에 파란 마커 생성및, 다시 클릭시 '선택된 위치'라고 박스 뜸.
 
-//                currentMarker=new Marker();
-//                currentMarker.setPosition(latLng);
-//                currentMarker.setCaptionText("선택된 위치");
-//                currentMarker.setIconTintColor(0x478EEC);
-//                currentMarker.setMap(mMap);
-// 마커 클릭이 아닌 지도를 클릭했을 때 버튼 숨기기
-//                placeNameButton.setVisibility(View.GONE);
+        // 맵 클릭 시 정보창 숨기기
+        mMap.setOnMapClickListener((pointF, latLng) -> {
+            // 이전에 생성된 마커가 있으면 제거
+            if (current_beforeMarker != null && selectedMarker != current_beforeMarker) {
+                current_beforeMarker.setMap(null);
             }
-
+            // 이전에 생성된 POI 마커가 있다면 제거합니다.
+            if (poiMarker != null) {
+                poiMarker.setMap(null);
+            }
+            // 선택한 위치에 파란 마커 생성 및, 다시 클릭 시 '선택된 위치'라고 박스 뜸.
         });
 
-
-        //길찾기!!!
-        // 경로 버튼 클릭 리스너
+        // 길찾기!!! 경로 버튼 클릭 리스너
         Button routeButton = view.findViewById(R.id.view_map_button); // 경로 버튼의 ID를 사용하여 버튼을 찾습니다.
-        routeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (startMarker == null) {
-//                    toMarker = tour;
-                    Toast.makeText(getContext(), "출발지 마커 선택하세요 ", LENGTH_SHORT).show();
-                } else if (destinationMarker == null) {
-//                    fromMarker = tour;
-                    Toast.makeText(getContext(), "도착지 마커 선택하세요", LENGTH_SHORT).show();
-                    // 선택된 두 마커의 이름을 가져와서 대중교통 길찾기 URL 생성
+        routeButton.setOnClickListener(v -> {
+            if (startMarker == null) {
+                Toast.makeText(getContext(), "출발지 마커 선택하세요", Toast.LENGTH_SHORT).show();
+            } else if (destinationMarker == null) {
+                Toast.makeText(getContext(), "도착지 마커 선택하세요", Toast.LENGTH_SHORT).show();
+            } else {
+                String sourceName = startMarker.getCaptionText();
+                String destinationName = destinationMarker.getCaptionText();
+                LatLng sourceLatLng = startMarker.getPosition();
+                LatLng destinationLatLng = destinationMarker.getPosition();
+                String url = generateTransitRouteURL(sourceLatLng, sourceName, destinationLatLng, destinationName);
 
-                } else {
+                Toast.makeText(getContext(), "url: " + url, Toast.LENGTH_SHORT).show();
+                // 생성된 URL로 네이버 지도 앱을 열기
+                openNaverMapWithTransitRoute(url);
 
-                    String sourceName = startMarker.getCaptionText();
-                    String destinationName = destinationMarker.getCaptionText();
-                    LatLng sourceLatLng = startMarker.getPosition();
-                    LatLng destinationLatLng = destinationMarker.getPosition();
-                    String url = generateTransitRouteURL(sourceLatLng, sourceName, destinationLatLng, destinationName);
-
-                    Toast.makeText(getContext(), "url: "+url, LENGTH_SHORT).show();
-                    // 생성된 URL로 네이버 지도 앱을 열기
-                    openNaverMapWithTransitRoute(url);
-
-
-                    destinationMarker =null;
-                    startMarker =null;
-
-                    // 이미 두 개의 마커가 선택되어 있음
-//                    Toast.makeText(getContext(), "이미 두 개의 마커를 선택하셨습니다.", LENGTH_SHORT).show();
-                }
+                destinationMarker = null;
+                startMarker = null;
             }
         });
 
-        infoCard.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-//                infoCard.setVisibility(View.GONE);
-
-
-                if (selectedPlace != null) {
-
-                    searchPlaceIdByName(selectedPlace.getPlaceName(), selectedPlace);
-                } else {
-                    Toast.makeText(getContext(), "선택된 장소가 없습니다.", Toast.LENGTH_SHORT).show();
-                }
+        infoCard.setOnClickListener(v -> {
+            if (selectedPlace != null) {
+                searchPlaceIdByName(selectedPlace.getPlaceName(), selectedPlace);
+            } else {
+                Toast.makeText(getContext(), "선택된 장소가 없습니다.", Toast.LENGTH_SHORT).show();
             }
         });
 
         // 공공데이터로부터 관광지 정보 받아오기
         loadTouristPlaces();
+
+
+        mMap.addOnCameraChangeListener((reason, animated) -> {
+            double zoom = mMap.getCameraPosition().zoom;
+            for (Marker marker : markers) {
+                if (zoom < ZOOM_THRESHOLD) {
+                    // 특정 줌 이하에서는 점으로 변경하고 캡션 텍스트 숨기기
+                    marker.setIcon(MarkerIcons.BLACK);
+                    marker.setWidth(10);  // 더 작게 설정하여 점처럼 보이게 함
+                    marker.setHeight(10);
+                    marker.setCaptionText(null);  // 캡션 텍스트 숨기기
+                } else {
+                    // 특정 줌 이상에서는 원래 마커와 캡션 텍스트 복구
+                    marker.setIcon(Marker.DEFAULT_ICON);
+                    marker.setWidth(Marker.SIZE_AUTO);
+                    marker.setHeight(Marker.SIZE_AUTO);
+                    marker.setCaptionText(marker.getTag().toString());  // 캡션 텍스트 복구
+                }
+            }
+        });
 
     }
 
@@ -593,6 +577,12 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
                         tourMarker.setTag(new TouristPlace(placeName[0], latitude[0], longitude[0], address[0], description[0], phone[0])); // Tag에 객체 저장
 
                         tourMarker.setMap(mMap);
+
+
+                        // markers 리스트에 추가
+                        markers.add(tourMarker);
+
+
 
                         tourMarker.setOnClickListener(new Overlay.OnClickListener() {
                             @Override

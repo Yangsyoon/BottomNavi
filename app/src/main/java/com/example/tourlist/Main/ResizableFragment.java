@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import androidx.annotation.NonNull;
@@ -157,10 +156,10 @@ public class ResizableFragment extends Fragment {
 
                 return new Slide1_Place_List();
             }
-            else if (fragmentClassName.equals(Frag3_Tourist_Search.class.getName())) {
+            else if (fragmentClassName.equals(Old_Frag3_Tourist_Search.class.getName())) {
                 Log.d(TAG, "2");
 
-                return new Frag3_Tourist_Search();
+                return new Old_Frag3_Tourist_Search();
             } else if (fragmentClassName.equals(Frag4_Gpt.class.getName())) {
                 Log.d(TAG, "3");
 

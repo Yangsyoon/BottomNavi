@@ -2,10 +2,11 @@ package com.example.tourlist.Main;
 
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+
+import com.example.tourlist.Main.ViewPager.NewFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private Frag5_Register frag5_register;
     private Frag1_NaverMap frag1_NaverMap;
     private Frag4_Gpt frag4_Gpt;
-    private Frag3_Tourist_Search frag3_TouristSearch;
+    private Old_Frag3_Tourist_Search frag3_TouristSearch;
     private Slide1_Course_List slide1_course_list;
     private Slide1_Place_List slide1_place_list;
     private Slide2_FavoriteList slide2_favoriteList;
@@ -68,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         frag5_register = new Frag5_Register();
         frag1_NaverMap = new Frag1_NaverMap();
         frag4_Gpt = new Frag4_Gpt();
-        frag3_TouristSearch = new Frag3_Tourist_Search();
+        frag3_TouristSearch = new Old_Frag3_Tourist_Search();
         resizableFragment = new ResizableFragment();
         slide1_course_list = new Slide1_Course_List();
         slide1_place_list = new Slide1_Place_List();
@@ -93,7 +94,8 @@ public class MainActivity extends AppCompatActivity {
                     addNewResizableFragment(Slide2_FavoriteList.class);
                 }
                 else if (nextTabId == R.id.action_tourist_search) {
-                    setFrag(slide1_place_list, "TouristSearch");
+//                    setFrag(slide1_place_list, "TouristSearch");
+                    setFrag(new NewFragment(), "TouristSearch");
                 }
                  else if (nextTabId == R.id.action_gpt) {
                     setFrag(frag4_Gpt, "Gpt");

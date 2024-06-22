@@ -137,7 +137,7 @@ public class Slide2_FavoriteList extends Fragment {
 
     private void updateFavoriteLocation(FavoriteLocation location) {
         if (location.getKey() != null) {
-            mDatabase.child(location.getKey()).setValue(location).addOnCompleteListener(task -> {
+            mDatabase.child(location.getName()).setValue(location).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     Toast.makeText(getContext(), "장소 이름이 수정되었습니다.", Toast.LENGTH_SHORT).show();
                     loadFavoriteLocations();

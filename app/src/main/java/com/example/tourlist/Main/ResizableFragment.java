@@ -42,7 +42,7 @@ public class ResizableFragment extends Fragment {
 //        Button change_button=view.findViewById(R.id.change_button);
 
 
-
+        //코스, 장소 슬라이드 객체 생성
         slide1_course_list =new Slide1_Course_List();
         slide1_place_list=new Slide1_Place_List();
 

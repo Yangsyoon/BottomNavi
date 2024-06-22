@@ -20,6 +20,7 @@
         android:paddingTop="5dp"
 
         android:text="Favorite"
+        android:textColor="@color/gray"
         android:textSize="20sp">
 
     </TextView>

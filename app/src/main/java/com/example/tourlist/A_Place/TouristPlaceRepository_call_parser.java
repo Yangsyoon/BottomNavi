@@ -41,7 +41,7 @@ public class TouristPlaceRepository_call_parser {
 
 //    jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D
 
-    public void loadTouristPlaces(final MutableLiveData<List<Place>> touristPlaces) {
+    public void loadTouristPlaces_first(final MutableLiveData<List<Place>> touristPlaces) {
         try {
         // 코스 키
         //String requestUrl = "https://apis.data.go.kr/B551011/KorService1/areaBasedList1?numOfRows=30&pageNo=1&MobileOS=ETC&MobileApp=AppTest&ServiceKey=jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D&listYN=Y&arrange=O&contentTypeId=25&areaCode=&sigunguCode=&cat1=&cat2=&cat3=";
@@ -49,11 +49,10 @@ public class TouristPlaceRepository_call_parser {
         String requestUrl ="https://apis.data.go.kr/B551011/KorService1/";
 //         홈페이지에서 받은 키
         String serviceKey = "jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D";
-        Log.d("tt", "12");
 
 
         String serviceType = "areaBasedList1";
-        String numOfRows = "20";
+        String numOfRows = "10";
         String pageNo = "1";
         String mobileOS = "AND";
         String mobileApp = "AppTest";
@@ -84,15 +83,18 @@ public class TouristPlaceRepository_call_parser {
             urlBuilder.append("&" + URLEncoder.encode("cat3", "UTF-8") + "=" + URLEncoder.encode(cat3, "UTF-8"));
 
             requestUrl = urlBuilder.toString();
-            Log.d("tt2", requestUrl);
+
+            Log.d("urlf", requestUrl);
 
 
         InputStreamRequest request = new InputStreamRequest(Request.Method.GET, requestUrl,
                 new Response.Listener<InputStream>() {
                     @Override
                     public void onResponse(InputStream response) {
-                        List<Place> places = place_xmlParser.parse(response);
+                        List<Place> places = place_xmlParser.parseCommon_return_List_Place(response);
                         touristPlaces.setValue(places);
+
+                        Log.d("urlf", places.get(0).getContenttypeid());
                     }
                 },
                 new Response.ErrorListener() {
@@ -108,24 +110,22 @@ public class TouristPlaceRepository_call_parser {
         catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             // 예외를 처리할 다른 방법을 추가할 수 있습니다.
-            Log.d("error", "UnsupportedEncodingException");
         }
 
 //        Log.d("tt", requestUrl);
     }
 
-    public void loadCommonInfo(final String contentid, final MutableLiveData<Place> placeDetail) {
+    public void loadCommonInfo(final String contentid, final String contentTypeId,final MutableLiveData<Place> placeDetail) {
         try {
 
             String requestUrl = "https://apis.data.go.kr/B551011/KorService1/";
 //         홈페이지에서 받은 키
-            String serviceKey = "jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D";
+            String serviceKey = "RG%2BJOg2NmquDjVNABdeiaNIlMlem1pPi1a4ZWMVVAFuUWsQNCN29nz45kkKunmmqq0IU0aVlpWWHtUsPM6vtkA%3D%3D";
 
 
             String serviceType = "detailCommon1";
             String mobileOS = "ETC";
             String mobileApp = "AppTest";
-            String contentTypeId = "12";
             String defaultYN = "Y";
             String firstImageYN = "Y";
             String areacodeYN = "Y";
@@ -133,7 +133,7 @@ public class TouristPlaceRepository_call_parser {
             String addrinfoYN = "Y";
             String mapinfoYN = "Y";
             String overviewYN = "Y";
-            String numOfRows = "20";
+            String numOfRows = "10";
             String pageNo = "1";
 
             /*String serviceType = "detailCommon1";
@@ -171,7 +171,8 @@ public class TouristPlaceRepository_call_parser {
 
 
             requestUrl = urlBuilder.toString();
-            Log.d("tt", requestUrl);
+
+            Log.d("url5", requestUrl);
 
             InputStreamRequest request = new InputStreamRequest(Request.Method.GET, requestUrl,
                     new Response.Listener<InputStream>() {
@@ -180,9 +181,9 @@ public class TouristPlaceRepository_call_parser {
 //                            place_xmlParser.parseCommonInfo(response, touristPlace);
 //                        Log.d("firstimage1", place.getSubname() + place.getFirstimage());
 //                            touristPlace.setValue(touristPlace.getValue());
-                            Place place = place_xmlParser.parseCommonInfo(response, new Place());
+                            Place place = place_xmlParser.parseCommonInfo_return_Place(response);
                             placeDetail.setValue(place);
-//Log.d("place", place.getTitle());
+//Log.d("place", place.getFirstimage());
                         }
                     },
                     new Response.ErrorListener() {
@@ -197,8 +198,72 @@ public class TouristPlaceRepository_call_parser {
         catch (UnsupportedEncodingException e) {}
     }
 
+    //이거 중간에 상세 띄울떄.
+    public void loadCommonInfo2(final String contentid, final MutableLiveData<Place> place) {
+        try {
+
+            Place tmp=new Place();
+            String requestUrl = "https://apis.data.go.kr/B551011/KorService1/";
+            String serviceKey = "RG%2BJOg2NmquDjVNABdeiaNIlMlem1pPi1a4ZWMVVAFuUWsQNCN29nz45kkKunmmqq0IU0aVlpWWHtUsPM6vtkA%3D%3D";
+
+            String serviceType = "detailCommon1";
+            String mobileOS = "ETC";
+            String mobileApp = "AppTest";
+            String contentTypeId = "12";
+            String defaultYN = "Y";
+            String firstImageYN = "Y";
+            String areacodeYN = "Y";
+            String catcodeYN = "Y";
+            String addrinfoYN = "Y";
+            String mapinfoYN = "Y";
+            String overviewYN = "Y";
+            String numOfRows = "3";
+            String pageNo = "1";
+
+            StringBuilder urlBuilder = new StringBuilder(requestUrl);
+            urlBuilder.append(URLEncoder.encode(serviceType, "UTF-8"));
+            urlBuilder.append("?" + URLEncoder.encode("ServiceKey", "UTF-8") + "=" + serviceKey);
+            urlBuilder.append("&" + URLEncoder.encode("MobileOS", "UTF-8") + "=" + URLEncoder.encode(mobileOS, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("MobileApp", "UTF-8") + "=" + URLEncoder.encode(mobileApp, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("contentId", "UTF-8") + "=" + URLEncoder.encode(contentid, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("contentTypeId", "UTF-8") + "=" + URLEncoder.encode(contentTypeId, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("defaultYN", "UTF-8") + "=" + URLEncoder.encode(defaultYN, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("firstImageYN", "UTF-8") + "=" + URLEncoder.encode(firstImageYN, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("areacodeYN", "UTF-8") + "=" + URLEncoder.encode(areacodeYN, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("catcodeYN", "UTF-8") + "=" + URLEncoder.encode(catcodeYN, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("addrinfoYN", "UTF-8") + "=" + URLEncoder.encode(addrinfoYN, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("mapinfoYN", "UTF-8") + "=" + URLEncoder.encode(mapinfoYN, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("overviewYN", "UTF-8") + "=" + URLEncoder.encode(overviewYN, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("numOfRows", "UTF-8") + "=" + URLEncoder.encode(numOfRows, "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("pageNo", "UTF-8") + "=" + URLEncoder.encode(pageNo, "UTF-8"));
+
+            requestUrl = urlBuilder.toString();
+
+            InputStreamRequest request = new InputStreamRequest(Request.Method.GET, requestUrl,
+                    new Response.Listener<InputStream>() {
+                        @Override
+                        public void onResponse(InputStream response) {
+                            Place tmp=place_xmlParser.parseCommonInfo_return_Place(response);
+                            // place 객체가 수정됨
+                            place.setValue(tmp);
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // 에러 처리 코드 추가 필요
+                        }
+                    });
+
+            requestQueue.add(request);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            // 예외 처리 코드 추가 필요
+        }
+    }
 
 
+    //이건 코스에서 따라온거 쓸일없다.
     /*public void loadTouristCourseDetails(final String contentId, final MutableLiveData<Course> touristCourse) {
         String requestUrl = "https://apis.data.go.kr/B551011/KorService1/detailInfo1?serviceKey=jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D&MobileOS=ETC&MobileApp=AppTest&contentId=" + contentId + "&contentTypeId=25&numOfRows=10&pageNo=1";
 //        String requestUrl = "https://apis.data.go.kr/B551011/KorService1/detailInfo1?serviceKey=YOUR_API_KEY&MobileOS=ETC&MobileApp=AppTest&contentId=" + contentId + "&contentTypeId=25&numOfRows=10&pageNo=1";
@@ -226,17 +291,15 @@ public class TouristPlaceRepository_call_parser {
     }*/
 
 
-   /* public void loadFilteredCourses(final String areaCode, final MutableLiveData<List<Course>> filteredCourses) {
+    public void loadFilteredPlaces(final String requestUrl, final MutableLiveData<List<Place>> filteredPlaces) {
 
-        String requestUrl = "https://apis.data.go.kr/B551011/KorService1/areaBasedList1?serviceKey=jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D&numOfRows=30&pageNo=1&MobileOS=ETC&MobileApp=AppTest&listYN=Y&arrange=O&contentTypeId=25&areaCode=" + areaCode;
-//        String requestUrl = "https://apis.data.go.kr/B551011/KorService1/areaBasedList1?serviceKey=YOUR_API_KEY&numOfRows=10&pageNo=1&MobileOS=ETC&MobileApp=AppTest&listYN=Y&arrange=O&contentTypeId=25&areaCode=" + areaCode;
 
         InputStreamRequest request = new InputStreamRequest(Request.Method.GET, requestUrl,
                 new Response.Listener<InputStream>() {
                     @Override
                     public void onResponse(InputStream response) {
-                        List<Course> courses = place_xmlParser.parse(response);
-                        filteredCourses.setValue(courses);
+                        List<Place> places = place_xmlParser.parseCommon_return_List_Place(response);
+                        filteredPlaces.setValue(places);
                     }
                 },
                 new Response.ErrorListener() {
@@ -247,19 +310,41 @@ public class TouristPlaceRepository_call_parser {
                 });
 
         requestQueue.add(request);
-    }*/
+    }
 
-    /*public void loadFilteredGps(final String latitude, final String longitude, final MutableLiveData<List<Course>> filteredCourses) {
-        Log.d("latitude", latitude);
-//        String requestUrl = "https://apis.data.go.kr/B551011/KorService1/areaBasedList1?serviceKey=YOUR_API_KEY&numOfRows=10&pageNo=1&MobileOS=ETC&MobileApp=AppTest&listYN=Y&arrange=O&contentTypeId=25&areaCode=" + areaCode;
-        String requestUrl = "https://apis.data.go.kr/B551011/KorService1/locationBasedList1?serviceKey=jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D&numOfRows=15&pageNo=1&MobileOS=ETC&MobileApp=AppTest&listYN=Y&arrange=O&mapX="+longitude+"&mapY="+latitude+"&radius=20000&contentTypeId=25";
+    public void loadFilteredGps(final String latitude, final String longitude, final MutableLiveData<List<Place>> filteredPlaces,final String contenttype) {
+        // 기본 URL
+        String baseUrl = "https://apis.data.go.kr/B551011/KorService1/locationBasedList1";
 
-//        https://apis.data.go.kr/B551011/KorService1/locationBasedList1?serviceKey=jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D&numOfRows=10&pageNo=1&MobileOS=ETC&MobileApp=AppTest&listYN=Y&arrange=O&mapX=128.6102797&mapY=35.8889217&radius=20000&contentTypeId=25
+// 서비스 키
+        String serviceKey = "jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D";
 
-//        https://apis.data.go.kr/B551011/KorService1/locationBasedList1?serviceKey=&numOfRows=10&pageNo=1&MobileOS=ETC&MobileApp=AppTest&listYN=Y&arrange=O&mapX=128.6102797&mapY=35.8889217&radius=20000&contentTypeId=25
-//        https://apis.data.go.kr/B551011/KorService1/locationBasedList1?serviceKey=jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D&numOfRows=10&pageNo=1&MobileOS=ETC&MobileApp=AppTest&listYN=Y&arrange=O&mapX=128.6102797&mapY=35.8889217&radius=20000&contentTypeId=25
+// 기타 파라미터
+        String numOfRows = "10";
+        String pageNo = "1";
+        String mobileOS = "ETC";
+        String mobileApp = "AppTest";
+        String listYN = "Y";
+        String arrange = "O";
+        String radius = "20000";
 
 
+// 위도와 경도
+        String mapX = String.valueOf(longitude);  // longitude 변수를 적절히 설정하세요.
+        String mapY = String.valueOf(latitude);   // latitude 변수를 적절히 설정하세요.
+
+// 최종 URL 생성
+        String requestUrl = baseUrl + "?serviceKey=" + serviceKey
+                + "&numOfRows=" + numOfRows
+                + "&pageNo=" + pageNo
+                + "&MobileOS=" + mobileOS
+                + "&MobileApp=" + mobileApp
+                + "&listYN=" + listYN
+                + "&arrange=" + arrange
+                + "&mapX=" + mapX
+                + "&mapY=" + mapY
+                + "&radius=" + radius
+                + "&contentTypeId=" + contenttype;
 
 
 
@@ -267,8 +352,8 @@ public class TouristPlaceRepository_call_parser {
                 new Response.Listener<InputStream>() {
                     @Override
                     public void onResponse(InputStream response) {
-                        List<Course> courses = place_xmlParser.parse(response);
-                        filteredCourses.setValue(courses);
+                        List<Place> places = place_xmlParser.parseCommon_return_List_Place(response);
+                        filteredPlaces.setValue(places);
                     }
                 },
                 new Response.ErrorListener() {
@@ -279,7 +364,7 @@ public class TouristPlaceRepository_call_parser {
                 });
 
         requestQueue.add(request);
-    }*/
+    }
 
 
 }

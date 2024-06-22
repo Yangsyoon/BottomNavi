@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.tourlist.R;
@@ -115,13 +116,29 @@ public class Frag5_Login extends Fragment {
             }
         });
 
-        TextView btn_register = view.findViewById(R.id.btn_register);
-        btn_register.setOnClickListener(new View.OnClickListener() {
+        TextView btnRegister = view.findViewById(R.id.btn_register);
+        btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                Frag5_Register frag5_register = new Frag5_Register();
-                transaction.replace(R.id.main_frame, frag5_register);
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+                // 모든 프래그먼트를 숨김
+                for (Fragment fragment : fragmentManager.getFragments()) {
+                    transaction.hide(fragment);
+                }
+
+                // 프래그먼트가 이미 추가되어 있는지 확인
+                Frag5_Register existingFragment = (Frag5_Register) fragmentManager.findFragmentByTag(Frag5_Register.class.getSimpleName());
+                if (existingFragment == null) {
+                    // 프래그먼트가 없으면 추가
+                    Frag5_Register frag5Register = new Frag5_Register();
+                    transaction.add(R.id.main_frame, frag5Register, Frag5_Register.class.getSimpleName());
+                    transaction.addToBackStack(null);  // 백스택에 추가하여 뒤로 가기 기능을 제공
+                } else {
+                    // 프래그먼트가 이미 존재하면 보여줌
+                    transaction.show(existingFragment);
+                }
                 transaction.commit();
             }
         });

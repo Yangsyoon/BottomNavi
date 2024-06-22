@@ -88,23 +88,18 @@ public class MainActivity extends AppCompatActivity {
                 if (nextTabId == R.id.action_map) {
                     setFrag(frag1_NaverMap, "NaverMap");
                     addNewResizableFragment(Slide1_Course_List.class);
-//                    addNewResizableFragment(Slide1_Place_List.class);
                 }else if (nextTabId == R.id.action_memory) {
                     setFrag(frag1_NaverMap, "NaverMap");
                     addNewResizableFragment(Slide2_FavoriteList.class);
                 }
                 else if (nextTabId == R.id.action_tourist_search) {
-//                    setFrag(frag3_TouristSearch, "TouristSearch");
                     setFrag(slide1_place_list, "TouristSearch");
-//                    removeResizableFragment();
                 }
                  else if (nextTabId == R.id.action_gpt) {
                     setFrag(frag4_Gpt, "Gpt");
-//                    removeResizableFragment();
                 }
                 else if (nextTabId == R.id.action_account) {
                     setFrag(frag5_login, "Login");
-//                    removeResizableFragment();
                 }
 
 
@@ -206,15 +201,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void removeResizableFragment() {
-        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.overlay_frame);
-        if (currentFragment != null) {
-            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.remove(currentFragment);
-            fragmentTransaction.commit();
-        }
-    }
-
     DrawerLayout.DrawerListener listener = new DrawerLayout.DrawerListener() {
         @Override
         public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
@@ -245,4 +231,16 @@ public class MainActivity extends AppCompatActivity {
             mAuth.signOut(); // 유저 있으면 로그아웃
         }
     }
+
+
+
+    private void removeResizableFragment() {
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.overlay_frame);
+        if (currentFragment != null) {
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.remove(currentFragment);
+            fragmentTransaction.commit();
+        }
+    }
+
 }

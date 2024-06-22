@@ -126,12 +126,7 @@ public class TouristPlaceDetailActivity extends AppCompatActivity implements OnM
         loadComments();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        loadUserNickname(); // 사용자 닉네임을 onStart에서 불러오기
-        mapView.onStart();
-    }
+
 
     private void loadUserNickname() {
         FirebaseUser user = mAuth.getCurrentUser();
@@ -250,6 +245,13 @@ public class TouristPlaceDetailActivity extends AppCompatActivity implements OnM
         // 카메라 업데이트
         CameraUpdate cameraUpdate = CameraUpdate.scrollTo(placeLocation);
         naverMap.moveCamera(cameraUpdate);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        loadUserNickname(); // 사용자 닉네임을 onStart에서 불러오기
+        mapView.onStart();
     }
 
     @Override

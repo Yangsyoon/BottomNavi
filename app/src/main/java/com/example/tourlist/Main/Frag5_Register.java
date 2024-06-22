@@ -10,11 +10,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.tourlist.R;
@@ -35,15 +40,17 @@ public class Frag5_Register extends Fragment {
     //이것만으로도 회원가입은 구현 가능. 근데 데이터베이스로 관리해야...
 
     private DatabaseReference mDatabaseReference; //실시간 데이터베이스. 서버연동.
-    private EditText mEtEmail, mEtPwd,mEtnickname;
+    private EditText mEtEmail, mEtPwd,mEtnickname,mEtBirthdate;
+    private RadioGroup mRgGender;
     private Button mBtnRegister; //회원가입 버튼
+
 
 
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.frag5_register,container,false);
+        view = inflater.inflate(R.layout.frag5_register2,container,false);
 
 
 
@@ -54,7 +61,9 @@ public class Frag5_Register extends Fragment {
         mEtEmail=view.findViewById(R.id.et_email);
         mEtPwd=view.findViewById(R.id.et_pwd);
         mEtnickname=view.findViewById(R.id.et_nickname);
-        mBtnRegister=view.findViewById(R.id.btn_register);
+        mEtBirthdate = view.findViewById(R.id.et_birthdate);
+        mRgGender = view.findViewById(R.id.rg_gender);
+        mBtnRegister = view.findViewById(R.id.btn_register);
 
         mEtPwd.addTextChangedListener(new TextWatcher() {
             @Override
@@ -75,17 +84,17 @@ public class Frag5_Register extends Fragment {
             }
         });
 
-        Button buttonToggle = view.findViewById(R.id.buttonToggle);
+        ImageView buttonToggle = view.findViewById(R.id.iv_toggle_pwd);
 
         buttonToggle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mEtPwd.getInputType() == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD)) {
                     mEtPwd.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                    buttonToggle.setText("Hide");
+//                    buttonToggle.setText("Hide");
                 } else {
                     mEtPwd.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                    buttonToggle.setText("Show");
+//                    buttonToggle.setText("Show");
                 }
                 // 커서 위치를 끝으로 이동
                 mEtPwd.setSelection(mEtPwd.getText().length());
@@ -135,19 +144,72 @@ public class Frag5_Register extends Fragment {
 
 
 
-        Button btn_login=view.findViewById(R.id.btn_login);
-        btn_login.setOnClickListener(new View.OnClickListener() {
+        TextView btnLoginSwitch = view.findViewById(R.id.tv_login_switch);
+        btnLoginSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                Frag5_Login frag5_login = new Frag5_Login();
-                //main_layout에 homeFragment로 transaction 한다.
-                transaction.replace(R.id.main_frame, frag5_login);
-                // 백 스택에 추가합니다.
-                transaction.addToBackStack(null);
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
 
-                //꼭 commit을 해줘야 바뀐다.
+                // 모든 프래그먼트를 숨김
+                for (Fragment fragment : fragmentManager.getFragments()) {
+                    transaction.hide(fragment);
+                }
+
+                // 프래그먼트가 이미 추가되어 있는지 확인
+                Frag5_Login existingFragment = (Frag5_Login) fragmentManager.findFragmentByTag(Frag5_Login.class.getSimpleName());
+                if (existingFragment == null) {
+                    // 프래그먼트가 없으면 추가
+                    Frag5_Login frag5Login = new Frag5_Login();
+                    transaction.add(R.id.main_frame, frag5Login, Frag5_Login.class.getSimpleName());
+                    transaction.addToBackStack(null);  // 백스택에 추가하여 뒤로 가기 기능을 제공
+                } else {
+                    // 프래그먼트가 이미 존재하면 보여줌
+                    transaction.show(existingFragment);
+                }
                 transaction.commit();
+            }
+        });
+
+
+        // 텍스트 변경 감지기 추가
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                checkFieldsForEmptyValues();
+                String email = mEtEmail.getText().toString().trim();
+                String pwd = mEtPwd.getText().toString().trim();
+                String nickname = mEtnickname.getText().toString().trim();
+                String birthdate = mEtBirthdate.getText().toString().trim();
+                boolean genderSelected = mRgGender.getCheckedRadioButtonId() != -1;
+
+                boolean allFieldsFilled = !email.isEmpty() && !pwd.isEmpty() && !nickname.isEmpty() && !birthdate.isEmpty() && genderSelected;
+
+                mBtnRegister.setEnabled(allFieldsFilled);
+
+                if (allFieldsFilled) {
+                    mBtnRegister.setBackgroundTintList(ContextCompat.getColorStateList(getContext(), R.color.login_blue));
+                } else {
+                    mBtnRegister.setBackgroundTintList(ContextCompat.getColorStateList(getContext(), R.color.login_gray));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        };
+
+        mEtEmail.addTextChangedListener(textWatcher);
+        mEtPwd.addTextChangedListener(textWatcher);
+        mEtnickname.addTextChangedListener(textWatcher);
+        mEtBirthdate.addTextChangedListener(textWatcher);
+
+        mRgGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                checkFieldsForEmptyValues();
             }
         });
 
@@ -176,7 +238,10 @@ public class Frag5_Register extends Fragment {
 
     }
 
+    private void checkFieldsForEmptyValues() {
 
+
+    }
     /*
 
         사용자 계정 정보 모델 클래스

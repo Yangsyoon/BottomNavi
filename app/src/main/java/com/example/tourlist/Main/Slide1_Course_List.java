@@ -61,13 +61,15 @@ public class Slide1_Course_List extends Fragment {
         getCurrentLocation();
         Log.d("m","8");
 
-
+        //코스 목록 띄울 리사이클러뷰
         RecyclerView recyclerView2_course = view.findViewById(R.id.recyclerView2);
         recyclerView2_course.setLayoutManager(new LinearLayoutManager(getContext()));
 
         courseViewModel = new ViewModelProvider(requireActivity()).get(CourseViewModel.class);
         courses = new ArrayList<>();
 
+
+        //코스 목록 구성할 adapter
         courseAdapter = new CourseAdapter(courses);
 //        courseAdapter = new CourseAdapter(courses, currentLocation);
         recyclerView2_course.setAdapter(courseAdapter);
@@ -75,6 +77,9 @@ public class Slide1_Course_List extends Fragment {
             Log.d("PP", "CourseAdapter: 123" + currentLocation.getLatitude());
         }
 
+        //코스 데이터들을 저장할 코스 뷰 모델
+        //코스 초기 전체 코스목록 받아오기 위한 함수.
+        //Tourapi의 지역기반 서비스의 코스 xml을 요청한다.
         courseViewModel.getTouristCourses().observe(getViewLifecycleOwner(), new Observer<List<Course>>() {
             @Override
             public void onChanged(List<Course> courses) {

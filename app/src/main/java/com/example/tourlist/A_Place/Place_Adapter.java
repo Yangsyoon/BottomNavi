@@ -1,5 +1,6 @@
 package com.example.tourlist.A_Place;
 
+import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.net.Uri;
@@ -13,21 +14,33 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.tourlist.A_Course.TouristCoursePlace;
 import com.example.tourlist.R;
+import com.example.tourlist.Tourist_Detail_Activity.Detail_files.TouristPlaceDataHolder;
 
 import java.util.List;
 
 public class Place_Adapter extends RecyclerView.Adapter<Place_Adapter.Place_ViewHolder> {
 
+    private Context context;
     public List<Place> places;
     private Location currentLocation;
+    public Place_ViewModel viewModel;
 
-    public Place_Adapter(List<Place> places) {
+    public Place_Adapter(Context context, List<Place> places) {
+        this.context = context;
         this.places = places;
-
+    }
+    public void setPlaces(List<Place> places) {
+        this.places = places;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -43,7 +56,7 @@ public class Place_Adapter extends RecyclerView.Adapter<Place_Adapter.Place_View
     public void onBindViewHolder(@NonNull Place_ViewHolder holder, int position) {
         Place place = places.get(position);
 
-//        Log.d("P", "onBindViewHolder: " + place.getTitle());
+        Log.d("urlf", "onBindViewHolder: " + place.getContenttypeid());
         Log.d("P", "onBindViewHolder: ");
 
         holder.bind(place);
@@ -119,7 +132,37 @@ public class Place_Adapter extends RecyclerView.Adapter<Place_Adapter.Place_View
                 public void onClick(View v) {
                     Intent intent = new Intent(itemView.getContext(), Place_DetailActivity.class);
                     intent.putExtra("CONTENT_ID", place.getContentid());
-                    itemView.getContext().startActivity(intent);
+                    intent.putExtra("CONTENT_TYPE_ID", place.getContenttypeid());
+                    intent.putExtra("mapx", place.getMapx());
+                    intent.putExtra("mapy", place.getMapy());
+                    Log.d("urlf","clicked"+place.getContenttypeid());
+
+
+
+
+
+                    if (place.getContentid() != null) {
+                        // ViewModel 인스턴스 가져오기
+                        viewModel = new ViewModelProvider((ViewModelStoreOwner) context).get(Place_ViewModel.class);
+
+                        // 데이터 가져오기 및 옵저버 설정
+                        viewModel.getPlacedetail(place.getContentid(), place.getContenttypeid()).observe((LifecycleOwner) context, new Observer<Place>() {
+                            @Override
+                            public void onChanged(Place place) {
+                                if (place != null) {
+                                    PlaceDataHolder.getInstance().setPlace(place);
+
+                                    itemView.getContext().startActivity(intent);
+
+                                   /* Place tmp=new Place();
+                                    tmp = PlaceDataHolder.getInstance().getPlace();
+                                    Log.d("PlaceDetailActivity3", "Place name: " + tmp.getAddr1());*/
+                                }
+                            }
+                        });
+                    }
+
+
                 }
             });
         }

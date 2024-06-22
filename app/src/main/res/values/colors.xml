@@ -13,4 +13,5 @@
     <color name="colorAccent">#03DAC5</color>
     <color name="puple">#800080</color>
     <color name="selected_color">#C87BF8</color>
+    <color name="markred">#FF0000</color>
 </resources>

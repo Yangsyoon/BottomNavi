@@ -15,7 +15,7 @@ import java.util.List;
 
 public class CourseViewModel extends AndroidViewModel {
 
-    private MutableLiveData<List<Course>> touristCourses;
+    private MutableLiveData<List<com.example.tourlist.A_Course.Course>> touristCourses;
     private TouristCourseRepository repository;
     private FusedLocationProviderClient fusedLocationClient;
     private double currentLatitude;

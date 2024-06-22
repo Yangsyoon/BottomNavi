@@ -367,7 +367,6 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         String placeTitle = place.getTitle();  // 장소명을 얻기 위한 메서드
         DatabaseReference viewRef = database.getReference("Places").child(placeTitle).child("View").child("count");
-
         viewRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

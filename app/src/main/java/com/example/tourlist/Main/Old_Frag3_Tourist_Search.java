@@ -52,7 +52,7 @@ import com.example.tourlist.A_Course.CourseAdapter;
 import com.example.tourlist.A_Course.CourseViewModel;
 import com.example.tourlist.A_Course.Course;
 
-public class Frag3_Tourist_Search extends Fragment {
+public class Old_Frag3_Tourist_Search extends Fragment {
     private static final String TAG = "Frag3_Tourist_Search";
 
     private List<TouristAttraction> attractions;
@@ -70,7 +70,7 @@ public class Frag3_Tourist_Search extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.frag3_tourist_search, container, false);
+        View view = inflater.inflate(R.layout.old_frag3_tourist_search, container, false);
     Log.d("m", "onCreateView: 3");
         RecyclerView recyclerView1_placelist = view.findViewById(R.id.recyclerView1);
 //        RecyclerView recyclerView2_course = view.findViewById(R.id.recyclerView2);
@@ -203,7 +203,7 @@ public class Frag3_Tourist_Search extends Fragment {
         @NonNull
         @Override
         public AttractionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.frag3_item_attraction, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.old_frag3_item_attraction, parent, false);
             return new AttractionViewHolder(view);
         }
 

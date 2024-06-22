@@ -66,7 +66,6 @@ import com.naver.maps.map.MapView;
 import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.OnMapReadyCallback;
 import com.naver.maps.map.UiSettings;
-import com.naver.maps.map.overlay.InfoWindow;
 import com.naver.maps.map.overlay.Marker;
 
 
@@ -98,7 +97,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.naver.maps.map.util.MarkerIcons;
 
 
 import java.io.UnsupportedEncodingException;
@@ -436,13 +434,15 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
             for (Marker marker : markers) {
                 if (zoom < ZOOM_THRESHOLD) {
                     // 특정 줌 이하에서는 점으로 변경하고 캡션 텍스트 숨기기
-                    marker.setIcon(MarkerIcons.BLACK);
-                    marker.setWidth(10);  // 더 작게 설정하여 점처럼 보이게 함
-                    marker.setHeight(10);
+                    OverlayImage smallIcon = OverlayImage.fromResource(R.drawable.small_marker);
+                    marker.setIcon(smallIcon);
+                    marker.setWidth(30);  // 더 작게 설정하여 점처럼 보이게 함
+                    marker.setHeight(30);
                     marker.setCaptionText(null);  // 캡션 텍스트 숨기기
                 } else {
                     // 특정 줌 이상에서는 원래 마커와 캡션 텍스트 복구
-                    marker.setIcon(Marker.DEFAULT_ICON);
+                    OverlayImage icon = OverlayImage.fromResource(R.drawable.custom_marker);
+                    marker.setIcon(icon);
                     marker.setWidth(Marker.SIZE_AUTO);
                     marker.setHeight(Marker.SIZE_AUTO);
                     marker.setCaptionText(marker.getTag().toString());  // 캡션 텍스트 복구
@@ -571,6 +571,7 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
 
                         tourMarker.setPosition(latLng);
                         tourMarker.setCaptionText(placeName[0]);
+
 
                         setupMarkerIcon(tourMarker);
 
@@ -725,7 +726,7 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
 
     private void setupMarkerIcon(Marker marker) {
         //마커 아이콘 설정
-        OverlayImage icon = OverlayImage.fromResource(R.drawable.baseline_location_on_24); // 새로운 아이콘 리소스 사용
+        OverlayImage icon = OverlayImage.fromResource(R.drawable.small_marker); // 새로운 아이콘 리소스 사용
        marker.setIcon(icon);
        // marker.setWidth와 marker.setHeight는 사용하지 않습니다. 아이콘 자체를 작은 크기로 준비합니다.
        // 주황색으로 설정

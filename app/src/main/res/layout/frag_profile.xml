@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <!-- 프로필 이미지 -->
+    <ImageView
+        android:id="@+id/profile_image"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/profile_image_placeholder"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/profile_image" />
+
+    <!-- 사용자 이름 -->
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/profile_image"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:text="사용자 이름" />
+
+    <!-- 팔로워 및 팔로잉 수 -->
+    <LinearLayout
+        android:id="@+id/followers_following_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/username"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/followers_count"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:text="팔로워 0" />
+
+        <TextView
+            android:id="@+id/following_count"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:text="팔로잉 0" />
+    </LinearLayout>
+
+    <!-- 게시물 그리드 -->
+    <GridView
+        android:id="@+id/posts_grid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/followers_following_container"
+        android:layout_marginTop="20dp"
+        android:numColumns="3"
+        android:verticalSpacing="2dp"
+        android:horizontalSpacing="2dp"
+        android:stretchMode="columnWidth"
+        android:gravity="center" />
+</RelativeLayout>

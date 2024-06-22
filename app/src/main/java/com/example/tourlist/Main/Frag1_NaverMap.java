@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -220,7 +221,7 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
 
         destinationButton=view.findViewById(R.id.destination_button);
 
-        Button favoriteButton = view.findViewById(R.id.btn_fav);
+        ImageButton favoriteButton = view.findViewById(R.id.btn_fav);
 
 //        placeNameButton = view.findViewById(R.id.place_name_button);
 

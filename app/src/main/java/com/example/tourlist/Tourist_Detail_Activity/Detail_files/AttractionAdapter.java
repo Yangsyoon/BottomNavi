@@ -22,7 +22,7 @@ public class AttractionAdapter extends RecyclerView.Adapter<AttractionViewHolder
     @NonNull
     @Override
     public AttractionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.frag3_item_attraction, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.old_frag3_item_attraction, parent, false);
         return new AttractionViewHolder(view);
     }
 

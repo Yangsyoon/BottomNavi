@@ -1,17 +1,23 @@
 package com.example.tourlist.Main;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 
-import com.example.tourlist.Main.ViewPager.NewFragment;
+import com.example.tourlist.Main.ViewPager.Frag3_New;
+import com.example.tourlist.Main.ViewPager.Slide1_Place_List;
+import com.example.tourlist.XMLParser;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.Handler;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -30,14 +36,19 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
+    private boolean doubleBackToExitPressedOnce = false;
+    private Handler mHandler = new Handler();
+
     private BottomNavigationView bottomNavigationView;
     private FragmentManager fm;
     private FragmentTransaction ft;
     private Frag5_Login frag5_login;
+    private Frag_Profile frag_profile;
+
     private Frag5_Register frag5_register;
     private Frag1_NaverMap frag1_NaverMap;
     private Frag4_Gpt frag4_Gpt;
-    private Old_Frag3_Tourist_Search frag3_TouristSearch;
+    private XMLParser.Old_Frag3_Tourist_Search frag3_TouristSearch;
     private Slide1_Course_List slide1_course_list;
     private Slide1_Place_List slide1_place_list;
     private Slide2_FavoriteList slide2_favoriteList;
@@ -59,24 +70,49 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+        setWindowInsets();
+
+        initializeFragments();
+        initializeFirebaseAuth();
+
+        setupBottomNavigationView();
+
+        if (savedInstanceState == null) {
+            setInitialFragment();
+        }
+
+        setupDrawer();
+        setupButtons();
+    }
+
+    private void setWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
 
+    private void initializeFragments() {
+        frag_profile= new Frag_Profile();
         frag5_login = new Frag5_Login();
         frag5_register = new Frag5_Register();
         frag1_NaverMap = new Frag1_NaverMap();
         frag4_Gpt = new Frag4_Gpt();
-        frag3_TouristSearch = new Old_Frag3_Tourist_Search();
+        frag3_TouristSearch = new XMLParser.Old_Frag3_Tourist_Search();
         resizableFragment = new ResizableFragment();
         slide1_course_list = new Slide1_Course_List();
         slide1_place_list = new Slide1_Place_List();
         slide2_favoriteList = new Slide2_FavoriteList();
 
         fm = getSupportFragmentManager();
+    }
 
+    private void initializeFirebaseAuth() {
+        mAuth = FirebaseAuth.getInstance();
+    }
+
+    private void setupBottomNavigationView() {
         bottomNavigationView = findViewById(R.id.bottomNavi);
         bottomNavigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
             @Override
@@ -86,61 +122,79 @@ public class MainActivity extends AppCompatActivity {
                 int nextTabId = menuItem.getItemId();
                 boolean forward = nextTabId > currentTabId;
 
+                ImageButton openbutton = findViewById(R.id.openbutton);
+
                 if (nextTabId == R.id.action_map) {
+                    Log.d("u", "a");
                     setFrag(frag1_NaverMap, "NaverMap");
                     addNewResizableFragment(Slide1_Course_List.class);
-                }else if (nextTabId == R.id.action_memory) {
+                    openbutton.setVisibility(View.VISIBLE);
+                } else if (nextTabId == R.id.action_memory) {
                     setFrag(frag1_NaverMap, "NaverMap");
                     addNewResizableFragment(Slide2_FavoriteList.class);
-                }
-                else if (nextTabId == R.id.action_tourist_search) {
-//                    setFrag(slide1_place_list, "TouristSearch");
-                    setFrag(new NewFragment(), "TouristSearch");
-                }
-                 else if (nextTabId == R.id.action_gpt) {
+                    openbutton.setVisibility(View.VISIBLE);
+                } else if (nextTabId == R.id.action_tourist_search) {
+                    setFrag(new Frag3_New(), "TouristSearch");
+                    openbutton.setVisibility(View.VISIBLE);
+                } else if (nextTabId == R.id.action_gpt) {
                     setFrag(frag4_Gpt, "Gpt");
+                    openbutton.setVisibility(View.VISIBLE);
+                } else if (nextTabId == R.id.action_account) {
+                    handleAccountTab();
+                    openbutton.setVisibility(View.GONE); // or View.INVISIBLE
                 }
-                else if (nextTabId == R.id.action_account) {
-                    setFrag(frag5_login, "Login");
-                }
 
-
-                // 선택된 메뉴 아이템의 색상 변경
-                MenuItem selectedItem = bottomNavigationView.getMenu().findItem(nextTabId);
-                selectedItem.setIconTintList(ColorStateList.valueOf(getResources().getColor(R.color.selected_color)));
-
-                // 이전에 선택된 메뉴 아이템의 색상 원래대로 변경
-                MenuItem previousItem = bottomNavigationView.getMenu().findItem(currentTabId);
-                previousItem.setIconTintList(ColorStateList.valueOf(getResources().getColor(R.color.white)));
-
+                updateTabColors(nextTabId);
                 currentTabId = nextTabId;
                 return true;
             }
         });
 
-        //초기.
-        if (savedInstanceState == null) {
-            setFrag(frag1_NaverMap, "NaverMap");
-            addNewResizableFragment(Slide1_Course_List.class);
-//            addNewResizableFragment(Slide1_Place_List.class);
-        }
+    }
 
+    private void handleAccountTab() {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            setFrag(frag_profile, "Profile");
+        } else {
+            setFrag(frag5_login, "Login");
+        }
+    }
+
+    private void updateTabColors(int nextTabId) {
+        MenuItem selectedItem = bottomNavigationView.getMenu().findItem(nextTabId);
+        selectedItem.setIconTintList(ColorStateList.valueOf(getResources().getColor(R.color.selected_color)));
+
+        MenuItem previousItem = bottomNavigationView.getMenu().findItem(currentTabId);
+        previousItem.setIconTintList(ColorStateList.valueOf(getResources().getColor(R.color.white)));
+    }
+
+    private void setInitialFragment() {
+        setFrag(frag1_NaverMap, "NaverMap");
+        addNewResizableFragment(Slide1_Course_List.class);
+    }
+
+    private void setupDrawer() {
         drawerLayout = findViewById(R.id.drawer_layout);
         drawerView = findViewById(R.id.drawer);
-
-        ImageButton openbutton = findViewById(R.id.openbutton);
-        openbutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawerLayout.openDrawer(drawerView);
-            }
-        });
 
         drawerLayout.addDrawerListener(listener);
         drawerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 drawerLayout.closeDrawer(drawerView);
+            }
+        });
+    }
+
+
+
+    private void setupButtons() {
+        ImageButton openbutton = findViewById(R.id.openbutton);
+        openbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.openDrawer(drawerView);
             }
         });
 
@@ -152,12 +206,28 @@ public class MainActivity extends AppCompatActivity {
                 drawerLayout.closeDrawer(drawerView);
             }
         });
+
+        Button logoutButton = findViewById(R.id.btn_logout);
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseUser currentUser = mAuth.getCurrentUser();
+                if (currentUser != null) {
+                    mAuth.signOut();
+                    Toast.makeText(MainActivity.this, "로그아웃되었습니다.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(MainActivity.this, "로그인된 사용자가 없습니다.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
+
 
     private void setFrag(Fragment fragment, String tag) {
         ft = fm.beginTransaction();
 
         Fragment existingFragment = fm.findFragmentByTag(tag);
+
         if (existingFragment != null) {
             ft.show(existingFragment);
         } else {
@@ -202,7 +272,6 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
-
     DrawerLayout.DrawerListener listener = new DrawerLayout.DrawerListener() {
         @Override
         public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
@@ -234,8 +303,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-
     private void removeResizableFragment() {
         Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.overlay_frame);
         if (currentFragment != null) {
@@ -245,4 +312,21 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "한 번 더 누르면 앱이 종료됩니다.", Toast.LENGTH_SHORT).show();
+
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce = false;
+            }
+        }, 2000); // 2초 동안 뒤로가기를 두 번 누르지 않으면 다시 false로 변경
+    }
 }

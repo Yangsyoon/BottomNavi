@@ -1,7 +1,7 @@
 package com.example.tourlist.Main.ViewPager;
 
+import com.example.tourlist.Main.ResizableFragment2;
 import com.example.tourlist.R;
-
 
 
 import android.os.Bundle;
@@ -11,9 +11,13 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class BoardFragment extends Fragment {
+
+    private ResizableFragment2 resizableFragment2;
+    private boolean isResizableFragmentVisible = false;
 
     @Nullable
     @Override
@@ -30,9 +34,28 @@ public class BoardFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 플로팅 버튼 클릭 시 동작 구현
-                // 예: 새로운 게시글 작성 화면으로 전환
+                toggleResizableFragment();
             }
         });
     }
+
+    private void toggleResizableFragment() {
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        if (resizableFragment2 == null) {
+            resizableFragment2 = new ResizableFragment2();
+            transaction.setCustomAnimations(R.anim.slide_in_up, R.anim.fade_out); // 애니메이션 추가
+            transaction.add(R.id.overlay_frame, resizableFragment2, "ResizableFragment2");
+        } else if (isResizableFragmentVisible) {
+            transaction.setCustomAnimations(R.anim.fade_in, R.anim.slide_out_down);
+            transaction.hide(resizableFragment2);
+        } else {
+            transaction.setCustomAnimations(R.anim.slide_in_up, R.anim.fade_out);
+            transaction.show(resizableFragment2);
+        }
+
+        transaction.commit();
+        isResizableFragmentVisible = !isResizableFragmentVisible;
+    }
+
+
 }

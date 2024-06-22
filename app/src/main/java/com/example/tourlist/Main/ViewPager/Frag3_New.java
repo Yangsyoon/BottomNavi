@@ -11,10 +11,10 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.tourlist.R;
 
-public class NewFragment extends Fragment {
+public class Frag3_New extends Fragment {
 
     private ViewPager2 viewPager;
-    private Button btnSearchPlace, btnBoard;
+    private Button btnSearchPlace, btnBoard, btnCalendar;
 
     @Nullable
     @Override
@@ -23,6 +23,7 @@ public class NewFragment extends Fragment {
 
         btnSearchPlace = view.findViewById(R.id.btnSearchPlace);
         btnBoard = view.findViewById(R.id.btnBoard);
+        btnCalendar = view.findViewById(R.id.btnCalendar);
         viewPager = view.findViewById(R.id.viewPager);
 
         // ViewPager2 어댑터 설정
@@ -45,6 +46,13 @@ public class NewFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 viewPager.setCurrentItem(1);
+            }
+        });
+
+        btnCalendar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewPager.setCurrentItem(2);
             }
         });
     }

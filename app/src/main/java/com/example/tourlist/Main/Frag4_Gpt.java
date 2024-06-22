@@ -132,7 +132,6 @@ public class Frag4_Gpt extends Fragment {
 
             jsonBody.put("messages",messageArr);
 
-
         } catch (JSONException e) {
             e.printStackTrace();
         }

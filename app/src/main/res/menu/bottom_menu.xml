@@ -4,7 +4,6 @@
         android:id="@+id/action_map"
         android:enabled="true"
         android:icon="@drawable/home_24"
-        android:menuCategory="secondary"
         android:title="홈"/>
 
 

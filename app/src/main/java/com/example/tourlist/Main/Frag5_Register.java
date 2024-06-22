@@ -25,6 +25,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.tourlist.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -115,27 +116,52 @@ public class Frag5_Register extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            FirebaseUser user = mFirebaseAuth.getCurrentUser();//로그인 성공시. 현재의 유저로 가져온다.
+                            FirebaseUser user = mFirebaseAuth.getCurrentUser(); // 로그인 성공 시 현재의 유저로 가져온다.
                             UserAccount account = new UserAccount();
 
-                            account.setIdToken(user.getUid());// 고유값이다.. 정도로 이해ㅣ.
-                            account.setEmailId(user.getEmail()); // 로그인 성공했으니,email 적어도 되지 않나..?
+                            account.setIdToken(user.getUid()); // 고유값 설정.
+                            account.setEmailId(user.getEmail()); // 로그인 성공했으니 이메일 설정.
                             account.setPassword(pwd);
                             account.setNickname(nickname);
 
-                            //setValue: database에 insert삽입 행위.
+                            // Database에 값 삽입.
                             mDatabaseReference.child("UserAccount").child(user.getUid()).setValue(account);
 
                             Toast.makeText(getContext(), "회원가입에 성공하셨습니다.", Toast.LENGTH_SHORT).show();
 
-
+                            // 이메일 인증 보내기
                             sendEmailVerification(user);
 
+                            // 로그인 화면으로 전환
+                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                            FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+                            Frag5_Login frag5_login = (Frag5_Login) fragmentManager.findFragmentByTag("Login");
+                            if (frag5_login != null) {
+                                // 기존에 생성된 프래그먼트가 있으면 보여줍니다.
+                                transaction.show(frag5_login);
+                            } else {
+                                // 기존에 생성된 프래그먼트가 없으면 추가합니다.
+                                frag5_login = new Frag5_Login();
+                                transaction.add(R.id.main_frame, frag5_login, "Login");
+                            }
+
+                            // 현재 프래그먼트를 숨깁니다.
+                            Fragment currentFragment = fragmentManager.findFragmentByTag("Register");
+                            if (currentFragment != null) {
+                                transaction.hide(currentFragment);
+                            }
+
+                            transaction.commit();
+
+                            // BottomNavigationView 탭 선택 상태 업데이트
+                            BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavi);
+                            bottomNavigationView.setSelectedItemId(R.id.action_account);
                         } else {
                             Toast.makeText(getContext(), "회원가입에 실패하셨습니다.", Toast.LENGTH_SHORT).show();
-
                         }
                     }
+
 
 
                 });
@@ -224,12 +250,12 @@ public class Frag5_Register extends Fragment {
                     .addOnCompleteListener(getActivity(), task -> {
                         if (task.isSuccessful()) {
                             Toast.makeText(getContext(),
-                                    "Verification email sent to " + user.getEmail(),
+                                     user.getEmail()+"로 인증메일 전송됨",
                                     Toast.LENGTH_SHORT).show();
                         } else {
                             Log.e("TAG", "sendEmailVerification", task.getException());
                             Toast.makeText(getContext(),
-                                    "Failed to send verification email.",
+                                    "인증 메일 전송 실패",
                                     Toast.LENGTH_SHORT).show();
                         }
                     });

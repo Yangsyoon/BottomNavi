@@ -27,6 +27,15 @@
             android:text="게시판"
             android:background="?attr/selectableItemBackground"
             android:textColor="@color/black" />
+
+        <Button
+            android:id="@+id/btnCalendar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="캘린더"
+            android:background="?attr/selectableItemBackground"
+            android:textColor="@color/black" />
     </LinearLayout>
 
     <androidx.viewpager2.widget.ViewPager2

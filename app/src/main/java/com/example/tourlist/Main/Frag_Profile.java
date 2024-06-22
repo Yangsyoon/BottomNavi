@@ -32,21 +32,20 @@ public class Frag_Profile extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag_profile, container, false);
-
-        mAuth = FirebaseAuth.getInstance();
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference("hongdroid");
-
-        profileImage = view.findViewById(R.id.profile_image);
-        username = view.findViewById(R.id.username);
-        followersCount = view.findViewById(R.id.followers_count);
-        followingCount = view.findViewById(R.id.following_count);
-        postsGrid = view.findViewById(R.id.posts_grid);
-
-        FirebaseUser user = mAuth.getCurrentUser();
-        if (user != null) {
-            loadUserProfile(user.getUid());
-        }
-
+//
+//        mAuth = FirebaseAuth.getInstance();
+//        mDatabaseReference = FirebaseDatabase.getInstance().getReference("hongdroid");
+//
+//        profileImage = view.findViewById(R.id.profile_image);
+//        username = view.findViewById(R.id.username);
+//        followersCount = view.findViewById(R.id.followers_count);
+//        followingCount = view.findViewById(R.id.following_count);
+//        postsGrid = view.findViewById(R.id.posts_grid);
+//
+//        FirebaseUser user = mAuth.getCurrentUser();
+//        if (user != null) {
+////            loadUserProfile(user.getUid());
+//        }
         return view;
     }
 

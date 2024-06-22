@@ -74,7 +74,7 @@ public class Slide1_Place_List extends Fragment {
         placeViewModel = new ViewModelProvider(requireActivity()).get(Place_ViewModel.class);
         places = new ArrayList<>();
 
-        placeAdapter = new Place_Adapter(places);
+        placeAdapter = new Place_Adapter(getContext(),places);
         Log.d("m", "onBindViewHolder: createview");
 
         recyclerView_place.setAdapter(placeAdapter);

@@ -945,7 +945,7 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
 
 
     private void openTouristPlaceDetailActivity(TouristPlace place) {
-        Toast.makeText(getContext(),"openTour~"+place.getPlaceName(),Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getContext(),"openTour~"+place.getPlaceName(),Toast.LENGTH_SHORT).show();
         TouristPlaceDataHolder.getInstance().setPlace(place);
         Intent intent = new Intent(getActivity(), TouristPlaceDetailActivity.class);
         startActivity(intent);

@@ -95,7 +95,7 @@ dependencies {
     //swipe layout
 //    implementation("com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1")
 
-
+    implementation ("org.jsoup:jsoup:1.14.3")
 
 
 

@@ -52,7 +52,7 @@ public class TouristPlaceRepository_call_parser {
 
 
         String serviceType = "areaBasedList1";
-        String numOfRows = "3";
+        String numOfRows = "10";
         String pageNo = "1";
         String mobileOS = "AND";
         String mobileApp = "AppTest";
@@ -133,7 +133,7 @@ public class TouristPlaceRepository_call_parser {
             String addrinfoYN = "Y";
             String mapinfoYN = "Y";
             String overviewYN = "Y";
-            String numOfRows = "3";
+            String numOfRows = "10";
             String pageNo = "1";
 
             /*String serviceType = "detailCommon1";
@@ -313,16 +313,38 @@ public class TouristPlaceRepository_call_parser {
     }
 
     public void loadFilteredGps(final String latitude, final String longitude, final MutableLiveData<List<Place>> filteredPlaces,final String contenttype) {
-        Log.d("latitude", latitude);
-//        String requestUrl = "https://apis.data.go.kr/B551011/KorService1/areaBasedList1?serviceKey=YOUR_API_KEY&numOfRows=10&pageNo=1&MobileOS=ETC&MobileApp=AppTest&listYN=Y&arrange=O&contentTypeId=25&areaCode=" + areaCode;
-        String requestUrl = "https://apis.data.go.kr/B551011/KorService1/locationBasedList1?serviceKey=jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D&numOfRows=15&pageNo=1&MobileOS=ETC&MobileApp=AppTest&listYN=Y&arrange=O&mapX="+longitude+"&mapY="+latitude+"&radius=20000&contentTypeId="+contenttype;
+        // 기본 URL
+        String baseUrl = "https://apis.data.go.kr/B551011/KorService1/locationBasedList1";
 
-//        https://apis.data.go.kr/B551011/KorService1/locationBasedList1?serviceKey=jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D&numOfRows=10&pageNo=1&MobileOS=ETC&MobileApp=AppTest&listYN=Y&arrange=O&mapX=128.6102797&mapY=35.8889217&radius=20000&contentTypeId=25
+// 서비스 키
+        String serviceKey = "jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D";
 
-//        https://apis.data.go.kr/B551011/KorService1/locationBasedList1?serviceKey=&numOfRows=10&pageNo=1&MobileOS=ETC&MobileApp=AppTest&listYN=Y&arrange=O&mapX=128.6102797&mapY=35.8889217&radius=20000&contentTypeId=25
-//        https://apis.data.go.kr/B551011/KorService1/locationBasedList1?serviceKey=jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D&numOfRows=10&pageNo=1&MobileOS=ETC&MobileApp=AppTest&listYN=Y&arrange=O&mapX=128.6102797&mapY=35.8889217&radius=20000&contentTypeId=25
+// 기타 파라미터
+        String numOfRows = "10";
+        String pageNo = "1";
+        String mobileOS = "ETC";
+        String mobileApp = "AppTest";
+        String listYN = "Y";
+        String arrange = "O";
+        String radius = "20000";
 
 
+// 위도와 경도
+        String mapX = String.valueOf(longitude);  // longitude 변수를 적절히 설정하세요.
+        String mapY = String.valueOf(latitude);   // latitude 변수를 적절히 설정하세요.
+
+// 최종 URL 생성
+        String requestUrl = baseUrl + "?serviceKey=" + serviceKey
+                + "&numOfRows=" + numOfRows
+                + "&pageNo=" + pageNo
+                + "&MobileOS=" + mobileOS
+                + "&MobileApp=" + mobileApp
+                + "&listYN=" + listYN
+                + "&arrange=" + arrange
+                + "&mapX=" + mapX
+                + "&mapY=" + mapY
+                + "&radius=" + radius
+                + "&contentTypeId=" + contenttype;
 
 
 

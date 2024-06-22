@@ -26,13 +26,6 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
-                <Button
-                    android:id="@+id/addfavoriteButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="즐겨찾기 추가"
-                    />
-
                 <TextView
                     android:id="@+id/placeNameTextView2"
                     android:layout_width="wrap_content"
@@ -48,6 +41,103 @@
                     android:layout_marginTop="8dp"
                     android:textSize="16sp"
                     android:textColor="@color/black" />
+
+                <!-- 아이콘 행 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="16dp">
+
+                    <!-- 왼쪽 아이콘들 -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:id="@+id/heartIcon"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/user_24"
+                            android:background="@android:color/transparent" />
+
+                        <TextView
+                            android:id="@+id/likeCountTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textSize="16sp"
+                            android:layout_marginStart="4dp"
+                            android:textColor="@color/black" />
+
+                        <ImageView
+                            android:id="@+id/viewIcon"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/user_24"
+                            android:background="@android:color/transparent"
+                            android:layout_marginStart="16dp" />
+
+                        <TextView
+                            android:id="@+id/viewCountTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1.1K"
+                            android:textSize="16sp"
+                            android:layout_marginStart="4dp"
+                            android:textColor="@color/black" />
+                    </LinearLayout>
+
+                    <!-- Spacer -->
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <!-- 오른쪽 아이콘들 -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:id="@+id/mapIcon"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_map"
+                            android:background="@android:color/transparent"
+                            android:layout_marginEnd="16dp" />
+
+                        <ImageView
+                            android:id="@+id/bookmarkIcon"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/star_24"
+                            android:background="@android:color/transparent"
+                            android:layout_marginEnd="16dp" />
+
+                        <ImageView
+                            android:id="@+id/shareIcon"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/user_24"
+                            android:background="@android:color/transparent" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- 1dp 높이의 View -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/gray"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="8dp" />
+
+
 
                 <ImageView
                     android:id="@+id/imageView"
@@ -76,7 +166,23 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
+                <!-- 상세정보 제목 텍스트뷰 -->
+                <TextView
+                    android:id="@+id/infoTitleTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="상세정보"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
+                <!-- 1dp 높이의 View -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/gray"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="8dp" />
 
                 <TextView
                     android:id="@+id/descriptionTextView"
@@ -118,12 +224,62 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
+                <!-- 전화번호 제목 텍스트뷰 -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="전화번호"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
+
+                <!-- 전화번호 텍스트뷰 -->
                 <TextView
                     android:id="@+id/phoneTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="-"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <!-- 홈페이지 제목 텍스트뷰 -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="홈페이지"
                     android:textSize="16sp"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
+
+                <!-- 홈페이지 텍스트뷰 -->
+                <TextView
+                    android:id="@+id/homepageTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:autoLink="web"
+                    android:text="-"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" /> <!-- 자동 링크 설정 -->
+
+
+                <!-- 우편번호 제목 텍스트뷰 -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="우편번호"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
+
+                <!-- 우편번호 텍스트뷰 -->
+                <TextView
+                    android:id="@+id/zipcodeTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="-"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>

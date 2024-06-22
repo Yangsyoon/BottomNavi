@@ -139,6 +139,7 @@ private void save_Text(String locationName) {
 
 
 }
+
 //
 private void loadMemoryText(String locationKey) {
     FirebaseUser user = mAuth.getCurrentUser();

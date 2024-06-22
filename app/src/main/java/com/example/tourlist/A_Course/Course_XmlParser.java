@@ -172,28 +172,28 @@ class Course_XmlParser {
                             if (place != null) {
                                 place.setSubname(parser.nextText());
                             }
-                            break;
-                        case "subdetailoverview":
-                            if (place != null) {
-                                place.setSubdetailoverview(parser.nextText());
-                            }
-                            break;
-                        case "subdetailimg":
-                            if (place != null) {
-                                place.setSubdetailimg(parser.nextText());
-                            }
-                            break;
-                        case "subdetailalt":
-                            if (place != null) {
-                                place.setSubdetailalt(parser.nextText());
-                            }
-                            break;
-
-                        case "arr1":
-                            if (place != null) {
-                                place.setAddr1(parser.nextText());
-                            }
-                            break;
+//                            break;
+//                        case "subdetailoverview":
+//                            if (place != null) {
+//                                place.setSubdetailoverview(parser.nextText());
+//                            }
+//                            break;
+//                        case "subdetailimg":
+//                            if (place != null) {
+//                                place.setSubdetailimg(parser.nextText());
+//                            }
+//                            break;
+//                        case "subdetailalt":
+//                            if (place != null) {
+//                                place.setSubdetailalt(parser.nextText());
+//                            }
+//                            break;
+//
+//                        case "arr1":
+//                            if (place != null) {
+//                                place.setAddr1(parser.nextText());
+//                            }
+//                            break;
                     }
                 } else if (eventType == XmlPullParser.END_TAG && parser.getName().equals("item")) {
                     if (place != null) {
@@ -210,7 +210,7 @@ class Course_XmlParser {
         return course;
     }
 
-    public TouristCoursePlace parseCommonInfo(InputStream inputStream, TouristCoursePlace place) {
+    public TouristCoursePlace parseDetailImg(InputStream inputStream, TouristCoursePlace place) {
         try (BufferedReader bufreader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
             StringBuilder xmlData = new StringBuilder();
             String line;
@@ -254,6 +254,107 @@ class Course_XmlParser {
         }
         return place;
     }
+
+    public TouristCoursePlace parseCommonInfo(InputStream inputStream, TouristCoursePlace place) {
+        try (BufferedReader bufreader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
+            StringBuilder xmlData = new StringBuilder();
+            String line;
+            while ((line = bufreader.readLine()) != null) {
+                xmlData.append(line);
+            }
+            Log.d("p", "mmmm");
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            XmlPullParser parser = factory.newPullParser();
+            parser.setInput(new StringReader(xmlData.toString()));
+
+            int eventType = parser.getEventType();
+            while (eventType != XmlPullParser.END_DOCUMENT) {
+                if (eventType == XmlPullParser.START_TAG) {
+                    String tagName = parser.getName();
+                    switch (tagName) {
+                        case "contentid":
+                            place.setSubcontentid(parser.nextText());
+                            break;
+                        case "contenttypeid":
+                            place.setContenttypeid(parser.nextText());
+                            break;
+                        case "title":
+                            place.setSubname(parser.nextText());
+                            Log.d("n", "888");
+                            break;
+                        case "createdtime":
+                            place.setCreatedtime(parser.nextText());
+                            break;
+                        case "modifiedtime":
+                            place.setModifiedtime(parser.nextText());
+                            break;
+                        case "tel":
+                            place.setTel(parser.nextText());
+                            break;
+                        case "telname":
+                            place.setTelname(parser.nextText());
+                            break;
+                        case "homepage":
+                            place.setHomepage(parser.nextText());
+                            break;
+                        case "booktour":
+                            place.setBooktour(parser.nextText());
+                            break;
+                        case "firstimage":
+                            place.setFirstimage(parser.nextText());
+                            break;
+                        case "firstimage2":
+                            place.setFirstimage2(parser.nextText());
+                            break;
+                        case "cpyrhtDivCd":
+                            place.setCpyrhtDivCd(parser.nextText());
+                            break;
+                        case "areacode":
+                            place.setAreacode(parser.nextText());
+                            break;
+                        case "sigungucode":
+                            place.setSigungucode(parser.nextText());
+                            break;
+                        case "cat1":
+                            place.setCat1(parser.nextText());
+                            break;
+                        case "cat2":
+                            place.setCat2(parser.nextText());
+                            break;
+                        case "cat3":
+                            place.setCat3(parser.nextText());
+                            break;
+                        case "addr1":
+                            place.setAddr1(parser.nextText());
+                            break;
+                        case "addr2":
+                            place.setAddr2(parser.nextText());
+                            break;
+                        case "zipcode":
+                            place.setZipcode(parser.nextText());
+                            break;
+                        case "mapx":
+                            place.setMapx(Double.parseDouble(parser.nextText()));
+                            break;
+                        case "mapy":
+                            place.setMapy(Double.parseDouble(parser.nextText()));
+                            break;
+                        case "mlevel":
+                            place.setMlevel(parser.nextText());
+                            break;
+                        case "overview":
+                            place.setSubdetailoverview(parser.nextText());
+                            break;
+                    }
+                }
+                eventType = parser.next();
+            }
+        } catch (XmlPullParserException | IOException e) {
+            e.printStackTrace();
+        }
+        return place;
+    }
+
 
     // Haversine 공식을 사용하여 두 지점 사이의 거리를 계산하는 메서드
     // Location 클래스를 사용하여 두 지점 사이의 거리를 계산하는 메서드

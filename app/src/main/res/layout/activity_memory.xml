@@ -23,19 +23,22 @@
         android:layout_height="200dp"
         android:layout_marginTop="16dp"
         android:background="#e0e0e0"
+        android:src="@drawable/picture_add"
         android:contentDescription="Memory image"
-        android:scaleType="centerCrop"
+        android:scaleType="centerInside"
+        android:adjustViewBounds="true"
         android:onClick="selectImage"
-        />
+    />
 
     <TextView
         android:id="@+id/memory_display"
         android:layout_width="379dp"
         android:layout_height="282dp"
         android:padding="16dp"
-        android:text="Click to add a memory"
+        android:text="\n\n\n\n           Click to add a memory"
         android:textColor="@android:color/black"
-        android:textSize="16sp" />
+        android:textSize="23sp"
+        />
 
     <EditText
         android:id="@+id/memory_text"
@@ -67,5 +70,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Save Memory" />
+        android:text="Save Memory"
+        android:background="@drawable/shape_rectangle_write_box"/>
 </LinearLayout>

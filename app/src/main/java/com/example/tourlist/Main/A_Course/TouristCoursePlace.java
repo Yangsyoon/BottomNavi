@@ -1,4 +1,4 @@
-package com.example.tourlist.A_Course;
+package com.example.tourlist.Main.A_Course;
 
 public class TouristCoursePlace {
 

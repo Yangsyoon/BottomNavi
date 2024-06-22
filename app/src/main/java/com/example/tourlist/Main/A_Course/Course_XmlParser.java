@@ -1,6 +1,5 @@
-package com.example.tourlist.A_Course;
+package com.example.tourlist.Main.A_Course;
 
-import android.location.Location;
 import android.util.Log;
 
 import com.naver.maps.map.util.FusedLocationSource;

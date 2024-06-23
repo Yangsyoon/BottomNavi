@@ -33,7 +33,7 @@
         app:fabSize="normal" />
 
     <FrameLayout
-        android:id="@+id/overlay_frame"
+        android:id="@+id/overlay_frame2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"

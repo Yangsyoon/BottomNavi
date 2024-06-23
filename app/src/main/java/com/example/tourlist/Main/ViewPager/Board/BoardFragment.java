@@ -131,7 +131,7 @@ public class BoardFragment extends Fragment {
         if (resizableFragment2Post == null) {
             resizableFragment2Post = new ResizableFragment2_Post();
             transaction.setCustomAnimations(R.anim.slide_in_up, R.anim.fade_out); // 애니메이션 추가
-            transaction.add(R.id.overlay_frame, resizableFragment2Post, "ResizableFragment2");
+            transaction.add(R.id.overlay_frame2, resizableFragment2Post, "ResizableFragment2");
         } else if (isResizableFragmentVisible) {
             transaction.setCustomAnimations(R.anim.fade_in, R.anim.slide_out_down);
             transaction.remove(resizableFragment2Post);
@@ -139,7 +139,7 @@ public class BoardFragment extends Fragment {
         } else {
             resizableFragment2Post = new ResizableFragment2_Post();
             transaction.setCustomAnimations(R.anim.slide_in_up, R.anim.fade_out);
-            transaction.add(R.id.overlay_frame, resizableFragment2Post, "ResizableFragment2");
+            transaction.add(R.id.overlay_frame2, resizableFragment2Post, "ResizableFragment2");
         }
 
         transaction.commit();

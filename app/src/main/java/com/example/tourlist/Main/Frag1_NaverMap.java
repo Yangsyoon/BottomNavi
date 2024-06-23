@@ -206,8 +206,11 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
             // Places SDK 초기화 - 사진
             if (getActivity() != null) {
                 Context context = getActivity().getApplicationContext();
-                //형준 : AIzaSyAlkrLP2vM_bjmH2vFcRjNSQNN4IZkBKD4
-                Places.initialize(context, "AIzaSyBtOchZ5iZsWKxjBayu8q2Qe3oQQQBgp9k");
+                //예림 :
+                //승혁 :
+                //승윤 :
+                //형준 : AIzaSyBTmeSMNBR9Fp8IQ3SjG16BU3m-DJdSqPI
+                Places.initialize(context, "AIzaSyBTmeSMNBR9Fp8IQ3SjG16BU3m-DJdSqPI");
                 placesClient = Places.createClient(context);
                 Log.d(TAG, "Places SDK 초기화 성공");
             } else {

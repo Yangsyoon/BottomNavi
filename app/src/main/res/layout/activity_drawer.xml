@@ -136,7 +136,7 @@
 
     <!-- 로그 아웃 버튼 -->
     <LinearLayout
-        android:id="@+id/logout_button"
+        android:id="@+id/btn_logout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"

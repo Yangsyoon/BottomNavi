@@ -31,6 +31,8 @@ public class PlaceViewModel extends ViewModel {
 
         private static final String CLIENT_ID = "50ZEXUvqEHSEMmaLJkij"; // 애플리케이션 클라이언트 아이디
         private static final String CLIENT_SECRET = "3GD0ZPu680"; // 애플리케이션 클라이언트 시크릿
+
+
         private static final String BASE_API_URL = "https://openapi.naver.com/v1/search/blog?query=";
 
         @Override

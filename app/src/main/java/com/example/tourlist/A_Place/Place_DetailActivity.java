@@ -128,10 +128,10 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
         descriptionTextView = findViewById(R.id.descriptionTextView);
         moreTextView = findViewById(R.id.moreTextView);
         likeCountTextView = findViewById(R.id.likeCountTextView); // 좋아요 수를 표시할 TextView
-        viewCountTextView = findViewById(R.id.viewCountTextView); // 조회 수를
+        /*viewCountTextView = findViewById(R.id.viewCountTextView);*/ // 조회 수를
         bookmarkIcon = findViewById(R.id.bookmarkIcon); // 즐겨찾기 아이콘
         mapIcon = findViewById(R.id.mapIcon); // 지도 아이콘
-        shareIcon = findViewById(R.id.shareIcon); // 공유 아이콘
+        /*shareIcon = findViewById(R.id.shareIcon);*/ // 공유 아이콘
 
         try {
             double mapX = getIntent().getDoubleExtra("mapx", 0.0);

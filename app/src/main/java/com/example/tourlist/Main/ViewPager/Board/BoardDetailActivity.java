@@ -56,17 +56,11 @@ public class BoardDetailActivity extends AppCompatActivity {
     private ImageView heartIcon;
     private TextView likeCountTextView;
 
-
-
-
-
     private boolean isAuthor = true;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board_detail);
-
-
 
 
 
@@ -102,20 +96,10 @@ public class BoardDetailActivity extends AppCompatActivity {
             }
         });
 
-
-        optionsIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("av","av");
-                showPopupMenu(v);
-            }
-        });
-
         loadPostDetails();
         loadComments();
-//        setOptionsIconClickListener();
-
-//        setLikeClickListener(); // 좋아요 클릭 리스너 설정
+        setLikeClickListener(); // 좋아요 클릭 리스너 설정
+        setOptionsIconClickListener();
     }
 
     private void setLikeClickListener() {
@@ -302,39 +286,43 @@ public class BoardDetailActivity extends AppCompatActivity {
     private void setOptionsIconClickListener() {
 
         Log.d("a","t");
-
+        optionsIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPopupMenu(v);
+            }
+        });
     }
 
     private void showPopupMenu(View v) {
         PopupMenu popupMenu = new PopupMenu(this, v);
         popupMenu.getMenuInflater().inflate(R.menu.popup_menu, popupMenu.getMenu());
+
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                int id = item.getItemId();
-                if (id == R.id.menu_edit) {
+                int itemId = item.getItemId();
+
+                if (itemId == R.id.menu_edit) {
                     if (isAuthor) {
                         openPostFragmentForEditing();
                     } else {
                         Toast.makeText(BoardDetailActivity.this, "작성자만 수정할 수 있습니다.", Toast.LENGTH_SHORT).show();
                     }
                     return true;
-                } else if (id == R.id.menu_delete) {
+                } else if (itemId == R.id.menu_delete) {
                     if (isAuthor) {
                         deletePost();
                     } else {
                         Toast.makeText(BoardDetailActivity.this, "작성자만 삭제할 수 있습니다.", Toast.LENGTH_SHORT).show();
                     }
                     return true;
+                } else {
+                    return false;
                 }
-                return false;
             }
         });
-
-        // Show the popup menu
-        popupMenu.show();
     }
-
 
     private void openPostFragmentForEditing() {
         ResizableFragment2_Post resizableFragment2Post = new ResizableFragment2_Post();
@@ -353,14 +341,12 @@ public class BoardDetailActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    Toast.makeText(BoardDetailActivity.this, "게시물이 삭제되었습니다.", Toast.LENGTH_SHORT).show();
-                    // 삭제 후 UI 업데이트
-                    finish(); // 현재 액티비티를 종료하고 이전 액티비티로 돌아갑니다.
+                    Toast.makeText(BoardDetailActivity.this, "게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show();
+                    finish(); // Close the activity after deletion
                 } else {
-                    Toast.makeText(BoardDetailActivity.this, "게시물 삭제에 실패했습니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(BoardDetailActivity.this, "게시글 삭제에 실패했습니다.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
-
 }

@@ -17,10 +17,12 @@
         android:layout_gravity="top|start"
         android:layout_marginTop="50dp"
         android:layout_marginStart="40dp"
-        android:text="한국 관광지"
+        android:text="요리 조리 한국 관광지 "
         android:textSize="24sp"
         android:textColor="@android:color/black"
         android:textStyle="bold"
-        android:background="@android:color/transparent" />
+        android:background="@android:color/transparent"
+        android:fontFamily="@font/ongullip"
+        />
 
 </FrameLayout>

@@ -437,7 +437,7 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
                         bookmarkIcon.setImageResource(R.drawable.star_24_yellow);
                     } else {
                         // 즐겨찾기에 없는 상태이면 빈 별 이미지로 변경
-                        bookmarkIcon.setImageResource(R.drawable.star_24);
+                        bookmarkIcon.setImageResource(R.drawable.star_empty);
                     }
                 }
 
@@ -447,7 +447,7 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
                 }
             });
         } else {
-            bookmarkIcon.setImageResource(R.drawable.star_24); // 로그인되지 않은 경우 빈 별 이미지로 설정
+            bookmarkIcon.setImageResource(R.drawable.star_empty); // 로그인되지 않은 경우 빈 별 이미지로 설정
         }
     }
 
@@ -491,7 +491,7 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(Place_DetailActivity.this, "즐겨찾기에서 삭제되었습니다.", Toast.LENGTH_SHORT).show();
-                                    bookmarkIcon.setImageResource(R.drawable.star_24); // 빈 별 이미지로 변경
+                                    bookmarkIcon.setImageResource(R.drawable.star_empty); // 빈 별 이미지로 변경
                                 } else {
                                     Toast.makeText(Place_DetailActivity.this, "즐겨찾기 삭제에 실패했습니다.", Toast.LENGTH_SHORT).show();
                                 }
@@ -547,31 +547,65 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
         });
     }
     private void setLike_ClickListener() {
-
-
         heartIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                String placeTitle = place.getTitle();  // 장소명을 얻기 위한 메서드
-                Log.d("PlaceDetailActivity","qqq"+placeTitle);
-                likeRef = database.getReference("Places").child(placeTitle).child("Like").child("count");
-//                        .child(placeTitle)
-//                        .child("Like")
-//                        .child("count");
-//                .getReference("Places").child(placeId).child("comments");
-
                 if (user != null) {
-                    likeRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    String userId = user.getUid();
+                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                    String placeTitle = place.getTitle();  // 장소명을 얻기 위한 메서드
+
+                    DatabaseReference likeRef = database.getReference("Places")
+                            .child(placeTitle)
+                            .child("Like");
+
+                    DatabaseReference userLikeRef = likeRef.child("users").child(userId);
+
+                    userLikeRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            Long currentCount = dataSnapshot.getValue(Long.class);
-                            if (currentCount == null) {
-                                currentCount = 0L;
+                            boolean isLiked = dataSnapshot.exists();
+
+                            if (isLiked) {
+                                // 이미 좋아요를 누른 경우, 좋아요 취소
+                                likeRef.child("count").addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot countSnapshot) {
+                                        Long currentCount = countSnapshot.getValue(Long.class);
+                                        if (currentCount != null && currentCount > 0) {
+                                            likeRef.child("count").setValue(currentCount - 1);
+                                        }
+                                        userLikeRef.removeValue();  // 사용자 좋아요 상태 제거
+                                        heartIcon.setImageResource(R.drawable.heart_empty);  // 하트 아이콘을 빈 하트로 변경
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                        // 실패 처리
+                                    }
+                                });
+                            } else {
+                                // 좋아요를 누르지 않은 경우, 좋아요 추가
+                                likeRef.child("count").addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot countSnapshot) {
+                                        Long currentCount = countSnapshot.getValue(Long.class);
+                                        if (currentCount == null) {
+                                            currentCount = 0L;
+                                        }
+                                        likeRef.child("count").setValue(currentCount + 1);
+                                        userLikeRef.setValue(true);  // 사용자 좋아요 상태 추가
+                                        heartIcon.setImageResource(R.drawable.heart_fill);  // 하트 아이콘을 채워진 하트로 변경
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                        // 실패 처리
+                                    }
+                                });
                             }
-                            likeRef.setValue(currentCount + 1);
                         }
 
                         @Override
@@ -585,6 +619,7 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
             }
         });
     }
+
 
 
     private void setDescriptionTextViewRunnable() {

@@ -10,7 +10,7 @@
     <item
         android:id="@+id/action_memory"
         android:enabled="true"
-        android:icon="@drawable/star_24"
+        android:icon="@drawable/star_empty"
         android:menuCategory="secondary"
         android:title="추억"/>
 

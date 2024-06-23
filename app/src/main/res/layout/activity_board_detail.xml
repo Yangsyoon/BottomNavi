@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="0dp">
 
         <!-- Header Section with Title and Options Icon -->
         <LinearLayout
@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:layout_marginBottom="16dp">
+            android:layout_margin="16dp">
 
             <TextView
                 android:id="@+id/titleTextView"
@@ -30,22 +30,26 @@
                 android:id="@+id/optionsIcon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:layout_marginStart="16dp"
                 android:src="@drawable/menu_dots_vertical_24"
-            android:contentDescription="Options" />
+                android:contentDescription="Options" />
         </LinearLayout>
 
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:scaleType="centerCrop"
-            android:layout_marginBottom="16dp" />
+            android:layout_height="400dp"
+            android:layout_margin="16dp"
+            android:background="@drawable/image_view_border"
+            android:clipToOutline="true"
+            android:elevation="16dp"
+            android:scaleType="centerCrop" />
 
         <TextView
             android:id="@+id/contentTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_margin="16dp"
             android:textSize="16sp" />
 
         <!-- 아이콘 행 -->
@@ -54,7 +58,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:layout_marginBottom="16dp">
+            android:layout_margin="16dp">
 
             <!-- 왼쪽 아이콘들 -->
             <LinearLayout
@@ -67,6 +71,7 @@
                     android:id="@+id/heartIcon"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
+                    android:layout_marginEnd="4dp"
                     android:src="@drawable/heart_empty"
                     android:background="@android:color/transparent" />
 
@@ -76,7 +81,7 @@
                     android:layout_height="wrap_content"
                     android:text="0"
                     android:textSize="16sp"
-                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="16dp"
                     android:textColor="@color/black" />
 
                 <ImageView
@@ -85,13 +90,12 @@
                     android:layout_height="24dp"
                     android:src="@drawable/user_24"
                     android:background="@android:color/transparent"
-                    android:layout_marginStart="16dp" />
+                    android:layout_marginEnd="4dp" />
 
                 <TextView
                     android:id="@+id/commentcnt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
                     android:text="0"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
@@ -126,8 +130,7 @@
             android:text="댓글"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:layout_marginBottom="8dp" />
-
+            android:layout_margin="16dp" />
 
         <!-- 댓글 입력 상자 및 등록 버튼 -->
         <LinearLayout
@@ -135,7 +138,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:layout_marginBottom="16dp">
+            android:layout_margin="16dp">
 
             <EditText
                 android:id="@+id/commentEditText"
@@ -144,22 +147,32 @@
                 android:layout_weight="1"
                 android:hint="댓글을 입력하세요"
                 android:padding="8dp"
+                android:layout_marginTop="8dp"
 
                 android:layout_marginEnd="8dp"
-                />
+                android:layout_marginBottom="8dp"/>
 
             <Button
                 android:id="@+id/postCommentButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/image_view_border"
+                android:elevation="50dp"
+                android:textColor="@color/white"
+                android:backgroundTint="#C5CCD2"
+                android:layout_marginBottom="8dp"
+android:layout_marginTop="8dp"
                 android:text="등록" />
-
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/commentRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp" />
 
     </LinearLayout>
+
+
+
 </ScrollView>

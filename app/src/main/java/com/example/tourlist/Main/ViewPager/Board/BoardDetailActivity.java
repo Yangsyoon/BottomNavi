@@ -2,16 +2,19 @@ package com.example.tourlist.Main.ViewPager.Board;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -52,10 +55,14 @@ public class BoardDetailActivity extends AppCompatActivity {
     private DatabaseReference commentsRef;
     private ImageView heartIcon;
     private TextView likeCountTextView;
+
+    private boolean isAuthor = true;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board_detail);
+
+
 
         titleTextView = findViewById(R.id.titleTextView);
         contentTextView = findViewById(R.id.contentTextView);
@@ -277,11 +284,68 @@ public class BoardDetailActivity extends AppCompatActivity {
     }
 
     private void setOptionsIconClickListener() {
+
+        Log.d("a","t");
         optionsIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 여기에 옵션을 표시하는 코드 추가
-                // 예를 들어, PopupMenu를 사용할 수 있습니다.
+                showPopupMenu(v);
+            }
+        });
+    }
+
+    private void showPopupMenu(View v) {
+        PopupMenu popupMenu = new PopupMenu(this, v);
+        popupMenu.getMenuInflater().inflate(R.menu.popup_menu, popupMenu.getMenu());
+
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int itemId = item.getItemId();
+
+                if (itemId == R.id.menu_edit) {
+                    if (isAuthor) {
+                        openPostFragmentForEditing();
+                    } else {
+                        Toast.makeText(BoardDetailActivity.this, "작성자만 수정할 수 있습니다.", Toast.LENGTH_SHORT).show();
+                    }
+                    return true;
+                } else if (itemId == R.id.menu_delete) {
+                    if (isAuthor) {
+                        deletePost();
+                    } else {
+                        Toast.makeText(BoardDetailActivity.this, "작성자만 삭제할 수 있습니다.", Toast.LENGTH_SHORT).show();
+                    }
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+    }
+
+    private void openPostFragmentForEditing() {
+        ResizableFragment2_Post resizableFragment2Post = new ResizableFragment2_Post();
+        Bundle args = new Bundle();
+        args.putString("postTitle", titleTextView.getText().toString());
+        resizableFragment2Post.setArguments(args);
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.overlay_frame2, resizableFragment2Post);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    private void deletePost() {
+        dbReference.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Toast.makeText(BoardDetailActivity.this, "게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show();
+                    finish(); // Close the activity after deletion
+                } else {
+                    Toast.makeText(BoardDetailActivity.this, "게시글 삭제에 실패했습니다.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

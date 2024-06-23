@@ -36,7 +36,7 @@
                     android:layout_margin="16dp"
                     android:contentDescription="Add Photo"
                     android:scaleType="center"
-                    android:src="@drawable/photo_24"
+                    android:src="@drawable/add_image_24"
                     android:elevation="16dp"
                     android:background="@drawable/image_view_border" />
 
@@ -67,6 +67,10 @@
                         android:layout_width="0dp"
                         android:layout_height="75dp"
                         android:layout_weight="1"
+                        android:backgroundTint="#C5CCD2"
+                        android:background="@drawable/image_view_border"
+                        android:elevation="50dp"
+                        android:textColor="@color/white"
                         android:text="등록" />
 
                 </LinearLayout>

@@ -27,6 +27,7 @@ public class CourseViewModel extends AndroidViewModel {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(application);
     }
 
+    // 초기 슬라이드를 구성하기 위해 첫 파싱 요청.
     public LiveData<List<Course>> getTouristCourses() {
         if (touristCourses == null) {
             touristCourses = new MutableLiveData<>();

@@ -219,27 +219,39 @@
             android:orientation="horizontal">
 
 
-
-
-            <Button
+            <ImageButton
                 android:id="@+id/pagedown_Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:text="이전" />
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded_button"
+                android:backgroundTint="@color/white"
+                android:contentDescription="Page down"
+                android:elevation="4dp"
+                android:padding="0dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/left" />
 
-            <Button
+
+            <ImageButton
                 android:id="@+id/pageup_Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:text="다음" />
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded_button"
+                android:backgroundTint="@color/white"
+                android:contentDescription="Page Up"
+                android:elevation="4dp"
+                android:padding="0dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/right" />
 
             <Button
                 android:id="@+id/my_location2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
+                android:background="@drawable/rounded_button2_frag3"
                 android:text="거리순" />
 
             <Button
@@ -247,6 +259,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
+                android:background="@drawable/rounded_button2_frag3"
                 android:text="이름순" />
 
             <Button
@@ -254,6 +267,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
+                android:background="@drawable/rounded_button2_frag3"
                 android:text="최신순" />
 
 
@@ -262,6 +276,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
+                android:background="@drawable/rounded_button2_frag3"
                 android:text="조회" />
 
 

@@ -26,6 +26,7 @@ public class Frag3_New extends Fragment {
         btnCalendar = view.findViewById(R.id.btnCalendar);
         viewPager = view.findViewById(R.id.viewPager);
 
+
         // ViewPager2 어댑터 설정
         viewPager.setAdapter(new ViewPagerAdapter(this));
 

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context=".A_Place.Place_DetailActivity">
+    tools:context=".Tourist_Search_Activity.TouristPlaceDetailActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -129,7 +129,7 @@
                             android:layout_marginEnd="16dp" />
 
                         <ImageView
-                            android:id="@+id/shareIcon"
+                            android:id="@+id/shareicon"
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/share_24"
@@ -364,5 +364,10 @@
         </androidx.cardview.widget.CardView>
 
     </LinearLayout>
+
+
+
+
+
 
 </ScrollView>

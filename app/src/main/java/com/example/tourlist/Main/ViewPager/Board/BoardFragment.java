@@ -128,23 +128,22 @@ public class BoardFragment extends Fragment {
 
     private void toggleResizableFragment() {
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        if (resizableFragment2Post == null) {
-            resizableFragment2Post = new ResizableFragment2_Post();
-            transaction.setCustomAnimations(R.anim.slide_in_up, R.anim.fade_out); // 애니메이션 추가
-            transaction.add(R.id.overlay_frame2, resizableFragment2Post, "ResizableFragment2");
-        } else if (isResizableFragmentVisible) {
+
+        // 애니메이션 설정
+        if (isResizableFragmentVisible) {
             transaction.setCustomAnimations(R.anim.fade_in, R.anim.slide_out_down);
-            transaction.remove(resizableFragment2Post);
-            resizableFragment2Post = null; // 프래그먼트를 null로 설정하여 다시 생성하도록 함
         } else {
-            resizableFragment2Post = new ResizableFragment2_Post();
             transaction.setCustomAnimations(R.anim.slide_in_up, R.anim.fade_out);
-            transaction.add(R.id.overlay_frame2, resizableFragment2Post, "ResizableFragment2");
         }
+
+        // 기존 프래그먼트를 새 프래그먼트로 교체
+        resizableFragment2Post = new ResizableFragment2_Post();
+        transaction.replace(R.id.overlay_frame2, resizableFragment2Post, "ResizableFragment2");
 
         transaction.commit();
         isResizableFragmentVisible = !isResizableFragmentVisible;
     }
+
 
 
 }

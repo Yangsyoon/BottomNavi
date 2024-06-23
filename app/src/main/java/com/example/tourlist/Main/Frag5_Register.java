@@ -212,7 +212,8 @@ public class Frag5_Register extends Fragment {
                 String birthdate = mEtBirthdate.getText().toString().trim();
                 boolean genderSelected = mRgGender.getCheckedRadioButtonId() != -1;
 
-                boolean allFieldsFilled = !email.isEmpty() && !pwd.isEmpty() && !nickname.isEmpty() && !birthdate.isEmpty() && genderSelected;
+                boolean allFieldsFilled = !email.isEmpty() && !pwd.isEmpty() && !nickname.isEmpty()&& !birthdate.isEmpty();
+//                 && genderSelected;
 
                 mBtnRegister.setEnabled(allFieldsFilled);
 

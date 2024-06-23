@@ -37,7 +37,7 @@
         android:layout_toEndOf="@id/profile_image"
         android:layout_marginStart="16dp"
         android:layout_alignTop="@id/profile_image"
-        android:text="임현빈"
+        android:text="양승윤"
         android:textSize="18sp"
         android:textStyle="bold" />
 

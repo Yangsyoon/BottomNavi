@@ -143,7 +143,7 @@ public class Frag4_Gpt extends Fragment {
                 .url("\n" +
                         "https://api.openai.com/v1/chat/completions")
 //                .header("Authorization","Bearer 1")
-//                .header("Authorization","Bearer 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")
+                .header("Authorization","Bearer sk-proj-oUJndplj4D5I7d9RVY13T3BlbkFJBV7DdQ9jEgcL9xXegUAH")
                 .post(body)
                 .build();
 

@@ -24,38 +24,37 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
-
-                <Button
-                    android:id="@+id/addfavoriteButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="즐겨찾기 추가"
-                    />
+                android:padding="16dp"
+                android:layout_marginTop="2dp"
+                >
 
                 <TextView
                     android:id="@+id/placeNameTextView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="장소명"
+                    android:textColor="@color/black"
                     android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black" />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/addressTextView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:textSize="16sp"
-                    android:textColor="@color/black" />
+                    android:text="주소"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
 
                 <!-- 아이콘 행 -->
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="30dp"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:layout_marginBottom="16dp">
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginTop="6dp"
+                    >
 
                     <!-- 왼쪽 아이콘들 -->
                     <LinearLayout
@@ -68,8 +67,9 @@
                             android:id="@+id/heartIcon"
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:src="@drawable/user_24"
-                            android:background="@android:color/transparent" />
+                            android:layout_marginTop="1dp"
+                            android:background="@android:color/transparent"
+                            android:src="@drawable/heart_empty" />
 
                         <TextView
                             android:id="@+id/likeCountTextView"
@@ -81,15 +81,16 @@
                             android:textColor="@color/black" />
 
                         <ImageView
-                            android:id="@+id/viewIcon"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/user_24"
+                            android:id="@+id/viewcnt"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:src="@drawable/eye_24"
                             android:background="@android:color/transparent"
-                            android:layout_marginStart="16dp" />
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="1dp"/>
 
                         <TextView
-                            android:id="@+id/viewCountTextView"
+                            android:id="@+id/commentcnt"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="1.1K"
@@ -115,7 +116,7 @@
                             android:id="@+id/mapIcon"
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:src="@drawable/ic_map"
+                            android:src="@drawable/map_marker_24"
                             android:background="@android:color/transparent"
                             android:layout_marginEnd="16dp" />
 
@@ -123,15 +124,15 @@
                             android:id="@+id/bookmarkIcon"
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:src="@drawable/star_24"
+                            android:src="@drawable/star_empty"
                             android:background="@android:color/transparent"
                             android:layout_marginEnd="16dp" />
 
                         <ImageView
-                            android:id="@+id/shareIcon"
+                            android:id="@+id/shareicon"
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:src="@drawable/user_24"
+                            android:src="@drawable/share_24"
                             android:background="@android:color/transparent" />
 
 
@@ -142,8 +143,8 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/gray"
-                    android:layout_marginTop="4dp"
+                    android:background="#FFCFCFCF"
+                    android:layout_marginTop="2dp"
                     android:layout_marginBottom="8dp" />
 
 

@@ -1,4 +1,4 @@
-package com.example.tourlist.Main;
+package com.example.tourlist.Main.ViewPager;
 
 import android.Manifest;
 import android.app.AlertDialog;

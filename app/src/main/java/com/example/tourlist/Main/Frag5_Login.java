@@ -3,6 +3,7 @@ package com.example.tourlist.Main;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.tourlist.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -86,6 +88,7 @@ public class Frag5_Login extends Fragment {
                 String email = mEtEmail.getText().toString();
                 String pwd = mEtPwd.getText().toString();
 
+                Log.d("Login", "email: " + email + ", pwd: " + pwd);
                 mAuth.signInWithEmailAndPassword(email, pwd).addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -97,11 +100,30 @@ public class Frag5_Login extends Fragment {
                                 // 이메일 인증 완료
                                 Toast.makeText(getContext(), "로그인 성공", Toast.LENGTH_SHORT).show();
 
-                                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                                Frag1_NaverMap frag1_NaverMap = new Frag1_NaverMap();
-                                transaction.replace(R.id.main_frame, frag1_NaverMap);
-                                transaction.addToBackStack(null);
+                                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                                FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+                                Frag1_NaverMap frag1_NaverMap = (Frag1_NaverMap) fragmentManager.findFragmentByTag("NaverMap");
+                                if (frag1_NaverMap != null) {
+                                    // 기존에 생성된 프래그먼트가 있으면 보여줍니다.
+                                    transaction.show(frag1_NaverMap);
+                                } else {
+                                    // 기존에 생성된 프래그먼트가 없으면 추가합니다.
+                                    frag1_NaverMap = new Frag1_NaverMap();
+                                    transaction.add(R.id.main_frame, frag1_NaverMap, "NaverMap");
+                                }
+
+                                // 로그인 프래그먼트를 숨깁니다.
+                                Fragment loginFragment = fragmentManager.findFragmentByTag("Login");
+                                if (loginFragment != null) {
+                                    transaction.hide(loginFragment);
+                                }
+
                                 transaction.commit();
+
+                                // BottomNavigationView 탭 선택 상태 업데이트
+                                BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavi);
+                                bottomNavigationView.setSelectedItemId(R.id.action_map);
                             } else {
                                 // 이메일 인증 미완료
                                 Toast.makeText(getContext(), "Please verify your email address", Toast.LENGTH_SHORT).show();
@@ -112,9 +134,11 @@ public class Frag5_Login extends Fragment {
                             Toast.makeText(getContext(), "로그인 실패", Toast.LENGTH_SHORT).show();
                         }
                     }
+
                 });
             }
         });
+
 
         TextView btnRegister = view.findViewById(R.id.btn_register);
         btnRegister.setOnClickListener(new View.OnClickListener() {

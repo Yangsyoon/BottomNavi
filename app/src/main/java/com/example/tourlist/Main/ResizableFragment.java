@@ -15,7 +15,9 @@ import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import com.example.tourlist.Main.ViewPager.Slide1_Place_List;
 import com.example.tourlist.R;
+import com.example.tourlist.XMLParser;
 
 public class ResizableFragment extends Fragment {
 
@@ -151,15 +153,15 @@ public class ResizableFragment extends Fragment {
                 return new Slide1_Course_List();
 
             }
-             else if (fragmentClassName.equals(Slide1_Place_List.class.getName())) {
+            else if (fragmentClassName.equals(Slide1_Place_List.class.getName())) {
                 Log.d(TAG, "2");
 
                 return new Slide1_Place_List();
             }
-            else if (fragmentClassName.equals(Old_Frag3_Tourist_Search.class.getName())) {
+            else if (fragmentClassName.equals(XMLParser.Old_Frag3_Tourist_Search.class.getName())) {
                 Log.d(TAG, "2");
 
-                return new Old_Frag3_Tourist_Search();
+                return new XMLParser.Old_Frag3_Tourist_Search();
             } else if (fragmentClassName.equals(Frag4_Gpt.class.getName())) {
                 Log.d(TAG, "3");
 
@@ -184,6 +186,11 @@ public class ResizableFragment extends Fragment {
 
         transaction.commit();
     }
+
+
+
+
+/*
 
     private void changeChildFragment() {
 
@@ -214,5 +221,6 @@ public class ResizableFragment extends Fragment {
             Log.d("k","5");
         }
     }
+*/
 
 }

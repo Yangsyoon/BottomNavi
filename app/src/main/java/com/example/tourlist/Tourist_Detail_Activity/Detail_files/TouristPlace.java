@@ -58,4 +58,8 @@ public class TouristPlace {
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
     }
+
+    public String toString() {
+        return placeName;
+    }
 }

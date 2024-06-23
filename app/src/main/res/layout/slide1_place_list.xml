@@ -43,8 +43,9 @@
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:scrollbars="none">
+        android:padding="0dp"
+        android:scrollbars="none"
+        android:layout_marginBottom="5dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -58,9 +59,13 @@
                 android:id="@+id/filter_Button"
                 android:layout_width="70dp"
                 android:layout_height="40dp"
-                android:layout_margin="10dp"
-                android:background="@drawable/rounded_button2_frag3"
 
+                android:background="@drawable/rounded_button2_frag3"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="2dp"
                 android:elevation="4dp"
                 android:text="필터" />
 
@@ -68,15 +73,21 @@
                 android:id="@+id/place_Button"
                 android:layout_width="70dp"
                 android:layout_height="40dp"
-                android:layout_margin="10dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
                 android:background="@drawable/rounded_button2_frag3"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
                 android:text="관광지" />
 
             <Button
                 android:id="@+id/cafe_Button"
                 android:layout_width="70dp"
                 android:layout_height="40dp"
-                android:layout_margin="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
                 android:background="@drawable/rounded_button2_frag3"
                 android:text="카페" />
 
@@ -84,7 +95,10 @@
                 android:id="@+id/food_Button"
                 android:layout_width="70dp"
                 android:layout_height="40dp"
-                android:layout_margin="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
                 android:background="@drawable/rounded_button2_frag3"
                 android:text="음식점" />
 
@@ -94,14 +108,20 @@
                 android:id="@+id/language_Button"
                 android:layout_width="70dp"
                 android:layout_height="40dp"
-                android:layout_margin="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
                 android:background="@drawable/rounded_button2_frag3"
                 android:text="언어" />
             <Button
                 android:id="@+id/contenttype_Button"
                 android:layout_width="70dp"
                 android:layout_height="40dp"
-                android:layout_margin="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
                 android:background="@drawable/rounded_button2_frag3"
 
                 android:text="관광타입" />
@@ -109,7 +129,10 @@
                 android:id="@+id/service_Button"
                 android:layout_width="70dp"
                 android:layout_height="40dp"
-                android:layout_margin="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
                 android:background="@drawable/rounded_button2_frag3"
                 android:text="서비스분류" />
 
@@ -117,7 +140,10 @@
                 android:id="@+id/area_Button"
                 android:layout_width="70dp"
                 android:layout_height="40dp"
-                android:layout_margin="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
                 android:background="@drawable/rounded_button2_frag3"
                 android:text="지역" />
 
@@ -218,7 +244,7 @@
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
+        android:padding="0dp"
         android:scrollbars="none">
 
         <LinearLayout
@@ -231,7 +257,10 @@
                 android:id="@+id/pagedown_Button"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_margin="10dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginBottom="2dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
                 android:background="@drawable/rounded_button"
                 android:backgroundTint="@color/white"
                 android:contentDescription="Page down"
@@ -245,7 +274,9 @@
                 android:id="@+id/pageup_Button"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_margin="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="2dp"
                 android:background="@drawable/rounded_button"
                 android:backgroundTint="@color/white"
                 android:contentDescription="Page Up"
@@ -258,7 +289,9 @@
                 android:id="@+id/my_location2"
                 android:layout_width="70dp"
                 android:layout_height="40dp"
-                android:layout_margin="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="2dp"
                 android:background="@drawable/rounded_button2_frag3"
                 android:text="거리순" />
 
@@ -267,7 +300,9 @@
                 android:id="@+id/sort_title_Button"
                 android:layout_width="70dp"
                 android:layout_height="40dp"
-                android:layout_margin="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="2dp"
                 android:background="@drawable/rounded_button2_frag3"
                 android:text="이름순" />
 
@@ -275,7 +310,9 @@
                 android:id="@+id/sort_early_Button"
                 android:layout_width="70dp"
                 android:layout_height="40dp"
-                android:layout_margin="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="2dp"
                 android:background="@drawable/rounded_button2_frag3"
                 android:text="최신순" />
 
@@ -284,88 +321,18 @@
                 android:id="@+id/search_Button"
                 android:layout_width="70dp"
                 android:layout_height="40dp"
-                android:layout_margin="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="2dp"
                 android:background="@drawable/rounded_button2_frag3"
                 android:text="조회" />
-
-
-
-            <!--            <Button-->
-            <!--                android:id="@+id/busan_Button"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_margin="4dp"-->
-            <!--                android:text="부산광역시" />-->
-
-            <!--            <Button-->
-            <!--                android:id="@+id/incheon_Button"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_margin="4dp"-->
-            <!--                android:text="인천광역시" />-->
-
-            <!--            <Button-->
-            <!--                android:id="@+id/ulsan_Button"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_margin="4dp"-->
-            <!--                android:text="울산광역시" />-->
-
-            <!--            <Button-->
-            <!--                android:id="@+id/daejeon_Button"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_margin="4dp"-->
-            <!--                android:text="대전광역시" />-->
-
-            <!--            <Button-->
-            <!--                android:id="@+id/gyeonggi_Button"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_margin="4dp"-->
-            <!--                android:text="경기도" />-->
-
-            <!--            <Button-->
-            <!--                android:id="@+id/jeon_Button"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_margin="4dp"-->
-            <!--                android:text="전라" />-->
-
-            <!--            <Button-->
-            <!--                android:id="@+id/chung_Button"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_margin="4dp"-->
-            <!--                android:text="충청" />-->
-
-            <!--            <Button-->
-            <!--                android:id="@+id/gyeong_Button"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_margin="4dp"-->
-            <!--                android:text="경상" />-->
-
-            <!--            <Button-->
-            <!--                android:id="@+id/gangwon_Button"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_margin="4dp"-->
-            <!--                android:text="강원" />-->
-
-            <!--            <Button-->
-            <!--                android:id="@+id/jeju_Button"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_margin="4dp"-->
-            <!--                android:text="제주" />-->
 
         </LinearLayout>
     </HorizontalScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="550dp"
         android:divider="?android:attr/dividerHorizontal"
         android:orientation="vertical"
         android:padding="8dp"

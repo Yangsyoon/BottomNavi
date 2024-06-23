@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class Slide1_Place_List extends Fragment {
+public class Frag3_Place_List extends Fragment {
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
@@ -89,8 +89,8 @@ public class Slide1_Place_List extends Fragment {
             public void onChanged(List<Place> places) {
                 Log.d("P", "onBindViewHolder: createview");
                 getCurrentLocation();
-                Slide1_Place_List.this.places.clear();
-                Slide1_Place_List.this.places.addAll(places);
+                Frag3_Place_List.this.places.clear();
+                Frag3_Place_List.this.places.addAll(places);
                 placeAdapter.notifyDataSetChanged();
                 Log.d("urlf", "onChanged: " + places.get(0).getContenttypeid());
             }

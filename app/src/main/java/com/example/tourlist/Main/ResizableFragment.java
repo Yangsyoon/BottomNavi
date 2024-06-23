@@ -27,7 +27,7 @@ public class ResizableFragment extends Fragment {
 
     private Slide1_Course_List slide1_course_list;
 
-    private Slide1_Place_List slide1_place_list;
+    private Frag3_Place_List frag3_place_list;
     private Fragment currentFragment;
     private int currentFragidx=0;
 
@@ -44,7 +44,7 @@ public class ResizableFragment extends Fragment {
 
         //코스, 장소 슬라이드 객체 생성
         slide1_course_list =new Slide1_Course_List();
-        slide1_place_list=new Slide1_Place_List();
+        frag3_place_list =new Frag3_Place_List();
 
 //        // Frag2_FavoriteList를 추가합니다.
 //        Frag2_FavoriteList frag2_favoriteList = new Frag2_FavoriteList();
@@ -152,10 +152,10 @@ public class ResizableFragment extends Fragment {
                 return new Slide1_Course_List();
 
             }
-            else if (fragmentClassName.equals(Slide1_Place_List.class.getName())) {
+            else if (fragmentClassName.equals(Frag3_Place_List.class.getName())) {
                 Log.d(TAG, "2");
 
-                return new Slide1_Place_List();
+                return new Frag3_Place_List();
             }
             else if (fragmentClassName.equals(XMLParser.Old_Frag3_Tourist_Search.class.getName())) {
                 Log.d(TAG, "2");

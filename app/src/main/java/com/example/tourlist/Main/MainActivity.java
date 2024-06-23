@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private Frag4_Gpt frag4_Gpt;
     private XMLParser.Old_Frag3_Tourist_Search frag3_TouristSearch;
     private Slide1_Course_List slide1_course_list;
-    private Slide1_Place_List slide1_place_list;
+    private Frag3_Place_List frag3_place_list;
     private Slide2_FavoriteList slide2_favoriteList;
     private ResizableFragment resizableFragment;
 
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         frag3_TouristSearch = new XMLParser.Old_Frag3_Tourist_Search();
         resizableFragment = new ResizableFragment();
         slide1_course_list = new Slide1_Course_List();
-        slide1_place_list = new Slide1_Place_List();
+        frag3_place_list = new Frag3_Place_List();
         slide2_favoriteList = new Slide2_FavoriteList();
 
         fm = getSupportFragmentManager();

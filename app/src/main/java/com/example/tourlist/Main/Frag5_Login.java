@@ -139,6 +139,7 @@ public class Frag5_Login extends Fragment {
             }
         });
 
+
         TextView btnRegister = view.findViewById(R.id.btn_register);
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override

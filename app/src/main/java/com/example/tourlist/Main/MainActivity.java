@@ -129,11 +129,11 @@ public class MainActivity extends AppCompatActivity {
                 if (nextTabId == R.id.action_map) {
                     Log.d("u", "a");
                     setFrag(frag1_NaverMap, "NaverMap");
-                    addNewResizableFragment(Slide1_Course_List.class,"Slide1_Course_List");
+                    addNewResizableFragment(Slide1_Course_List.class);
                     openbutton.setVisibility(View.VISIBLE);
                 } else if (nextTabId == R.id.action_memory) {
                     setFrag(frag1_NaverMap, "NaverMap");
-                    addNewResizableFragment(Slide2_FavoriteList.class, "Slide2_FavoriteList");
+                    addNewResizableFragment(Slide2_FavoriteList.class);
                     openbutton.setVisibility(View.VISIBLE);
                 } else if (nextTabId == R.id.action_tourist_search) {
                     setFrag(new Frag3_New(), "TouristSearch");
@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setInitialFragment() {
         setFrag(frag1_NaverMap, "NaverMap");
-        addNewResizableFragment(Slide1_Course_List.class,"Slide1_Course_List");
+        addNewResizableFragment(Slide1_Course_List.class);
     }
 
     private void setupDrawer() {
@@ -204,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setFrag(frag5_login, "Login");
+                setFrag(frag5_login, "Frag5_Login");
                 drawerLayout.closeDrawer(drawerView);
             }
         });
@@ -217,47 +217,16 @@ public class MainActivity extends AppCompatActivity {
                 if (currentUser != null) {
                     mAuth.signOut();
 
-                    // 프래그먼트 매니저를 통해 지정된 프래그먼트 제거
-                    FragmentManager fragmentManager = getSupportFragmentManager();
-                    FragmentTransaction transaction = fragmentManager.beginTransaction();
 
-                    // 지정된 프래그먼트 클래스
-                    String[] fragmentTags = {"Slide2_FavoriteList", "Frag_Profile"};
+                    addNewResizableFragment(Slide2_FavoriteList.class);
 
-                    for (String tag : fragmentTags) {
-                        Fragment fragment = fragmentManager.findFragmentByTag(tag);
-                        if(tag.equals("Slide2_FavoriteList")&&fragment!=null){
-                            Log.d("u","l");
-
-
-                            Bundle bundle = new Bundle();
-                            bundle.putString("child_fragment_class", tag);
-                            ResizableFragment newResizableFragment = new ResizableFragment();
-                            newResizableFragment.setArguments(bundle);
-                                Log.d("u","p");
-                            FragmentTransaction fragmentTransaction=getSupportFragmentManager().beginTransaction();
-                            fragmentTransaction.replace(R.id.overlay_frame, newResizableFragment, tag);
-
-                        }
-                        else if (fragment != null) {
-                            transaction.remove(fragment);
-                        }
-                    }
-                    transaction.commit();
 
                     Toast.makeText(MainActivity.this, "로그아웃되었습니다.", Toast.LENGTH_SHORT).show();
-
-                    // 로그아웃 후 초기 프래그먼트 상태로 복원 (필요 시)
-                    // Fragment initialFragment = new InitialFragment();
-                    // fragmentManager.beginTransaction()
-                    //                .add(R.id.main_frame, initialFragment, "InitialFragment")
-                    //                .commit();
                 } else {
                     Toast.makeText(MainActivity.this, "로그인된 사용자가 없습니다.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
     }
 
 
@@ -281,13 +250,22 @@ public class MainActivity extends AppCompatActivity {
         ft.commit();
     }
 
-    private void addNewResizableFragment(Class<? extends Fragment> fragmentClass, String tag) {
+    private void addNewResizableFragment(Class<? extends Fragment> fragmentClass) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        String tag = fragmentClass.getName();
 
         // 기존 프래그먼트를 찾습니다.
         ResizableFragment existingFragment = (ResizableFragment) getSupportFragmentManager().findFragmentByTag(tag);
-
-        if (existingFragment != null) {
+        Log.d("u", tag);
+        if (existingFragment != null && tag.equals("com.example.tourlist.Main.Slide2_FavoriteList")) {
+            Log.d("u", "kkk");
+            // 이미 추가된 프래그먼트이면서 Slide2_FavoriteList인 경우
+            ResizableFragment newResizableFragment = new ResizableFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("child_fragment_class", fragmentClass.getName());
+            newResizableFragment.setArguments(bundle);
+            fragmentTransaction.replace(R.id.overlay_frame, newResizableFragment, tag);
+        } else if (existingFragment != null) {
             // 이미 추가된 프래그먼트라면 보여줍니다.
             fragmentTransaction.show(existingFragment);
         } else {
@@ -306,9 +284,16 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+
+        // 다른 프래그먼트를 숨깁니다.
+        for (Fragment f : getSupportFragmentManager().getFragments()) {
+            if (f != null && f instanceof ResizableFragment && !f.equals(existingFragment) && f.isVisible()) {
+                fragmentTransaction.hide(f);
+            }
+        }
+
         fragmentTransaction.commit();
     }
-
 
     DrawerLayout.DrawerListener listener = new DrawerLayout.DrawerListener() {
         @Override

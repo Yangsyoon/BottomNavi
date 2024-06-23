@@ -18,6 +18,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -67,8 +69,7 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
     public List<Comment> commentList;
     public EditText commentEditText;
     public Button postCommentButton;
-    public Place_ViewModel viewModel;
-
+    public PlaceViewModel viewModel;
 
     private ImageView heartIcon;
     private TextView likeCountTextView;
@@ -85,16 +86,42 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
 
     public TouristPlaceRepository_call_parser repository;
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_detail);
 
-        place=new Place();
         place = PlaceDataHolder.getInstance().getPlace();
+
+        // place 객체가 null인지 확인
+        if (place == null) {
+            Log.e("PlaceDetailActivity", "place 객체가 null입니다.");
+            // place 객체가 null인 경우 예외 처리 또는 기본값 설정
+            Toast.makeText(this, "Place 정보가 없습니다.", Toast.LENGTH_LONG).show();
+            // 필요에 따라 액티비티 종료
+            finish();
+            return;
+        }
+
+        Log.d("PlaceDetailActivity", "ch " + place.getTitle());
         updateUI(place);
-        Log.d("PlaceDetailActivity","ch"+place.getTitle()) ;
+
+        // ViewModel 설정
+        viewModel = new ViewModelProvider(this).get(PlaceViewModel.class);
+        viewModel.getBlogSearchResult().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String result) {
+                if (result != null) {
+                    Toast.makeText(Place_DetailActivity.this, result, Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(Place_DetailActivity.this, "검색 실패", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        // Blog 검색 시작
+        String query = place.getTitle(); // place.getTitle()을 사용하여 장소명을 검색어로 사용
+        viewModel.searchBlog(query);
 
         // 뷰 찾기
         heartIcon = findViewById(R.id.heartIcon);
@@ -106,52 +133,16 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
         mapIcon = findViewById(R.id.mapIcon); // 지도 아이콘
         shareIcon = findViewById(R.id.shareIcon); // 공유 아이콘
 
-
-
         try {
             double mapX = getIntent().getDoubleExtra("mapx", 0.0);
             double mapY = getIntent().getDoubleExtra("mapy", 0.0);
-//            place.setMapx(mapX);
-//            place.setMapy(mapY);
-            Log.d("PlaceDetailActivity",mapX+" "+mapY) ;
-
-
-        }catch (Exception e){
+            Log.d("PlaceDetailActivity", mapX + " " + mapY);
+        } catch (Exception e) {
             Log.d("PlaceDetailActivity", e.toString());
         }
 
-        /*// ViewModel 설정
-        String contentId = getIntent().getStringExtra("CONTENT_ID");
-        String contenttypeid = getIntent().getStringExtra("CONTENT_TYPE_ID");
-        viewModel = new ViewModelProvider(this).get(Place_ViewModel.class);
-
-        // ViewModel에서 데이터 가져오기
-        if (contentId != null) {
-            viewModel.getPlacedetail(contentId,contenttypeid).observe(this, new Observer<Place>() {
-                @Override
-                public void onChanged(Place place) {
-                    if (place != null) {
-
-                        updateUI(place);
-//                        placeNameTextView.setText(place.getTitle());
-                        Log.d("PlaceDetailActivity3", "Place name: " + place.getAddr1());
-
-                    }
-                }
-            });
-        }
-        Log.d("PlaceDetailActivity",contentId);
-        Log.d("urlf","detail"+contenttypeid);*/
-
-
-
-//        // 기타 초기 설정
+        // 기타 초기 설정
         mAuth = FirebaseAuth.getInstance();
-//        mapView.onCreate(savedInstanceState); // MapView 생명주기 메서드 호출
-
-
-
-        // 즐겨찾기 버튼 클릭 리스너 설정
 
         mapView = findViewById(R.id.naver_map_view2);
         mapView.getMapAsync(this);
@@ -164,14 +155,11 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
         commentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         commentsRecyclerView.setAdapter(commentsAdapter);
 
-
         // 댓글 작성 버튼 클릭 리스너 설정
         commentEditText = findViewById(R.id.commentEditText);
         postCommentButton = findViewById(R.id.postCommentButton);
         postCommentButton.setOnClickListener(v -> postComment());
         Log.d("PlaceDetailActivity", "Place name:2 " + place.getTitle());
-
-
 
         setViewCountListener(); // 조회 수 리스너 설정
         incrementViewCount(); // 액티비티 실행 시 조회 수 증가
@@ -183,7 +171,6 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
         setMapIcon_ClickListener(); // 지도 아이콘 클릭 리스너 설정
         setShareIcon_ClickListener(); // 공유 아이콘 클릭 리스너 설정
         checkFavoriteStatus(); // 액티비티 실행 시 즐겨찾기 상태 확인
-
     }
 
     public void updateUI(Place place) {
@@ -232,10 +219,7 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
         String homepageUrl = extractUrlFromHtml(homepageHtml);
         homepageTextView.setText(homepageUrl);
 
-        // 우편번호 설정
-
         Log.d("PlaceDetailActivity2", "Place name: " + place.getContentid());
-
 
         String imageUrl = place.getFirstimage();
         if (imageUrl != null && !imageUrl.isEmpty()) {
@@ -245,10 +229,6 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
             Log.d("2", "Image URL is null or empty");
         }
 
-
-
-
-//
         placeLocation = new LatLng(place.getMapx(), place.getMapy());
         loadComments();
     }
@@ -258,7 +238,6 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
         Element link = document.select("a").first();
         return link != null ? link.attr("href") : "";
     }
-
 
     private void setShareIcon_ClickListener() {
         shareIcon.setOnClickListener(new View.OnClickListener() {
@@ -279,7 +258,6 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
         });
     }
 
-
     private void showMapDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("네이버 지도 전환")
@@ -292,7 +270,7 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
 
                         String url = generatePlaceURL(destinationLatLng, destinationName);
                         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                        Log.d("PlaceDetailActivity", "d"+url);
+                        Log.d("PlaceDetailActivity", "d" + url);
                         startActivity(intent);
                     }
                 })
@@ -300,7 +278,6 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
                 .setIcon(android.R.drawable.ic_dialog_info)
                 .show();
     }
-
 
     private String generatePlaceURL(LatLng latLng, String placeName) {
         String url = "nmap://place?";
@@ -346,7 +323,6 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
         }
         return url;
     }
-
 
     // 공유할 URL 생성 및 인텐트 생성
     private void sharePlaceURL() {
@@ -452,8 +428,6 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
         }
     }
 
-
-
     private void showAddFavoriteDialog(DatabaseReference favoriteRef) {
         new AlertDialog.Builder(this)
                 .setTitle("즐겨찾기 추가")
@@ -526,6 +500,7 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
             }
         });
     }
+
     private void setLikeCountListener() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         String placeTitle = place.getTitle();  // 장소명을 얻기 위한 메서드
@@ -547,9 +522,8 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
             }
         });
     }
+
     private void setLike_ClickListener() {
-
-
         heartIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -557,12 +531,8 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
 
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 String placeTitle = place.getTitle();  // 장소명을 얻기 위한 메서드
-                Log.d("PlaceDetailActivity","qqq"+placeTitle);
+                Log.d("PlaceDetailActivity", "qqq" + placeTitle);
                 likeRef = database.getReference("Places").child(placeTitle).child("Like").child("count");
-//                        .child(placeTitle)
-//                        .child("Like")
-//                        .child("count");
-//                .getReference("Places").child(placeId).child("comments");
 
                 if (user != null) {
                     likeRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -586,7 +556,6 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
             }
         });
     }
-
 
     private void setDescriptionTextViewRunnable() {
         descriptionTextView.post(new Runnable() {
@@ -614,11 +583,6 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
                 }
             }
         });
-    }
-
-    private String getPlaceTitle() {
-        // 장소명을 얻기 위한 메서드 구현
-        return "examplePlaceTitle";
     }
 
     private void loadUserNickname() {
@@ -676,8 +640,7 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
 
             if (!content.isEmpty()) {
                 String placeId = place.getTitle();
-                Log.d("PlaceDetailActivity", "pli"+placeId);
-//                mDatabase = FirebaseDatabase.getInstance().getReference("comments").child(placeId);
+                Log.d("PlaceDetailActivity", "pli" + placeId);
                 mDatabase = FirebaseDatabase.getInstance().getReference("Places").child(placeId).child("comments");
                 String key = mDatabase.push().getKey();
 
@@ -727,14 +690,6 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
 
         Log.d("PlaceDetailActivity1", "Place location: " + placeLocation);
 
-        ////////////////////////////////////////
-//       ` // 임의의 위도와 경도를 설정
-//        double newLatitude = 35.87434;
-//        double newLongitude = 128.6394; // 경도를 임의로 설정
-//
-//        // 새로운 LatLng 객체 생성
-//        placeLocation = new LatLng(newLatitude, newLongitude);
-
         // 마커 설정
         Marker marker = new Marker();
         marker.setPosition(placeLocation);
@@ -745,6 +700,7 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
         CameraUpdate cameraUpdate = CameraUpdate.scrollTo(placeLocation);
         naverMap.moveCamera(cameraUpdate);
     }
+
     @Override
     protected void onStart() {
         super.onStart();

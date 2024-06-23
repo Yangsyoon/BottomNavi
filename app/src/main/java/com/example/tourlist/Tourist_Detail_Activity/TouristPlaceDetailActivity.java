@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tourlist.Main.FavoriteLocation;
 import com.example.tourlist.Main.Frag5_Register;
+import com.example.tourlist.Main.UserAccount;
 import com.example.tourlist.R;
 import com.example.tourlist.Tourist_Detail_Activity.Comment.Comment;
 import com.example.tourlist.Tourist_Detail_Activity.Comment.CommentsAdapter;
@@ -135,7 +136,7 @@ public class TouristPlaceDetailActivity extends AppCompatActivity implements OnM
             userRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    Frag5_Register.UserAccount account = snapshot.getValue(Frag5_Register.UserAccount.class);
+                    UserAccount account = snapshot.getValue(UserAccount.class);
                     if (account != null) {
                         userName = account.getNickname();
                         Toast.makeText(TouristPlaceDetailActivity.this, "Nickname loaded: " + userName, Toast.LENGTH_SHORT).show();

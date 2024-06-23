@@ -217,7 +217,7 @@ public class TouristPlaceRepository_call_parser {
             String addrinfoYN = "Y";
             String mapinfoYN = "Y";
             String overviewYN = "Y";
-            String numOfRows = "3";
+            String numOfRows = "10";
             String pageNo = "1";
 
             StringBuilder urlBuilder = new StringBuilder(requestUrl);

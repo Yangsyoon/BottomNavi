@@ -41,27 +41,24 @@ public class Frag5_Register extends Fragment {
     //이것만으로도 회원가입은 구현 가능. 근데 데이터베이스로 관리해야...
 
     private DatabaseReference mDatabaseReference; //실시간 데이터베이스. 서버연동.
-    private EditText mEtEmail, mEtPwd,mEtnickname,mEtBirthdate;
+    private EditText mEtEmail, mEtPwd, mEtnickname, mEtBirthdate;
     private RadioGroup mRgGender;
     private Button mBtnRegister; //회원가입 버튼
-
-
 
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.frag5_register2,container,false);
+        view = inflater.inflate(R.layout.frag5_register2, container, false);
 
 
-
-        mFirebaseAuth=FirebaseAuth.getInstance();//google
-        mDatabaseReference= FirebaseDatabase.getInstance().getReference("hongdroid");//실시간 데이터베이스.=Fireb
+        mFirebaseAuth = FirebaseAuth.getInstance();//google
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference("hongdroid");//실시간 데이터베이스.=Fireb
         //앱이름 보통 넣어준다. 근데 길어서 hongdroid로 넣어준다..
 
-        mEtEmail=view.findViewById(R.id.et_email);
-        mEtPwd=view.findViewById(R.id.et_pwd);
-        mEtnickname=view.findViewById(R.id.et_nickname);
+        mEtEmail = view.findViewById(R.id.et_email);
+        mEtPwd = view.findViewById(R.id.et_pwd);
+        mEtnickname = view.findViewById(R.id.et_nickname);
         mEtBirthdate = view.findViewById(R.id.et_birthdate);
         mRgGender = view.findViewById(R.id.rg_gender);
         mBtnRegister = view.findViewById(R.id.btn_register);
@@ -111,13 +108,16 @@ public class Frag5_Register extends Fragment {
                 String nickname = mEtnickname.getText().toString();
 
                 //Firebase Auth 진행. 회원가입.
+                // Firebase Auth 진행. 회원가입.
                 mFirebaseAuth.createUserWithEmailAndPassword(email, pwd).addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
 
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             FirebaseUser user = mFirebaseAuth.getCurrentUser(); // 로그인 성공 시 현재의 유저로 가져온다.
-                            UserAccount account = new UserAccount();
+
+                            // UserAccount 싱글톤 인스턴스를 가져옴
+                            UserAccount account = UserAccount.getInstance();
 
                             account.setIdToken(user.getUid()); // 고유값 설정.
                             account.setEmailId(user.getEmail()); // 로그인 성공했으니 이메일 설정.
@@ -155,19 +155,17 @@ public class Frag5_Register extends Fragment {
                             transaction.commit();
 
                             // BottomNavigationView 탭 선택 상태 업데이트
-                            BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavi);
-                            bottomNavigationView.setSelectedItemId(R.id.action_account);
+//            BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavi);
+//            bottomNavigationView.setSelectedItemId(R.id.action_account);
                         } else {
                             Toast.makeText(getContext(), "회원가입에 실패하셨습니다.", Toast.LENGTH_SHORT).show();
                         }
                     }
-
-
-
                 });
+
+
             }
         });
-
 
 
         TextView btnLoginSwitch = view.findViewById(R.id.tv_login_switch);
@@ -201,7 +199,8 @@ public class Frag5_Register extends Fragment {
         // 텍스트 변경 감지기 추가
         TextWatcher textWatcher = new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -212,7 +211,7 @@ public class Frag5_Register extends Fragment {
                 String birthdate = mEtBirthdate.getText().toString().trim();
                 boolean genderSelected = mRgGender.getCheckedRadioButtonId() != -1;
 
-                boolean allFieldsFilled = !email.isEmpty() && !pwd.isEmpty() && !nickname.isEmpty()&& !birthdate.isEmpty();
+                boolean allFieldsFilled = !email.isEmpty() && !pwd.isEmpty() && !nickname.isEmpty() && !birthdate.isEmpty();
 //                 && genderSelected;
 
                 mBtnRegister.setEnabled(allFieldsFilled);
@@ -225,7 +224,8 @@ public class Frag5_Register extends Fragment {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
         };
 
         mEtEmail.addTextChangedListener(textWatcher);
@@ -241,17 +241,16 @@ public class Frag5_Register extends Fragment {
         });
 
 
-
         return view;
     }
 
-    private void sendEmailVerification(FirebaseUser user){
+    private void sendEmailVerification(FirebaseUser user) {
         if (user != null) {
             user.sendEmailVerification()
                     .addOnCompleteListener(getActivity(), task -> {
                         if (task.isSuccessful()) {
                             Toast.makeText(getContext(),
-                                     user.getEmail()+"로 인증메일 전송됨",
+                                    user.getEmail() + "로 인증메일 전송됨",
                                     Toast.LENGTH_SHORT).show();
                         } else {
                             Log.e("TAG", "sendEmailVerification", task.getException());
@@ -268,54 +267,5 @@ public class Frag5_Register extends Fragment {
     private void checkFieldsForEmptyValues() {
 
 
-    }
-    /*
-
-        사용자 계정 정보 모델 클래스
-        */
-    public static class UserAccount {
-
-    //    getter, setter.... alt+insert.
-
-        private String idToken; // Firebase Uid(고유 토큰정보)... 유일하게 가질 수있는 키값
-
-        private String emailId; // 이메일 아이디
-        private String password;// 비밀번호
-        private String nickname;//
-
-
-        public UserAccount() {
-        }
-
-        public String getIdToken() {
-            return idToken;
-        }
-
-        public void setIdToken(String idToken) {
-            this.idToken = idToken;
-        }
-    //    빈 생성자 적엉줘야함.
-
-        public String getEmailId() {
-            return emailId;
-        }
-
-        public void setEmailId(String emailId) {
-            this.emailId = emailId;
-        }
-
-        public String getPassword() {
-            return password;
-        }
-
-        public void setPassword(String password) {
-            this.password = password;
-        }
-
-        public String getNickname() {return nickname;}
-
-        public void setNickname(String nickname) {
-            this.nickname = nickname;
-            }
     }
 }

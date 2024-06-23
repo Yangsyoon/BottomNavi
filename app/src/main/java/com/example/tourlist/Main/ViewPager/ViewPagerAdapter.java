@@ -3,6 +3,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import com.example.tourlist.Main.Slide1_Place_List;
 import com.example.tourlist.Main.ViewPager.Board.BoardFragment;
 import com.example.tourlist.Main.ViewPager.Calendar.CalendarFragment;
 

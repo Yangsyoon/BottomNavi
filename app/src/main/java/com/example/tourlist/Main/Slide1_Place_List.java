@@ -1,4 +1,4 @@
-package com.example.tourlist.Main.ViewPager;
+package com.example.tourlist.Main;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -82,11 +82,13 @@ public class Slide1_Place_List extends Fragment {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
 
+
+
         placeViewModel.getTouristPlaces_observe().observe(getViewLifecycleOwner(), new Observer<List<Place>>() {
             @Override
             public void onChanged(List<Place> places) {
                 Log.d("P", "onBindViewHolder: createview");
-
+                getCurrentLocation();
                 Slide1_Place_List.this.places.clear();
                 Slide1_Place_List.this.places.addAll(places);
                 placeAdapter.notifyDataSetChanged();
@@ -131,7 +133,6 @@ public class Slide1_Place_List extends Fragment {
         Button contenttypeButton = view.findViewById(R.id.contenttype_Button);
 
 
-        getCurrentLocation();
 
         {
 

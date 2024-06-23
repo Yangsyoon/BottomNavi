@@ -8,7 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/left_chat_view"
-        android:background="@drawable/rounded_corner"
+        android:background="@drawable/image_view_border"
         android:backgroundTint="#E1F5FE"
     android:padding="8dp"
     android:layout_marginEnd="80dp"

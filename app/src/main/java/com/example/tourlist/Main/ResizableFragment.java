@@ -15,7 +15,6 @@ import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.example.tourlist.Main.ViewPager.Slide1_Place_List;
 import com.example.tourlist.R;
 import com.example.tourlist.XMLParser;
 

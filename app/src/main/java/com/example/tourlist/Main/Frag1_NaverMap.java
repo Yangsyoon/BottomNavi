@@ -124,7 +124,8 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
     private NaverMap mMap;
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
-    private static final double ZOOM_THRESHOLD = 11f;
+    private static final double ZOOM_THRESHOLD_LOW = 8f;
+    private static final double ZOOM_THRESHOLD_HIGH = 13f;
     private FusedLocationSource locationSource;
 
     private boolean isFabOpen = false; // FAB 상태를 나타내는 변수
@@ -435,15 +436,18 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
         mMap.addOnCameraChangeListener((reason, animated) -> {
             double zoom = mMap.getCameraPosition().zoom;
             for (Marker marker : markers) {
-                if (zoom < ZOOM_THRESHOLD) {
-                    // 특정 줌 이하에서는 점으로 변경하고 캡션 텍스트 숨기기
+                if (zoom < ZOOM_THRESHOLD_LOW) {
+                    // 낮은 줌 임계값 이하에서는 점으로 변경하고 캡션 텍스트 숨기기
                     OverlayImage smallIcon = OverlayImage.fromResource(R.drawable.small_marker);
                     marker.setIcon(smallIcon);
                     marker.setWidth(30);  // 더 작게 설정하여 점처럼 보이게 함
                     marker.setHeight(30);
                     marker.setCaptionText(null);  // 캡션 텍스트 숨기기
+                } else if (zoom < ZOOM_THRESHOLD_HIGH) {
+                    // 중간 줌 임계값 이하에서는 캡션 텍스트 빠르게 숨기기
+                    marker.setCaptionText(null);  // 캡션 텍스트 빠르게 숨기기
                 } else {
-                    // 특정 줌 이상에서는 원래 마커와 캡션 텍스트 복구
+                    // 높은 줌 임계값 이상에서는 원래 마커와 캡션 텍스트 복구
                     OverlayImage icon = OverlayImage.fromResource(R.drawable.custom_marker);
                     marker.setIcon(icon);
                     marker.setWidth(Marker.SIZE_AUTO);

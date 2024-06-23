@@ -20,17 +20,17 @@ import java.util.List;
 
 public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseViewHolder> {
 
-    public List<Course> courses;
+    public List<com.example.tourlist.A_Course.Course> courses;
 
 
 
     private Location currentLocation;
 
-    public CourseAdapter(List<Course> courses) {
+    public CourseAdapter(List<com.example.tourlist.A_Course.Course> courses) {
         this.courses = courses;
     }
 
-    public CourseAdapter(List<Course> courses, Location currentLocation) {
+    public CourseAdapter(List<com.example.tourlist.A_Course.Course> courses, Location currentLocation) {
         this.courses = courses;
 //        this.currentLocation = currentLocation;
 //        Log.d("P", "CourseAdapter: "+currentLocation.getLatitude());
@@ -45,7 +45,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
 
     @Override
     public void onBindViewHolder(@NonNull CourseViewHolder holder, int position) {
-        Course course = courses.get(position);
+        com.example.tourlist.A_Course.Course course = courses.get(position);
         Log.d("P", "onBindViewHolder: ");
 
         holder.bind(course);

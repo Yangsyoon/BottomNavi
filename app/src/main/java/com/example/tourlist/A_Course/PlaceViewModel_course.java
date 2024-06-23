@@ -12,7 +12,7 @@ import java.util.List;
 
 public class PlaceViewModel_course extends AndroidViewModel {
 
-    private MutableLiveData<List<TouristCoursePlace>> places;
+    private MutableLiveData<List<com.example.tourlist.A_Course.TouristCoursePlace>> places;
     private TouristCourseRepository repository;
 
     public PlaceViewModel_course(@NonNull Application application) {

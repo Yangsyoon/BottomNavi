@@ -21,8 +21,8 @@ class Course_XmlParser {
     private double currentLatitude;
     private double currentLongitude;
     private FusedLocationSource locationSource;
-    public List<Course> parse(InputStream inputStream) {
-        List<Course> courses = new ArrayList<>();
+    public List<com.example.tourlist.A_Course.Course> parse(InputStream inputStream) {
+        List<com.example.tourlist.A_Course.Course> courses = new ArrayList<>();
         Log.d("Course_XmlParser", "parse: ");
 
         try (BufferedReader bufreader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
@@ -37,7 +37,7 @@ class Course_XmlParser {
             parser.setInput(new StringReader(xmlData.toString()));
 
             int eventType = parser.getEventType();
-            Course course=null;
+            com.example.tourlist.A_Course.Course course=null;
             while (eventType != XmlPullParser.END_DOCUMENT) {
                 if (eventType == XmlPullParser.START_TAG && parser.getName().equals("item")) {
 
@@ -47,7 +47,7 @@ class Course_XmlParser {
                         if (eventType == XmlPullParser.START_TAG) {
                             String tagName = parser.getName();
                             if (tagName.equals("item")) {
-                                course = new Course();
+                                course = new com.example.tourlist.A_Course.Course();
                             } else if (course != null) {
                             switch (tagName) {
 
@@ -132,8 +132,8 @@ class Course_XmlParser {
         return courses;
     }
 
-    public Course parseDetail(InputStream inputStream) {
-        Course course = new Course();
+    public com.example.tourlist.A_Course.Course parseDetail(InputStream inputStream) {
+        com.example.tourlist.A_Course.Course course = new Course();
         List<TouristCoursePlace> places = new ArrayList<>();
 
         try (BufferedReader bufreader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {

@@ -51,9 +51,9 @@ public class CourseDetail_Activity extends AppCompatActivity {
 
         //여기서  장소 1, 장소 2, 채워지면(사진 없는) =>어댑터, bind.
         //결국 준비가 되면, getPlace해서  어댑터 하겠다.
-        placeviewModel_course.getPlaces().observe(this, new Observer<List<TouristCoursePlace>>() {
+        placeviewModel_course.getPlaces().observe(this, new Observer<List<com.example.tourlist.A_Course.TouristCoursePlace>>() {
             @Override
-            public void onChanged(List<TouristCoursePlace> places) {
+            public void onChanged(List<com.example.tourlist.A_Course.TouristCoursePlace> places) {
                 if (places != null) {
                     placeAdapter_Course.setPlaces(places);
                     Log.d("1", "4contentId: " + contentId);
@@ -66,9 +66,9 @@ public class CourseDetail_Activity extends AppCompatActivity {
 }
 class PlaceAdapter_Course extends RecyclerView.Adapter<PlaceAdapter_Course.PlaceViewHolder> {
 
-    private List<TouristCoursePlace> places;
+    private List<com.example.tourlist.A_Course.TouristCoursePlace> places;
 
-    public void setPlaces(List<TouristCoursePlace> places) {
+    public void setPlaces(List<com.example.tourlist.A_Course.TouristCoursePlace> places) {
         this.places = places;
         notifyDataSetChanged();
     }
@@ -82,7 +82,7 @@ class PlaceAdapter_Course extends RecyclerView.Adapter<PlaceAdapter_Course.Place
 
     @Override
     public void onBindViewHolder(@NonNull PlaceViewHolder holder, int position) {
-        TouristCoursePlace place = places.get(position);
+        com.example.tourlist.A_Course.TouristCoursePlace place = places.get(position);
         holder.bind(place);
     }
 

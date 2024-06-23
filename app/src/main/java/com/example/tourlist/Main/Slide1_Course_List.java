@@ -70,8 +70,8 @@ public class Slide1_Course_List extends Fragment {
 
 
         //코스 목록 구성할 adapter
-        courseAdapter = new CourseAdapter(courses);
-//        courseAdapter = new CourseAdapter(courses, currentLocation);
+//        courseAdapter = new CourseAdapter(courses);
+        courseAdapter = new CourseAdapter(courses, currentLocation);
         recyclerView2_course.setAdapter(courseAdapter);
         if(currentLocation!=null) {
             Log.d("PP", "CourseAdapter: 123" + currentLocation.getLatitude());

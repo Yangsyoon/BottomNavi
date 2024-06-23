@@ -129,7 +129,7 @@ public class Place_ViewModel extends AndroidViewModel {
         return touristPlaces;
     }
 
-
+//
 
     public LiveData<Place> getPlacedetail(String contentId,String contenttypeId) {
         placeDetail = new MutableLiveData<>();

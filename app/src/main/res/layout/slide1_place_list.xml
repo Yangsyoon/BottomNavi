@@ -219,16 +219,16 @@
             android:orientation="horizontal">
 
 
-
-
             <ImageButton
                 android:id="@+id/pagedown_Button"
                 android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:background="@drawable/rounded_button2_frag3"
-                android:contentDescription="Page Up"
-                android:padding="10dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded_button"
+                android:backgroundTint="@color/white"
+                android:contentDescription="Page down"
+                android:elevation="4dp"
+                android:padding="0dp"
                 android:scaleType="centerInside"
                 android:src="@drawable/left" />
 
@@ -236,11 +236,13 @@
             <ImageButton
                 android:id="@+id/pageup_Button"
                 android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
                 android:background="@drawable/rounded_button"
+                android:backgroundTint="@color/white"
                 android:contentDescription="Page Up"
-                android:padding="10dp"
+                android:elevation="4dp"
+                android:padding="0dp"
                 android:scaleType="centerInside"
                 android:src="@drawable/right" />
 

@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -115,8 +116,8 @@ public class Slide1_Place_List extends Fragment {
         Button foodButton = view.findViewById(R.id.food_Button);
         Button areaButton=view.findViewById(R.id.area_Button);
 
-        Button pagedownButton = view.findViewById(R.id.pagedown_Button);
-        Button pageupButton = view.findViewById(R.id.pageup_Button);
+        ImageButton pagedownButton = view.findViewById(R.id.pagedown_Button);
+        ImageButton pageupButton = view.findViewById(R.id.pageup_Button);
 
         Button sort_early_Button = view.findViewById(R.id.sort_early_Button);
         Button sort_title_Button = view.findViewById(R.id.sort_title_Button);

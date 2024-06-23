@@ -284,45 +284,25 @@ public class MainActivity extends AppCompatActivity {
     private void addNewResizableFragment(Class<? extends Fragment> fragmentClass, String tag) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
-        if (tag.equals("Slide2_FavoriteList")) {
-            // Slide2_FavoriteList 프래그먼트를 관리
-            Fragment existingFragment = getSupportFragmentManager().findFragmentByTag(tag);
-            if (existingFragment != null) {
+        // 기존 프래그먼트를 찾습니다.
+        ResizableFragment existingFragment = (ResizableFragment) getSupportFragmentManager().findFragmentByTag(tag);
 
-                Bundle bundle = new Bundle();
-                bundle.putString("child_fragment_class", "Slide2_FavoriteList");
-                fragmentTransaction.remove(existingFragment);
-                ResizableFragment newResizableFragment = new ResizableFragment();
-                newResizableFragment.setArguments(bundle);
-
-                fragmentTransaction.replace(R.id.overlay_frame, newResizableFragment, tag);
-
-            } else {
-                Bundle bundle = new Bundle();
-                bundle.putString("child_fragment_class", fragmentClass.getName());
-                ResizableFragment newResizableFragment = new ResizableFragment();
-                newResizableFragment.setArguments(bundle);
-
-                fragmentTransaction.replace(R.id.overlay_frame, newResizableFragment, tag);
-            }
+        if (existingFragment != null) {
+            // 이미 추가된 프래그먼트라면 보여줍니다.
+            fragmentTransaction.show(existingFragment);
         } else {
-            // 기존 로직으로 ResizableFragment를 관리
-            ResizableFragment existingFragment = (ResizableFragment) getSupportFragmentManager().findFragmentByTag(tag);
-            if (existingFragment != null) {
-                fragmentTransaction.show(existingFragment);
-            } else {
-                ResizableFragment newResizableFragment = new ResizableFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("child_fragment_class", fragmentClass.getName());
-                newResizableFragment.setArguments(bundle);
-                fragmentTransaction.add(R.id.overlay_frame, newResizableFragment, tag);
-            }
+            // 새로운 프래그먼트라면 생성하고 추가합니다.
+            ResizableFragment newResizableFragment = new ResizableFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("child_fragment_class", fragmentClass.getName());
+            newResizableFragment.setArguments(bundle);
+            fragmentTransaction.add(R.id.overlay_frame, newResizableFragment, tag);
+        }
 
-            // 다른 프래그먼트를 숨깁니다.
-            for (Fragment f : getSupportFragmentManager().getFragments()) {
-                if (f != null && f instanceof ResizableFragment && !f.equals(existingFragment) && f.isVisible()) {
-                    fragmentTransaction.hide(f);
-                }
+        // 다른 프래그먼트를 숨깁니다.
+        for (Fragment f : getSupportFragmentManager().getFragments()) {
+            if (f != null && f instanceof ResizableFragment && !f.equals(existingFragment) && f.isVisible()) {
+                fragmentTransaction.hide(f);
             }
         }
 

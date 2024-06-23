@@ -56,61 +56,69 @@
 
             <Button
                 android:id="@+id/filter_Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:background="@color/login_gray"
+                android:layout_width="70dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded_button2_frag3"
 
                 android:elevation="4dp"
                 android:text="필터" />
 
             <Button
                 android:id="@+id/place_Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
+                android:layout_width="70dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded_button2_frag3"
                 android:text="관광지" />
 
             <Button
                 android:id="@+id/cafe_Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
+                android:layout_width="70dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded_button2_frag3"
                 android:text="카페" />
 
             <Button
                 android:id="@+id/food_Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
+                android:layout_width="70dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded_button2_frag3"
                 android:text="음식점" />
 
 
 
             <Button
                 android:id="@+id/language_Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
+                android:layout_width="70dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded_button2_frag3"
                 android:text="언어" />
             <Button
                 android:id="@+id/contenttype_Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
+                android:layout_width="70dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded_button2_frag3"
+
                 android:text="관광타입" />
             <Button
                 android:id="@+id/service_Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
+                android:layout_width="70dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded_button2_frag3"
                 android:text="서비스분류" />
 
             <Button
                 android:id="@+id/area_Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
+                android:layout_width="70dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded_button2_frag3"
                 android:text="지역" />
 
             <!--<Button
@@ -248,34 +256,35 @@
 
             <Button
                 android:id="@+id/my_location2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
+                android:layout_width="70dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
                 android:background="@drawable/rounded_button2_frag3"
                 android:text="거리순" />
 
+
             <Button
                 android:id="@+id/sort_title_Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
+                android:layout_width="70dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
                 android:background="@drawable/rounded_button2_frag3"
                 android:text="이름순" />
 
             <Button
                 android:id="@+id/sort_early_Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
+                android:layout_width="70dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
                 android:background="@drawable/rounded_button2_frag3"
                 android:text="최신순" />
 
 
             <Button
                 android:id="@+id/search_Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
+                android:layout_width="70dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
                 android:background="@drawable/rounded_button2_frag3"
                 android:text="조회" />
 

@@ -124,7 +124,7 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
     private NaverMap mMap;
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
-    private static final double ZOOM_THRESHOLD = 7f;
+    private static final double ZOOM_THRESHOLD = 11f;
     private FusedLocationSource locationSource;
 
     private boolean isFabOpen = false; // FAB 상태를 나타내는 변수

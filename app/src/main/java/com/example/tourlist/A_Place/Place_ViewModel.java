@@ -129,7 +129,7 @@ public class Place_ViewModel extends AndroidViewModel {
         return touristPlaces;
     }
 
-
+//
 
     public LiveData<Place> getPlacedetail(String contentId,String contenttypeId) {
         placeDetail = new MutableLiveData<>();
@@ -182,7 +182,12 @@ public class Place_ViewModel extends AndroidViewModel {
 
 
     public void filterPlacesByAreaCode(String url) {
+
+
         repository.loadFilteredPlaces(url, touristPlaces);
+
+
+
     }
 
     public void filterPlacesByGps(String latitude, String longitude,String contenttype) {

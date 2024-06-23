@@ -67,7 +67,7 @@
                     android:id="@+id/heartIcon"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/user_24"
+                    android:src="@drawable/heart_empty"
                     android:background="@android:color/transparent" />
 
                 <TextView

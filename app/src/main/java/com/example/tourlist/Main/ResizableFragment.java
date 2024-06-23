@@ -134,7 +134,7 @@ public class ResizableFragment extends Fragment {
             currentFragment = getChildFragment(fragmentClassName);
             Log.d(TAG, "7 "+fragmentClassName);
             if (childFragment != null) {
-                addChildFragment(childFragment,false);
+                addChildFragment(childFragment,fragmentClassName,false);
             }
         }
     }
@@ -142,7 +142,7 @@ public class ResizableFragment extends Fragment {
     private Fragment getChildFragment(String fragmentClassName) {
         // 전달된 클래스 이름에 따라 자식 Fragment를 생성합니다.
         try {
-            if (fragmentClassName.equals(Slide2_FavoriteList.class.getName())) {
+            if (fragmentClassName.equals("Slide2_FavoriteList")) {
                 Log.d(TAG, "1");
 
                 return new Slide2_FavoriteList();
@@ -173,19 +173,26 @@ public class ResizableFragment extends Fragment {
         return null;
     }
 
-    public void addChildFragment(Fragment fragment,boolean addToBackStack) {
+    public void addChildFragment(Fragment fragment, String tag, boolean addToBackStack) {
         Log.d("k", "4");
 
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.replace(R.id.frameLayout_drag_button_below, fragment);
-        transaction.addToBackStack(null);
 
-//        if (addToBackStack) {
-//            transaction.addToBackStack(null);
-//        }
+        if (tag.equals("Slide2_FavoriteList")) {
+            Slide2_FavoriteList newFavoriteFragment = new Slide2_FavoriteList();
+            Log.d("k", "5");
+            transaction.replace(R.id.frameLayout_drag_button_below, newFavoriteFragment, tag);
+        } else {
+            transaction.replace(R.id.frameLayout_drag_button_below, fragment);
+            if (addToBackStack) {
+                transaction.addToBackStack(null);
+            }
+        }
 
         transaction.commit();
     }
+
+/*
 
     private void changeChildFragment() {
 
@@ -216,5 +223,6 @@ public class ResizableFragment extends Fragment {
             Log.d("k","5");
         }
     }
+*/
 
 }

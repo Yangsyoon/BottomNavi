@@ -23,7 +23,7 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         final ImageView splashImage = findViewById(R.id.splashImage);
-        final TextView splashText = findViewById(R.id.splashText);
+
         final FrameLayout parentLayout = (FrameLayout) splashImage.getParent();
 
         // 뷰 레이아웃 초기화 완료 후 실행

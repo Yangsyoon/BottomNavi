@@ -37,27 +37,21 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-
 public class BoardDetailActivity extends AppCompatActivity {
-
-
 
     private String userName = "3"; // 초기값 설정
     private DatabaseReference dbReference;
-
     private TextView titleTextView, contentTextView;
     private ImageView imageView, optionsIcon;
     private RecyclerView commentRecyclerView;
     private CommentAdapter commentAdapter;
     private List<Comment> commentList;
     private FirebaseAuth mAuth;
-
     private EditText commentEditText;
     private Button postCommentButton;
     private DatabaseReference commentsRef;
-
-
-
+    private ImageView heartIcon;
+    private TextView likeCountTextView;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +61,9 @@ public class BoardDetailActivity extends AppCompatActivity {
         contentTextView = findViewById(R.id.contentTextView);
         imageView = findViewById(R.id.imageView);
         optionsIcon = findViewById(R.id.optionsIcon);
+        heartIcon = findViewById(R.id.heartIcon); // 좋아요 아이콘 추가
+        likeCountTextView = findViewById(R.id.likeCountTextView); // 좋아요 수를 표시할 TextView
+
         commentEditText = findViewById(R.id.commentEditText);
         commentRecyclerView = findViewById(R.id.commentRecyclerView);
         postCommentButton = findViewById(R.id.postCommentButton);
@@ -77,12 +74,9 @@ public class BoardDetailActivity extends AppCompatActivity {
         commentsRef = FirebaseDatabase.getInstance().getReference("Board").child(postTitle).child("comments");
         dbReference = FirebaseDatabase.getInstance().getReference("Board").child(postTitle);
 
-
-
-
         loadUserNickname();
 
-// 어댑터 설정
+        // 어댑터 설정
         commentList = new ArrayList<>();
         commentAdapter = new CommentAdapter(commentList);
         commentRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -97,8 +91,82 @@ public class BoardDetailActivity extends AppCompatActivity {
 
         loadPostDetails();
         loadComments();
-
+        setLikeClickListener(); // 좋아요 클릭 리스너 설정
         setOptionsIconClickListener();
+    }
+
+    private void setLikeClickListener() {
+        heartIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                if (user != null) {
+                    String userId = user.getUid();
+                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                    String placeTitle = titleTextView.getText().toString(); // 게시물 제목을 가져옴
+
+                    DatabaseReference likeRef = database.getReference("Board")
+                            .child(placeTitle)
+                            .child("Like");
+
+                    DatabaseReference userLikeRef = likeRef.child("users").child(userId);
+
+                    userLikeRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            boolean isLiked = dataSnapshot.exists();
+
+                            if (isLiked) {
+                                // 이미 좋아요를 누른 경우, 좋아요 취소
+                                likeRef.child("count").addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot countSnapshot) {
+                                        Long currentCount = countSnapshot.getValue(Long.class);
+                                        if (currentCount != null && currentCount > 0) {
+                                            likeRef.child("count").setValue(currentCount - 1);
+                                        }
+                                        userLikeRef.removeValue();  // 사용자 좋아요 상태 제거
+                                        heartIcon.setImageResource(R.drawable.heart_empty);  // 하트 아이콘을 빈 하트로 변경
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                        // 실패 처리
+                                    }
+                                });
+                            } else {
+                                // 좋아요를 누르지 않은 경우, 좋아요 추가
+                                likeRef.child("count").addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot countSnapshot) {
+                                        Long currentCount = countSnapshot.getValue(Long.class);
+                                        if (currentCount == null) {
+                                            currentCount = 0L;
+                                        }
+                                        likeRef.child("count").setValue(currentCount + 1);
+                                        userLikeRef.setValue(true);  // 사용자 좋아요 상태 추가
+                                        heartIcon.setImageResource(R.drawable.heart_fill);  // 하트 아이콘을 채워진 하트로 변경
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                        // 실패 처리
+                                    }
+                                });
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            // 실패 처리
+                        }
+                    });
+                } else {
+                    Toast.makeText(BoardDetailActivity.this, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
 
@@ -130,7 +198,7 @@ public class BoardDetailActivity extends AppCompatActivity {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (user != null) {
                 String userId = user.getUid();
-                 // 사용자 닉네임 가져오기
+                // 사용자 닉네임 가져오기
                 long timestamp = System.currentTimeMillis();
                 // 날짜 형식 변환
                 String formattedDate = getFormattedDate(timestamp);
@@ -162,6 +230,7 @@ public class BoardDetailActivity extends AppCompatActivity {
         Date resultDate = new Date(timestamp);
         return sdf.format(resultDate);
     }
+
     private void loadPostDetails() {
         dbReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -184,10 +253,8 @@ public class BoardDetailActivity extends AppCompatActivity {
                 // Handle possible errors.
             }
         });
-
-
-
     }
+
     private void loadComments() {
         commentsRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -208,7 +275,6 @@ public class BoardDetailActivity extends AppCompatActivity {
             }
         });
     }
-
 
     private void setOptionsIconClickListener() {
         optionsIcon.setOnClickListener(new View.OnClickListener() {

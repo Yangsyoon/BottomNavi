@@ -10,19 +10,36 @@
         android:scaleType="centerCrop"
         android:src="@drawable/your_splash_image" />
 
-    <TextView
-        android:id="@+id/splashText"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|start"
         android:layout_marginTop="50dp"
         android:layout_marginStart="40dp"
-        android:text="요리 조리 한국 관광지 "
-        android:textSize="24sp"
-        android:textColor="@android:color/black"
-        android:textStyle="bold"
-        android:background="@android:color/transparent"
-        android:fontFamily="@font/ongullip"
-        />
+        android:orientation="vertical"
+        android:background="@android:color/transparent">
+
+        <TextView
+            android:id="@+id/mainTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="저기 어때"
+            android:textSize="38sp"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            android:fontFamily="@font/ongullip"
+            android:background="@android:color/transparent" />
+
+        <TextView
+            android:id="@+id/subTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="       요리조리 한국 관광지"
+            android:textSize="18sp"
+            android:textColor="@android:color/black"
+            android:textStyle="normal"
+            android:fontFamily="@font/ongullip"
+            android:background="@android:color/transparent" />
+    </LinearLayout>
 
 </FrameLayout>

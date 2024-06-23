@@ -36,7 +36,7 @@ import java.util.List;
 
 public class Slide2_FavoriteList extends Fragment {
 
-    private String fragmentTag = "Favorite";
+    private String fragmentTag = "Slide2_FavoriteList";
 
     public void setFragmentTag(String tag) {
         this.fragmentTag = tag;

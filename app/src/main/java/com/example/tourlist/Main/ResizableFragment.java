@@ -153,7 +153,7 @@ public class ResizableFragment extends Fragment {
                 return new Slide1_Course_List();
 
             }
-             else if (fragmentClassName.equals(Slide1_Place_List.class.getName())) {
+            else if (fragmentClassName.equals(Slide1_Place_List.class.getName())) {
                 Log.d(TAG, "2");
 
                 return new Slide1_Place_List();
@@ -187,6 +187,11 @@ public class ResizableFragment extends Fragment {
         transaction.commit();
     }
 
+
+
+
+/*
+
     private void changeChildFragment() {
 
 //        if (currentFragment != null) {
@@ -216,5 +221,6 @@ public class ResizableFragment extends Fragment {
             Log.d("k","5");
         }
     }
+*/
 
 }

@@ -72,13 +72,25 @@
     </activity>
 
 
+    <activity
+        android:name=".Main.ViewPager.Board.BoardDetailActivity"
+        android:exported="true"
+
+        >
+    </activity>
+
+
     <meta-data
         android:name="com.naver.maps.map.CLIENT_ID"
         android:value="viwfudh039" />
     <meta-data
         android:name="com.google.android.geo.API_KEY"
-        android:value="AIzaSyBtOchZ5iZsWKxjBayu8q2Qe3oQQQBgp9k" />
+        android:value="AIzaSyBTmeSMNBR9Fp8IQ3SjG16BU3m-DJdSqPI" />
 
+<!--    //예림 :-->
+<!--    //승혁 :-->
+<!--    //승윤 :-->
+<!--    //형준 : AIzaSyBTmeSMNBR9Fp8IQ3SjG16BU3m-DJdSqPI-->
 
 
 </application>

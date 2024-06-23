@@ -7,7 +7,9 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Place_ViewModel extends AndroidViewModel {
@@ -85,20 +87,20 @@ public class Place_ViewModel extends AndroidViewModel {
         if (touristPlaces == null) {
             touristPlaces = new MutableLiveData<>();
             //밑에 해제하면 중간에 상세 뜸.
-//            repository.loadTouristPlaces(newTouristPlaces);
-            repository.loadTouristPlaces_first(touristPlaces);
+            repository.loadTouristPlaces_first(newTouristPlaces);
+//            repository.loadTouristPlaces_first(touristPlaces);
 //이게 첫 load.
         }
 
         //이거에 48시간 썼다.
-        /*newTouristPlaces.observeForever(new Observer<List<Place>>() {
+        newTouristPlaces.observeForever(new Observer<List<Place>>() {
             @Override
             public void onChanged(List<Place> places) {
                 List<Place> newPlaces = new ArrayList<>();
                 MutableLiveData<Place> place_mut = new MutableLiveData<>();
 //                Log.d("Place_ViewModel1", String.valueOf(places.size()));
                 for(Place place:places){
-//                    place_mut.setValue(place);
+                    place_mut.setValue(place);
                     repository.loadCommonInfo2(place.getContentid(),place_mut);
 
                 }
@@ -113,13 +115,13 @@ public class Place_ViewModel extends AndroidViewModel {
                     }
 
                 });
-//                Log.d("Place_ViewModel2", "onChanged: "+newPlaces.get(0).getOverview());
+                Log.d("Place_ViewModel2", "onChanged: "+newPlaces.get(0).getOverview());
 
 
 
             }
 
-        });*/
+        });
 
 
 
@@ -127,7 +129,7 @@ public class Place_ViewModel extends AndroidViewModel {
         return touristPlaces;
     }
 
-
+//
 
     public LiveData<Place> getPlacedetail(String contentId,String contenttypeId) {
         placeDetail = new MutableLiveData<>();

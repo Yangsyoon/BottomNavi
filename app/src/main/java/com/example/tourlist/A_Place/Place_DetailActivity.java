@@ -656,29 +656,7 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
         return "examplePlaceTitle";
     }
 
-    private void loadUserNickname() {
-        FirebaseUser user = mAuth.getCurrentUser();
-        if (user != null) {
-            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("hongdroid").child("UserAccount").child(user.getUid());
-            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    UserAccount account = snapshot.getValue(UserAccount.class);
-                    if (account != null) {
-                        userName = account.getNickname();
-                        Toast.makeText(Place_DetailActivity.this, "Nickname loaded: " + userName, Toast.LENGTH_SHORT).show();
-                    } else {
-                        Log.d(TAG, "User data not found");
-                    }
-                }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    Log.e(TAG, "Failed to load user data", error.toException());
-                }
-            });
-        }
-    }
 
     private void loadComments() {
         String placeId = place.getTitle();
@@ -783,7 +761,7 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
     @Override
     protected void onStart() {
         super.onStart();
-        loadUserNickname(); // 사용자 닉네임을 onStart에서 불러오기
+         // 사용자 닉네임을 onStart에서 불러오기
         mapView.onStart();
     }
 

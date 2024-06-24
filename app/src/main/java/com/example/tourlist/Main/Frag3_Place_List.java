@@ -49,6 +49,7 @@ public class Frag3_Place_List extends Fragment {
 
     public Location currentLocation;
 
+    String languageType = "KorService1"; // 기본값: 한국어
     String serviceType = "areaBasedList1";
     String numOfRows = "10";
     String pageNo = "1";
@@ -147,7 +148,7 @@ public class Frag3_Place_List extends Fragment {
 
                         String serviceKey = "jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D";
 
-                        String requestUrl = buildRequestUrl(serviceType, serviceKey, numOfRows, pageNo, mobileOS, mobileApp, listYN, arrange, contentTypeId, areaCode, sigunguCode, cat1, cat2, cat3);
+                        String requestUrl = buildRequestUrl(languageType,serviceType, serviceKey, numOfRows, pageNo, mobileOS, mobileApp, listYN, arrange, contentTypeId, areaCode, sigunguCode, cat1, cat2, cat3);
 
                         placeViewModel.filterPlacesByAreaCode(requestUrl);
                     } else {
@@ -165,11 +166,18 @@ public class Frag3_Place_List extends Fragment {
                     pageNo = String.valueOf(currentPage);
 
                     String serviceKey = "jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D";
-
-                    String requestUrl = buildRequestUrl(serviceType, serviceKey, numOfRows, pageNo, mobileOS, mobileApp, listYN, arrange, contentTypeId, areaCode, sigunguCode, cat1, cat2, cat3);
+                    String requestUrl = buildRequestUrl(languageType,serviceType, serviceKey, numOfRows, pageNo, mobileOS, mobileApp, listYN, arrange, contentTypeId, areaCode, sigunguCode, cat1, cat2, cat3);
 
                     placeViewModel.filterPlacesByAreaCode(requestUrl);
 
+                }
+            });
+
+            Button languageButton = view.findViewById(R.id.language_Button);
+            languageButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showLanguageDialog();
                 }
             });
 
@@ -205,26 +213,26 @@ public class Frag3_Place_List extends Fragment {
 
 
             searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String serviceKey = "jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D";
+                @Override
+                public void onClick(View v) {
+                    String serviceKey = "jkZr%2BH8GxnzGB9LAB%2BDG0t%2B7xV6YZeF%2BiOqlC%2Fx3%2BdTAkBnoUim7KC6DdfyDdQ3%2FqnOgQQWhWHlHyrQGOLKobw%3D%3D";
 
-                String requestUrl = buildRequestUrl(serviceType, serviceKey, numOfRows, pageNo, mobileOS, mobileApp, listYN, arrange, contentTypeId, areaCode, sigunguCode, cat1, cat2, cat3);
+                    // languageType과 serviceType을 함께 전달
+                    String requestUrl = buildRequestUrl(languageType, serviceType, serviceKey, numOfRows, pageNo, mobileOS, mobileApp, listYN, arrange, contentTypeId, areaCode, sigunguCode, cat1, cat2, cat3);
+                    Log.d("d", requestUrl);
+                    placeViewModel.filterPlacesByAreaCode(requestUrl);
 
-                placeViewModel.filterPlacesByAreaCode(requestUrl);
+                    // Reset filters
+                    cat1 = "";
+                    cat2 = "";
+                    cat3 = "";
+                    areaCode = "";
+                    pageNo = "1";
+                }
+            });
 
-                cat1="";
-                cat2="";
-                cat3="";
-                areaCode="";
-                pageNo = "1";
 
-                // 필요한 로직 추가
-                // 예: placeViewModel.fetchPlaces(requestUrl);
-            }
-        });
-
-        placeButton.setOnClickListener(new View.OnClickListener() {
+            placeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 contentTypeId = "12";
@@ -373,6 +381,23 @@ public class Frag3_Place_List extends Fragment {
 
         return view;
     }
+    private void showLanguageDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("언어 선택");
+        String[] languages = {"영어", "일본어", "중국어", "한국어"};
+        String[] languageKeys = {"EngService1", "JpnService1", "ChsService1", "KorService1"};
+
+        builder.setItems(languages, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                languageType = languageKeys[which];
+                Toast.makeText(getContext(), "선택된 언어: " + languages[which], Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.show();
+    }
+
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -632,11 +657,10 @@ public class Frag3_Place_List extends Fragment {
         }
     }
 
-    private String buildRequestUrl(String serviceType, String serviceKey, String numOfRows, String pageNo, String mobileOS, String mobileApp, String listYN, String arrange, String contentTypeId, String areaCode, String sigunguCode, String cat1, String cat2, String cat3) {
-        String requestUrl = "https://apis.data.go.kr/B551011/KorService1/";
+    private String buildRequestUrl(String languageType, String serviceType, String serviceKey, String numOfRows, String pageNo, String mobileOS, String mobileApp, String listYN, String arrange, String contentTypeId, String areaCode, String sigunguCode, String cat1, String cat2, String cat3) {
         try {
-            StringBuilder urlBuilder = new StringBuilder(requestUrl);
-            urlBuilder.append(URLEncoder.encode(serviceType, "UTF-8"));
+            StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/B551011/");
+            urlBuilder.append(languageType).append("/").append(serviceType);
             urlBuilder.append("?" + URLEncoder.encode("ServiceKey", "UTF-8") + "=" + serviceKey);
             urlBuilder.append("&" + URLEncoder.encode("numOfRows", "UTF-8") + "=" + URLEncoder.encode(numOfRows, "UTF-8"));
             urlBuilder.append("&" + URLEncoder.encode("pageNo", "UTF-8") + "=" + URLEncoder.encode(pageNo, "UTF-8"));
@@ -656,5 +680,8 @@ public class Frag3_Place_List extends Fragment {
             return null;
         }
     }
+
+
+
 
 }

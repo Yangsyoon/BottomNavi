@@ -67,7 +67,7 @@ public class Frag3_Place_List extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.slide1_place_list, container, false);
+        View view = inflater.inflate(R.layout.frag3_place_list, container, false);
 
         RecyclerView recyclerView_place = view.findViewById(R.id.recyclerView_place);
         recyclerView_place.setLayoutManager(new LinearLayoutManager(getContext()));

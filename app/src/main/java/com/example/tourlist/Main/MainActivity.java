@@ -204,12 +204,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button button = findViewById(R.id.button);
+        Button button = findViewById(R.id.login_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setFrag(frag5_login, "Frag5_Login");
-                drawerLayout.closeDrawer(drawerView);
+                FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                FirebaseUser currentUser = mAuth.getCurrentUser();
+
+                if (currentUser != null && currentUser.isEmailVerified()) {
+                    // 이미 로그인된 상태
+                    Toast.makeText(getApplicationContext(), "이미 로그인되어 있습니다.", Toast.LENGTH_SHORT).show();
+                } else {
+                    // 로그인되지 않은 상태
+                    setFrag(new Frag5_Login(), "Frag5_Login");
+                    drawerLayout.closeDrawer(drawerView);
+                }
             }
         });
 

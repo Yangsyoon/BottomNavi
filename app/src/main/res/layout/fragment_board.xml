@@ -11,8 +11,10 @@
 
         <Button
             android:id="@+id/refresh_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="70dp"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/rounded_button2_frag3"
             android:text="새로고침" />
 
         <androidx.recyclerview.widget.RecyclerView

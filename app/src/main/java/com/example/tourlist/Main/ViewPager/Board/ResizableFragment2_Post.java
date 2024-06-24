@@ -126,7 +126,7 @@ public class ResizableFragment2_Post extends Fragment {
                 String title = titleEditText.getText().toString().trim();
                 String content = contentEditText.getText().toString().trim();
                 FirebaseUser user = mAuth.getCurrentUser();
-
+Log.d("d","asdf");
                 if (user != null) {
                     String userId = user.getUid();
                     long timestamp = System.currentTimeMillis();
@@ -173,6 +173,7 @@ public class ResizableFragment2_Post extends Fragment {
             public void onClick(View v) {
                 FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
                 transaction.setCustomAnimations(R.anim.slide_out_down, R.anim.fade_out);
+
                 transaction.remove(ResizableFragment2_Post.this);
                 transaction.commit();
             }

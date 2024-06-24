@@ -1,4 +1,4 @@
-package com.example.tourlist.Main.ViewPager;
+package com.example.tourlist.Main;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class Slide1_Place_List extends Fragment {
+public class Frag3_Place_List extends Fragment {
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
@@ -67,7 +67,7 @@ public class Slide1_Place_List extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.slide1_place_list, container, false);
+        View view = inflater.inflate(R.layout.frag3_place_list, container, false);
 
         RecyclerView recyclerView_place = view.findViewById(R.id.recyclerView_place);
         recyclerView_place.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -82,13 +82,15 @@ public class Slide1_Place_List extends Fragment {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
 
+
+
         placeViewModel.getTouristPlaces_observe().observe(getViewLifecycleOwner(), new Observer<List<Place>>() {
             @Override
             public void onChanged(List<Place> places) {
                 Log.d("P", "onBindViewHolder: createview");
-
-                Slide1_Place_List.this.places.clear();
-                Slide1_Place_List.this.places.addAll(places);
+                getCurrentLocation();
+                Frag3_Place_List.this.places.clear();
+                Frag3_Place_List.this.places.addAll(places);
                 placeAdapter.notifyDataSetChanged();
                 Log.d("urlf", "onChanged: " + places.get(0).getContenttypeid());
             }
@@ -131,7 +133,6 @@ public class Slide1_Place_List extends Fragment {
         Button contenttypeButton = view.findViewById(R.id.contenttype_Button);
 
 
-        getCurrentLocation();
 
         {
 

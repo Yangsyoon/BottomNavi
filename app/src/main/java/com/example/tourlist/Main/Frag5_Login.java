@@ -70,7 +70,7 @@ public class Frag5_Login extends Fragment {
 
                 boolean isEnabled = !emailInput.isEmpty() && !passwordInput.isEmpty();
                 btnLogin.setEnabled(isEnabled);
-                btnLogin.setBackgroundTintList(getResources().getColorStateList(isEnabled ? R.color.login_blue: R.color.login_gray));
+                btnLogin.setBackgroundTintList(getResources().getColorStateList(isEnabled ? R.color.login_blue : R.color.login_gray));
             }
 
             @Override
@@ -106,18 +106,15 @@ public class Frag5_Login extends Fragment {
                                 Frag1_NaverMap frag1_NaverMap = (Frag1_NaverMap) fragmentManager.findFragmentByTag("NaverMap");
                                 if (frag1_NaverMap != null) {
                                     // 기존에 생성된 프래그먼트가 있으면 보여줍니다.
-                                    transaction.show(frag1_NaverMap);
+                                    transaction.replace(R.id.main_frame, frag1_NaverMap, "NaverMap");
                                 } else {
                                     // 기존에 생성된 프래그먼트가 없으면 추가합니다.
                                     frag1_NaverMap = new Frag1_NaverMap();
-                                    transaction.add(R.id.main_frame, frag1_NaverMap, "NaverMap");
+                                    transaction.replace(R.id.main_frame, frag1_NaverMap, "NaverMap");
                                 }
 
-                                // 로그인 프래그먼트를 숨깁니다.
-                                Fragment loginFragment = fragmentManager.findFragmentByTag("Login");
-                                if (loginFragment != null) {
-                                    transaction.hide(loginFragment);
-                                }
+                                // 로그인 프래그먼트를 교체합니다.
+                                transaction.replace(R.id.main_frame, frag1_NaverMap, "NaverMap");
 
                                 transaction.commit();
 
@@ -134,11 +131,9 @@ public class Frag5_Login extends Fragment {
                             Toast.makeText(getContext(), "로그인 실패", Toast.LENGTH_SHORT).show();
                         }
                     }
-
                 });
             }
         });
-
 
         TextView btnRegister = view.findViewById(R.id.btn_register);
         btnRegister.setOnClickListener(new View.OnClickListener() {
@@ -157,11 +152,11 @@ public class Frag5_Login extends Fragment {
                 if (existingFragment == null) {
                     // 프래그먼트가 없으면 추가
                     Frag5_Register frag5Register = new Frag5_Register();
-                    transaction.add(R.id.main_frame, frag5Register, Frag5_Register.class.getSimpleName());
+                    transaction.replace(R.id.main_frame, frag5Register, Frag5_Register.class.getSimpleName());
                     transaction.addToBackStack(null);  // 백스택에 추가하여 뒤로 가기 기능을 제공
                 } else {
                     // 프래그먼트가 이미 존재하면 보여줌
-                    transaction.show(existingFragment);
+                    transaction.replace(R.id.main_frame, existingFragment);
                 }
                 transaction.commit();
             }

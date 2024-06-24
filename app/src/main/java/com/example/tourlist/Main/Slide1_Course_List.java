@@ -57,8 +57,9 @@ public class Slide1_Course_List extends Fragment {
         locationSource = new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
-
         getCurrentLocation();
+
+
         Log.d("m","8");
 
         //코스 목록 띄울 리사이클러뷰
@@ -83,6 +84,8 @@ public class Slide1_Course_List extends Fragment {
         courseViewModel.getTouristCourses().observe(getViewLifecycleOwner(), new Observer<List<Course>>() {
             @Override
             public void onChanged(List<Course> courses) {
+                getCurrentLocation();
+
                 Slide1_Course_List.this.courses.clear();
                 Slide1_Course_List.this.courses.addAll(courses);
                 courseAdapter.notifyDataSetChanged();

@@ -10,59 +10,75 @@
         android:layout_gravity="bottom"
         android:background="@drawable/rounded_top_corners">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-
-            <EditText
-                android:id="@+id/titleEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="제목을 입력하세요" />
-
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:contentDescription="Add Photo"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_camera" />
-
-            <EditText
-                android:id="@+id/editText"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:hint="글을 입력하세요" />
+            android:layout_marginTop="40dp"
+            >
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:orientation="vertical"
+                android:padding="0dp">
 
-                <ImageButton
-                    android:id="@+id/close_button"
-                    android:layout_width="wrap_content"
+                <EditText
+                    android:id="@+id/titleEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_margin="16dp"
+                    android:hint="제목을 입력하세요" />
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="600dp"
+                    android:layout_margin="16dp"
+                    android:contentDescription="Add Photo"
+                    android:scaleType="center"
+                    android:src="@drawable/add_image_24"
+                    android:elevation="16dp"
+                    android:background="@drawable/image_view_border" />
+
+                <EditText
+                    android:id="@+id/editText"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_margin="16dp"
+                    android:hint="글을 입력하세요" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/star_empty"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:contentDescription="Close" />
+                    android:layout_margin="16dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
 
-                <Button
-                    android:id="@+id/register_button"
-                    android:layout_width="0dp"
-                    android:layout_height="75dp"
-                    android:layout_weight="1"
-                    android:text="등록" />
+                    <ImageButton
+                        android:id="@+id/close_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/star_empty"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:contentDescription="Close" />
+
+                    <Button
+                        android:id="@+id/register_button"
+                        android:layout_width="0dp"
+                        android:layout_height="75dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="#C5CCD2"
+                        android:background="@drawable/image_view_border"
+                        android:elevation="50dp"
+                        android:textColor="@color/white"
+                        android:text="등록" />
+
+                </LinearLayout>
+
 
             </LinearLayout>
 
-        </LinearLayout>
+        </ScrollView>
 
         <ImageButton
             android:id="@+id/drag_button"
@@ -74,4 +90,5 @@
             android:scaleType="fitCenter"
             android:src="@drawable/ic_drag_handle_3" />
     </FrameLayout>
+
 </FrameLayout>

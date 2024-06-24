@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tourlist.Main.FavoriteLocation;
 import com.example.tourlist.Main.Frag5_Register;
+import com.example.tourlist.Main.UserAccount;
 import com.example.tourlist.R;
 import com.example.tourlist.Tourist_Detail_Activity.Comment.Comment;
 import com.example.tourlist.Tourist_Detail_Activity.Comment.CommentsAdapter;
@@ -112,7 +113,6 @@ public class TouristPlaceDetailActivity extends AppCompatActivity implements OnM
         // 댓글 RecyclerView 설정
         commentsRecyclerView = findViewById(R.id.commentsRecyclerView);
 
-
         commentList = new ArrayList<>();
         commentsAdapter = new CommentsAdapter(commentList, this, this);
         commentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -124,32 +124,6 @@ public class TouristPlaceDetailActivity extends AppCompatActivity implements OnM
         postCommentButton.setOnClickListener(v -> postComment());
 
         loadComments();
-    }
-
-
-
-    private void loadUserNickname() {
-        FirebaseUser user = mAuth.getCurrentUser();
-        if (user != null) {
-            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("hongdroid").child("UserAccount").child(user.getUid());
-            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    Frag5_Register.UserAccount account = snapshot.getValue(Frag5_Register.UserAccount.class);
-                    if (account != null) {
-                        userName = account.getNickname();
-                        Toast.makeText(TouristPlaceDetailActivity.this, "Nickname loaded: " + userName, Toast.LENGTH_SHORT).show();
-                    } else {
-                        Log.d(TAG, "User data not found");
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    Log.e(TAG, "Failed to load user data", error.toException());
-                }
-            });
-        }
     }
 
     private Bitmap base64ToBitmap(String base64String) {
@@ -194,6 +168,10 @@ public class TouristPlaceDetailActivity extends AppCompatActivity implements OnM
                 String placeId = place.getPlaceName();
                 mDatabase = FirebaseDatabase.getInstance().getReference("comments").child(placeId);
                 String key = mDatabase.push().getKey();
+
+                // UserAccount 싱글톤 인스턴스를 통해 사용자 닉네임 가져오기
+                UserAccount account = UserAccount.getInstance();
+                userName = account.getNickname();
 
                 Comment comment = new Comment(key, userId, userName, content, System.currentTimeMillis(), placeId);
                 mDatabase.child(key).setValue(comment).addOnCompleteListener(task -> {
@@ -250,7 +228,6 @@ public class TouristPlaceDetailActivity extends AppCompatActivity implements OnM
     @Override
     protected void onStart() {
         super.onStart();
-        loadUserNickname(); // 사용자 닉네임을 onStart에서 불러오기
         mapView.onStart();
     }
 

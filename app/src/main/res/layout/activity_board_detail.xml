@@ -77,11 +77,12 @@
                 android:id="@+id/optionsIcon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="8dp"
                 android:src="@drawable/menu_dots_vertical_24"
                 android:clickable="true"
                 android:contentDescription="Options"
                 android:layout_margin="8dp"
+                android:layout_marginRight="16dp"
                 />
 
         </LinearLayout>

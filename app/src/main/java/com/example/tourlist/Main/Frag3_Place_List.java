@@ -50,7 +50,7 @@ public class Frag3_Place_List extends Fragment {
     public Location currentLocation;
 
     String serviceType = "areaBasedList1";
-    String numOfRows = "3";
+    String numOfRows = "10";
     String pageNo = "1";
     String mobileOS = "AND";
     String mobileApp = "AppTest";

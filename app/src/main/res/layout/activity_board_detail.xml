@@ -77,11 +77,12 @@
                 android:id="@+id/optionsIcon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="8dp"
                 android:src="@drawable/menu_dots_vertical_24"
                 android:clickable="true"
                 android:contentDescription="Options"
                 android:layout_margin="8dp"
+                android:layout_marginRight="16dp"
                 />
 
         </LinearLayout>
@@ -161,7 +162,7 @@
                     android:id="@+id/comment"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/user_24"
+                    android:src="@drawable/eye_24"
                     android:background="@android:color/transparent"
                     android:layout_marginEnd="4dp" />
 
@@ -191,7 +192,7 @@
                     android:id="@+id/shareicon"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/user_24"
+                    android:src="@drawable/share_24"
                     android:background="@android:color/transparent" />
             </LinearLayout>
         </LinearLayout>

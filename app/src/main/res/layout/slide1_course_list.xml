@@ -13,7 +13,7 @@
         android:gravity="center"
         android:text="Courses For You"
         android:textSize="20sp"
-
+        android:textColor="#111111"
         >
 
     </TextView>
@@ -52,100 +52,114 @@
 
             <Button
                 android:id="@+id/my_location"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
+                android:layout_width="80dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded_button2_frag3"
                 android:text="근처 코스" />
 
             <Button
                 android:id="@+id/all_Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
+                android:layout_width="70dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded_button2_frag3"
                 android:text="전체" />
 
             <Button
                 android:id="@+id/seoul_Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
+                android:layout_width="90dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded_button2_frag3"
                 android:text="서울특별시" />
 
             <Button
                 android:id="@+id/daegu_Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
+                android:layout_width="90dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded_button2_frag3"
                 android:text="대구광역시" />
 
             <Button
                 android:id="@+id/busan_Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
+                android:layout_width="90dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded_button2_frag3"
                 android:text="부산광역시" />
 
             <Button
                 android:id="@+id/incheon_Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
+                android:layout_width="90dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded_button2_frag3"
                 android:text="인천광역시" />
 
             <Button
                 android:id="@+id/ulsan_Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
+                android:layout_width="90dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded_button2_frag3"
                 android:text="울산광역시" />
 
             <Button
                 android:id="@+id/daejeon_Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
+                android:layout_width="90dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded_button2_frag3"
                 android:text="대전광역시" />
 
             <Button
                 android:id="@+id/gyeonggi_Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
+                android:layout_width="80dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded_button2_frag3"
                 android:text="경기도" />
 
             <Button
                 android:id="@+id/jeon_Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
+                android:layout_width="70dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded_button2_frag3"
                 android:text="전라" />
 
             <Button
                 android:id="@+id/chung_Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
+                android:layout_width="70dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded_button2_frag3"
                 android:text="충청" />
 
             <Button
                 android:id="@+id/gyeong_Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
+                android:layout_width="70dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded_button2_frag3"
                 android:text="경상" />
 
             <Button
                 android:id="@+id/gangwon_Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
+                android:layout_width="70dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded_button2_frag3"
                 android:text="강원" />
 
             <Button
                 android:id="@+id/jeju_Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
+                android:layout_width="70dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded_button2_frag3"
                 android:text="제주" />
 
         </LinearLayout>

@@ -3,7 +3,7 @@ package com.example.tourlist.Main;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 
-import com.example.tourlist.Main.ViewPager.Frag3_New;
+import com.example.tourlist.ViewPager.Frag3_New;
 import com.example.tourlist.XMLParser;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,9 +13,9 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -32,6 +32,11 @@ import com.example.tourlist.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -64,12 +69,21 @@ public class MainActivity extends AppCompatActivity {
     private Animation fab_open, fab_close;
     private boolean isFabOpen = false;
 
+    private TextView userNameTextView;
+    private TextView userEmailTextView;
+
+    private DatabaseReference mDatabaseReference;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
         setWindowInsets();
+
+
+        userNameTextView = findViewById(R.id.user_name);
+        userEmailTextView = findViewById(R.id.user_email);
 
         initializeFragments();
         initializeFirebaseAuth();
@@ -82,7 +96,39 @@ public class MainActivity extends AppCompatActivity {
 
         setupDrawer();
         setupButtons();
+
+        loadUserInfo();
     }
+    private void loadUserInfo() {
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+
+        if (user != null) {
+            mDatabaseReference = FirebaseDatabase.getInstance().getReference("hongdroid").child("UserAccount").child(user.getUid());
+            mDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    UserAccount account = snapshot.getValue(UserAccount.class);
+                    if (account != null) {
+                        UserAccount.getInstance().setIdToken(account.getIdToken());
+                        UserAccount.getInstance().setEmailId(account.getEmailId());
+                        UserAccount.getInstance().setPassword(account.getPassword());
+                        UserAccount.getInstance().setNickname(account.getNickname());
+
+                        userNameTextView.setText(account.getNickname());
+                        userEmailTextView.setText(account.getEmailId());
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    // Handle possible errors.
+                }
+            });
+        }
+    }
+
+
 
     private void setWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {

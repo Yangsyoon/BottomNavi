@@ -169,10 +169,8 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
     ///////////////////////////////////////
 
 //    private Button placeNameButton;
-/*
     private Button startButton;
     private Button destinationButton;
-*/
 
     private CardView infoCard;
     private TextView infoTitle;
@@ -225,9 +223,9 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
 
 
 
-        /*startButton=view.findViewById(R.id.start_button);
+        startButton=view.findViewById(R.id.start_button);
 
-        destinationButton=view.findViewById(R.id.destination_button);*/
+        destinationButton=view.findViewById(R.id.destination_button);
 
         ImageButton favoriteButton = view.findViewById(R.id.btn_fav);
 
@@ -259,7 +257,7 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
 
 
 //
-        /*startButton.setOnClickListener(new View.OnClickListener() {
+        startButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -290,7 +288,7 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
 
                 }
             }
-        });*/
+        });
 
         //즐겨찾기 추가 버튼
         favoriteButton.setOnClickListener(new View.OnClickListener() {
@@ -400,7 +398,7 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
             // 선택한 위치에 파란 마커 생성 및, 다시 클릭 시 '선택된 위치'라고 박스 뜸.
         });
 
-       /* // 길찾기!!! 경로 버튼 클릭 리스너
+        // 길찾기!!! 경로 버튼 클릭 리스너
         Button routeButton = view.findViewById(R.id.view_map_button); // 경로 버튼의 ID를 사용하여 버튼을 찾습니다.
         routeButton.setOnClickListener(v -> {
             if (startMarker == null) {
@@ -421,7 +419,7 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
                 destinationMarker = null;
                 startMarker = null;
             }
-        });*/
+        });
 
         infoCard.setOnClickListener(v -> {
             if (selectedPlace != null) {

@@ -73,7 +73,7 @@
 
 
     <activity
-        android:name=".Main.ViewPager.Board.BoardDetailActivity"
+        android:name=".ViewPager.Board.Detail.BoardDetailActivity"
         android:exported="true"
 
         >

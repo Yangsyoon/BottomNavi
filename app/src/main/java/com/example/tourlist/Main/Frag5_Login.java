@@ -25,8 +25,11 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class Frag5_Login extends Fragment {
     private String fragmentTag = "Login";
@@ -121,6 +124,9 @@ public class Frag5_Login extends Fragment {
                                 // BottomNavigationView 탭 선택 상태 업데이트
                                 BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavi);
                                 bottomNavigationView.setSelectedItemId(R.id.action_map);
+
+                                // 드로어에 계정 정보 세팅
+                                loadUserInfo();
                             } else {
                                 // 이메일 인증 미완료
                                 Toast.makeText(getContext(), "Please verify your email address", Toast.LENGTH_SHORT).show();
@@ -163,6 +169,37 @@ public class Frag5_Login extends Fragment {
         });
 
         return view;
+    }
+
+    private void loadUserInfo() {
+        FirebaseUser user = mAuth.getCurrentUser();
+
+        if (user != null) {
+            mDatabaseReference = FirebaseDatabase.getInstance().getReference("hongdroid").child("UserAccount").child(user.getUid());
+            mDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    UserAccount account = snapshot.getValue(UserAccount.class);
+                    if (account != null) {
+                        UserAccount.getInstance().setIdToken(account.getIdToken());
+                        UserAccount.getInstance().setEmailId(account.getEmailId());
+                        UserAccount.getInstance().setPassword(account.getPassword());
+                        UserAccount.getInstance().setNickname(account.getNickname());
+
+                        TextView userNameTextView = getActivity().findViewById(R.id.user_name);
+                        TextView userEmailTextView = getActivity().findViewById(R.id.user_email);
+
+                        userNameTextView.setText(account.getNickname());
+                        userEmailTextView.setText(account.getEmailId());
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    // Handle possible errors.
+                }
+            });
+        }
     }
 
     @Override

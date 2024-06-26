@@ -140,7 +140,7 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
 
 
 
-//    private FloatingActionButton fab_main, fab_sub1, fab_sub2;
+    //    private FloatingActionButton fab_main, fab_sub1, fab_sub2;
     private Animation fab_open, fab_close;
 
 
@@ -168,9 +168,9 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
     private float distance;
     ///////////////////////////////////////
 
-//    private Button placeNameButton;
-/*    private Button startButton;
-    private Button destinationButton;*/
+    //    private Button placeNameButton;
+    private Button startButton;
+    private Button destinationButton;
 
     private CardView infoCard;
     private TextView infoTitle;
@@ -223,10 +223,10 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
 
 
 
-        /*startButton=view.findViewById(R.id.start_button);
+        startButton=view.findViewById(R.id.start_button);
 
         destinationButton=view.findViewById(R.id.destination_button);
-*/
+
         ImageButton favoriteButton = view.findViewById(R.id.btn_fav);
 
 //        placeNameButton = view.findViewById(R.id.place_name_button);
@@ -257,7 +257,7 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
 
 
 //
-        /*startButton.setOnClickListener(new View.OnClickListener() {
+        startButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -273,8 +273,8 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
                 }
             }
         });
-*/
-        /*destinationButton.setOnClickListener(new View.OnClickListener() {
+
+        destinationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (selectedMarker == null) {
@@ -290,7 +290,7 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
             }
         });
 
-       */ //즐겨찾기 추가 버튼
+        //즐겨찾기 추가 버튼
         favoriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -399,7 +399,7 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
         });
 
         // 길찾기!!! 경로 버튼 클릭 리스너
-        Button routeButton = view.findViewById(R.id.view_map_button); // 경로 버튼의 ID를 사용하여 버튼을 찾습니다.
+        ImageButton routeButton = view.findViewById(R.id.view_map_button); // 경로 버튼의 ID를 사용하여 버튼을 찾습니다.
         routeButton.setOnClickListener(v -> {
             if (startMarker == null) {
                 Toast.makeText(getContext(), "출발지 마커 선택하세요", Toast.LENGTH_SHORT).show();
@@ -598,7 +598,7 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
                                 getCurrentLocation();
                                 selectedMarker = tourMarker;
 
-                                    //거리 계산.
+                                //거리 계산.
                                 if (currentLocation != null) {
 
                                     Location markerLocation = new Location("");
@@ -734,9 +734,9 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
     private void setupMarkerIcon(Marker marker) {
         //마커 아이콘 설정
         OverlayImage icon = OverlayImage.fromResource(R.drawable.small_marker); // 새로운 아이콘 리소스 사용
-       marker.setIcon(icon);
-       // marker.setWidth와 marker.setHeight는 사용하지 않습니다. 아이콘 자체를 작은 크기로 준비합니다.
-       // 주황색으로 설정
+        marker.setIcon(icon);
+        // marker.setWidth와 marker.setHeight는 사용하지 않습니다. 아이콘 자체를 작은 크기로 준비합니다.
+        // 주황색으로 설정
     }
 
 

@@ -169,8 +169,8 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
     ///////////////////////////////////////
 
 //    private Button placeNameButton;
-    private Button startButton;
-    private Button destinationButton;
+/*    private Button startButton;
+    private Button destinationButton;*/
 
     private CardView infoCard;
     private TextView infoTitle;
@@ -223,10 +223,10 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
 
 
 
-        startButton=view.findViewById(R.id.start_button);
+        /*startButton=view.findViewById(R.id.start_button);
 
         destinationButton=view.findViewById(R.id.destination_button);
-
+*/
         ImageButton favoriteButton = view.findViewById(R.id.btn_fav);
 
 //        placeNameButton = view.findViewById(R.id.place_name_button);
@@ -257,7 +257,7 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
 
 
 //
-        startButton.setOnClickListener(new View.OnClickListener() {
+        /*startButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -273,8 +273,8 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
                 }
             }
         });
-
-        destinationButton.setOnClickListener(new View.OnClickListener() {
+*/
+        /*destinationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (selectedMarker == null) {
@@ -290,7 +290,7 @@ public class Frag1_NaverMap extends Fragment implements OnMapReadyCallback, View
             }
         });
 
-        //즐겨찾기 추가 버튼
+       */ //즐겨찾기 추가 버튼
         favoriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

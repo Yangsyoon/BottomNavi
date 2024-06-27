@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+
+    >
+
+
+    <TextView
+        android:id="@+id/tv"
+        android:layout_width="match_parent"
+        android:layout_height="74dp"
+        android:gravity="center"
+        android:text="search 2"
+        android:textSize="20sp"
+
+        >
+
+    </TextView>
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#FFCFCFCF"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        >
+
+    </View>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+
+        >
+        <EditText
+            android:id="@+id/searchEditText"
+            style="@style/SearchEditTextStyle"
+            android:background="@drawable/image_view_border"
+            android:elevation="8dp"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:hint="Search here" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- 관광타입 섹션 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="관광타입"
+                    android:textSize="16sp"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/tvSelectedCategory"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text=" "
+                    android:textSize="16sp"/>
+
+                <Button
+                    android:id="@+id/btnSelectCategory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="관광타입 선택"
+                    android:background="?attr/selectableItemBackground"
+                    android:textColor="@color/black"/>
+            </LinearLayout>
+
+            <!-- 관광타입 리스트를 위한 RecyclerView 추가 -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewCategory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:padding="8dp"/>
+
+
+            </LinearLayout>
+
+            <!-- 서비스분류 섹션 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="8dp">
+
+                <TextView
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:text="서비스분류"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/tvSelectedService"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text=" "
+                    android:textSize="16sp"/>
+
+                <Button
+                    android:id="@+id/btnSelectService"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="서비스 분류 선택"
+                    android:background="?attr/selectableItemBackground"
+                    android:textColor="@color/black"/>
+            </LinearLayout>
+
+            <!-- 지역 섹션 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="8dp">
+
+                <TextView
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:text="지역"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/tvSelectedArea"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text=" "
+                    android:textSize="16sp"/>
+
+                <Button
+                    android:id="@+id/btnSelectArea"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="지역 선택"
+                    android:background="?attr/selectableItemBackground"
+                    android:textColor="@color/black"/>
+            </LinearLayout>
+        </LinearLayout>
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="550dp"
+            android:divider="?android:attr/dividerHorizontal"
+            android:orientation="vertical"
+            android:padding="8dp"
+            android:showDividers="middle">
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView_place"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible" />
+
+            <!--        <androidx.cardview.widget.CardView-->
+            <!--            android:layout_width="match_parent"-->
+            <!--            android:layout_height="match_parent"-->
+            <!--            android:layout_marginTop="16dp"-->
+            <!--            android:layout_marginBottom="16dp"-->
+            <!--            app:cardCornerRadius="16dp"-->
+            <!--            app:cardElevation="8dp">-->
+
+            <!--            -->
+            <!--        </androidx.cardview.widget.CardView>-->
+
+
+
+        </LinearLayout>
+</LinearLayout>

@@ -1,4 +1,5 @@
 package com.example.tourlist.ViewPager;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +15,7 @@ import com.example.tourlist.R;
 public class Frag3_New extends Fragment {
 
     private ViewPager2 viewPager;
-    private Button btnSearchPlace, btnBoard, btnCalendar;
+    private Button btnSearchPlace, btnSearchPlace2, btnBoard, btnCalendar;
 
     @Nullable
     @Override
@@ -22,10 +23,10 @@ public class Frag3_New extends Fragment {
         View view = inflater.inflate(R.layout.fragment_new, container, false);
 
         btnSearchPlace = view.findViewById(R.id.btnSearchPlace);
+        btnSearchPlace2 = view.findViewById(R.id.btnSearchPlace2);
         btnBoard = view.findViewById(R.id.btnBoard);
         btnCalendar = view.findViewById(R.id.btnCalendar);
         viewPager = view.findViewById(R.id.viewPager);
-
 
         // ViewPager2 어댑터 설정
         viewPager.setAdapter(new ViewPagerAdapter(this));
@@ -43,17 +44,24 @@ public class Frag3_New extends Fragment {
             }
         });
 
-        btnBoard.setOnClickListener(new View.OnClickListener() {
+        btnSearchPlace2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 viewPager.setCurrentItem(1);
             }
         });
 
-        btnCalendar.setOnClickListener(new View.OnClickListener() {
+        btnBoard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 viewPager.setCurrentItem(2);
+            }
+        });
+
+        btnCalendar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewPager.setCurrentItem(3);
             }
         });
     }

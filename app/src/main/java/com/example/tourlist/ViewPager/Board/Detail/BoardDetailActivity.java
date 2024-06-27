@@ -55,6 +55,8 @@ public class BoardDetailActivity extends AppCompatActivity {
     private DatabaseReference commentsRef;
     private ImageView heartIcon;
     private TextView likeCountTextView;
+    private TextView viewCountTextView;
+
 
     private boolean isAuthor = true;
     @Override
@@ -70,6 +72,9 @@ public class BoardDetailActivity extends AppCompatActivity {
         optionsIcon = findViewById(R.id.optionsIcon);
         heartIcon = findViewById(R.id.heartIcon); // 좋아요 아이콘 추가
         likeCountTextView = findViewById(R.id.likeCountTextView2); // 좋아요 수를 표시할 TextView
+        viewCountTextView = findViewById(R.id.commentcnt); // 조회 수를
+
+
 
         commentEditText = findViewById(R.id.commentEditText);
         commentRecyclerView = findViewById(R.id.commentRecyclerView);
@@ -101,7 +106,60 @@ public class BoardDetailActivity extends AppCompatActivity {
         setLikeClickListener(); // 좋아요 클릭 리스너 설정
         setLikeCountListener();
         setOptionsIconClickListener();
+        incrementViewCount();
+        setViewCountListener();
     }
+
+
+    private void incrementViewCount() {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+        String postTitle = getIntent().getStringExtra("postTitle");  // 게시물 제목을 얻음
+
+        DatabaseReference viewCountRef = database.getReference("Board").child(postTitle).child("View").child("count");
+
+        viewCountRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Long currentCount = dataSnapshot.getValue(Long.class);
+                if (currentCount == null) {
+                    currentCount = 0L;
+                }
+                viewCountRef.setValue(currentCount + 1);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // 실패 처리
+            }
+        });
+    }
+
+
+    private void setViewCountListener() {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+//        String placeTitle = titleTextView.getText().toString();  // 게시물 제목을 얻음
+        String postTitle = getIntent().getStringExtra("postTitle");
+
+        DatabaseReference viewCountRef = database.getReference("Board").child(postTitle).child("View").child("count");
+
+        viewCountRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Long currentCount = dataSnapshot.getValue(Long.class);
+                if (currentCount == null) {
+                    currentCount = 0L;
+                }
+                viewCountTextView.setText(String.valueOf(currentCount));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // 실패 처리
+            }
+        });
+    }
+
 
     private void setLikeClickListener() {
         heartIcon.setOnClickListener(new View.OnClickListener() {
@@ -109,15 +167,18 @@ public class BoardDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
+                Log.d("ff","asdf");
+
                 if (user != null) {
                     UserAccount userAccount = UserAccount.getInstance();
 
                     String userId = user.getUid();
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
-                    String placeTitle = titleTextView.getText().toString(); // 게시물 제목을 가져옴
+//                    String placeTitle = titleTextView.getText().toString(); // 게시물 제목을 가져옴
+                    String postTitle = getIntent().getStringExtra("postTitle");
 
                     DatabaseReference likeRef = database.getReference("Board")
-                            .child(placeTitle)
+                            .child(postTitle)
                             .child("Like");
 
                     DatabaseReference userLikeRef = likeRef.child("users").child(userAccount.getNickname());
@@ -128,6 +189,8 @@ public class BoardDetailActivity extends AppCompatActivity {
                             boolean isLiked = dataSnapshot.exists();
 
                             if (isLiked) {
+                                heartIcon.setImageResource(R.drawable.heart_empty);  // 하트 아이콘을 빈 하트로 변경
+
                                 // 이미 좋아요를 누른 경우, 좋아요 취소
                                 likeRef.child("count").addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
@@ -137,7 +200,6 @@ public class BoardDetailActivity extends AppCompatActivity {
                                             likeRef.child("count").setValue(currentCount - 1);
                                         }
                                         userLikeRef.removeValue();  // 사용자 좋아요 상태 제거
-                                        heartIcon.setImageResource(R.drawable.heart_empty);  // 하트 아이콘을 빈 하트로 변경
                                     }
 
                                     @Override
@@ -146,6 +208,8 @@ public class BoardDetailActivity extends AppCompatActivity {
                                     }
                                 });
                             } else {
+                                heartIcon.setImageResource(R.drawable.heart_fill);  // 하트 아이콘을 채워진 하트로 변경
+
                                 // 좋아요를 누르지 않은 경우, 좋아요 추가
                                 likeRef.child("count").addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
@@ -154,9 +218,9 @@ public class BoardDetailActivity extends AppCompatActivity {
                                         if (currentCount == null) {
                                             currentCount = 0L;
                                         }
+                                        Log.d("ff","aaaa");
                                         likeRef.child("count").setValue(currentCount + 1);
                                         userLikeRef.setValue(true);  // 사용자 좋아요 상태 추가
-                                        heartIcon.setImageResource(R.drawable.heart_fill);  // 하트 아이콘을 채워진 하트로 변경
                                     }
 
                                     @Override
@@ -182,9 +246,11 @@ public class BoardDetailActivity extends AppCompatActivity {
 
     private void setLikeCountListener() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        String placeTitle = titleTextView.getText().toString();  // 게시물 제목을 얻음
-        DatabaseReference likeRef = database.getReference("Board").child(placeTitle).child("Like").child("count");
+//        String placeTitle = titleTextView.getText().toString();  // 게시물 제목을 얻음
+        String postTitle = getIntent().getStringExtra("postTitle");
 
+        DatabaseReference likeRef = database.getReference("Board").child(postTitle).child("Like").child("count");
+//        Log.d("setLikeCountListener", "placeTitle: " + placeTitle);
         likeRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -200,6 +266,8 @@ public class BoardDetailActivity extends AppCompatActivity {
                 // 실패 처리
             }
         });
+
+
     }
 
     private void loadUserNickname() {
@@ -278,6 +346,32 @@ public class BoardDetailActivity extends AppCompatActivity {
                     if (imageUrl != null) {
                         Glide.with(BoardDetailActivity.this).load(imageUrl).into(imageView);
                     }
+
+                    // 좋아요 상태 확인
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    if (user != null) {
+                        UserAccount userAccount = UserAccount.getInstance();
+                        String userId = user.getUid();
+                        DatabaseReference likeRef = dbReference.child("Like").child("users").child(userAccount.getNickname());
+
+                        likeRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot snapshot) {
+                                if (snapshot.exists()) {
+                                    heartIcon.setImageResource(R.drawable.heart_fill);
+                                } else {
+                                    heartIcon.setImageResource(R.drawable.heart_empty);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                // 실패 처리
+                            }
+                        });
+                    } else {
+                        heartIcon.setImageResource(R.drawable.heart_empty);
+                    }
                 }
             }
 
@@ -287,6 +381,7 @@ public class BoardDetailActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private void loadComments() {
         commentsRef.addValueEventListener(new ValueEventListener() {
@@ -307,6 +402,9 @@ public class BoardDetailActivity extends AppCompatActivity {
                 // Log or handle database error
             }
         });
+
+
+
     }
 
     private void setOptionsIconClickListener() {
@@ -347,6 +445,8 @@ public class BoardDetailActivity extends AppCompatActivity {
                     return false;
                 }
             }
+
+
         });
     }
 
@@ -375,4 +475,6 @@ public class BoardDetailActivity extends AppCompatActivity {
             }
         });
     }
+
+
 }

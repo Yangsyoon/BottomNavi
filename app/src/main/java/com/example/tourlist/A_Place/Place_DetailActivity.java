@@ -570,6 +570,8 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
                             boolean isLiked = dataSnapshot.exists();
 
                             if (isLiked) {
+                                heartIcon.setImageResource(R.drawable.heart_empty);  // 하트 아이콘을 빈 하트로 변경
+
                                 // 이미 좋아요를 누른 경우, 좋아요 취소
                                 likeRef.child("count").addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
@@ -579,7 +581,6 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
                                             likeRef.child("count").setValue(currentCount - 1);
                                         }
                                         userLikeRef.removeValue();  // 사용자 좋아요 상태 제거
-                                        heartIcon.setImageResource(R.drawable.heart_empty);  // 하트 아이콘을 빈 하트로 변경
                                     }
 
                                     @Override
@@ -588,6 +589,8 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
                                     }
                                 });
                             } else {
+                                heartIcon.setImageResource(R.drawable.heart_fill);  // 하트 아이콘을 채워진 하트로 변경
+
                                 // 좋아요를 누르지 않은 경우, 좋아요 추가
                                 likeRef.child("count").addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
@@ -598,7 +601,6 @@ public class Place_DetailActivity extends AppCompatActivity implements OnMapRead
                                         }
                                         likeRef.child("count").setValue(currentCount + 1);
                                         userLikeRef.setValue(true);  // 사용자 좋아요 상태 추가
-                                        heartIcon.setImageResource(R.drawable.heart_fill);  // 하트 아이콘을 채워진 하트로 변경
                                     }
 
                                     @Override

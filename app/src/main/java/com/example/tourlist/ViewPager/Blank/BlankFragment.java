@@ -21,10 +21,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tourlist.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,7 +44,10 @@ public class BlankFragment extends Fragment {
     private CategoryAdapter categoryAdapter;
     private List<String> categoryList;
 
-    private Map<String, Map<String, String[]>> dataMap;
+    private FirebaseDatabase database;
+    private DatabaseReference categoryRef;
+
+    private String selectedMainCategory;
 
     @Nullable
     @Override
@@ -62,50 +68,11 @@ public class BlankFragment extends Fragment {
         recyclerViewCategory.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerViewCategory.setAdapter(categoryAdapter);
 
-        initializeData();
-
+        database = FirebaseDatabase.getInstance();
         setButtonClickListeners();
 
         return view;
     }
-
-    // 초기 데이터 설정 부분 수정
-    private void initializeData() {
-        dataMap = new HashMap<>();
-        dataMap.put("자연", new HashMap<String, String[]>() {{
-            put("자연관광지", new String[]{
-                    "국립공원", "도립공원", "군립공원", "산", "자연생태관광지",
-                    "자연휴양림", "수목원", "폭포", "계곡", "약수터",
-                    "해안절경", "해수욕장", "섬", "항구/포구", "등대",
-                    "호수", "강", "동굴"
-            });
-            put("관광자원", new String[]{
-                    "희귀동.식물", "기암괴석"
-            });
-        }});
-        dataMap.put("인문(문화/예술/역사)", new HashMap<String, String[]>() {{
-            put("역사관광지", new String[]{
-                    "고궁", "성", "문", "고택", "생가",
-                    "민속마을", "유적지/사적지", "사찰", "종교성지", "안보관광"
-            });
-            put("휴양관광지", new String[]{
-                    "관광단지", "온천/욕장/스파", "이색찜질방", "헬스투어",
-                    "테마공원", "공원", "유람선/잠수함관광"
-            });
-            put("체험관광지", new String[]{
-                    "농.산.어촌 체험", "전통체험", "산사체험", "이색체험", "이색거리"
-            });
-            put("산업관광지", new String[]{
-                    "발전소", "식음료", "기타", "전자-반도체", "자동차"
-            });
-            put("건축/조형물", new String[]{
-                    "다리/대교", "기념탑/기념비/전망대", "분수", "동상", "터널", "유명건물"
-            });
-        }});
-    }
-
-
-
 
     private void setButtonClickListeners() {
         btnSelectCategory.setOnClickListener(new View.OnClickListener() {
@@ -130,8 +97,6 @@ public class BlankFragment extends Fragment {
         });
     }
 
-
-    //관광타입
     private void showCategoryDialog() {
         final String[] categories = {"관광지 (12)", "문화시설 (14)", "축제/공연/행사 (15)", "여행코스 (25)", "레포츠 (28)", "숙박 (32)", "쇼핑 (38)", "음식 (39)"};
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -141,14 +106,11 @@ public class BlankFragment extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 String selectedCategory = categories[which];
                 tvSelectedCategory.setText(selectedCategory);
-                showCategoryList(selectedCategory);
             }
         });
         builder.show();
     }
 
-    //서비스분류
-    // showServiceDialog 메소드 수정
     private void showServiceDialog() {
         final Dialog dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.dialog_service_selection);
@@ -157,25 +119,49 @@ public class BlankFragment extends Fragment {
         final ListView lvSubCategory = dialog.findViewById(R.id.lvSubCategory);
         final ListView lvDetailCategory = dialog.findViewById(R.id.lvDetailCategory);
 
-        String selectedCategory = tvSelectedCategory.getText().toString().split(" ")[0];
-        Map<String, String[]> subcategories = dataMap.get(selectedCategory);
+        String selectedCategory = tvSelectedCategory.getText().toString().split(" ")[1]; // 코드만 가져오기
+        categoryRef = database.getReference("Tourist_Categories").child(selectedCategory);
 
-        if (subcategories == null) {
-            Log.e("ServiceDialogError", "subcategories is null for category: " + selectedCategory);
-            return;
-        }
+        categoryRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<String> mainCategories = new ArrayList<>();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    mainCategories.add(dataSnapshot.getKey());
+                }
 
-        ArrayAdapter<String> mainCategoryAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, new ArrayList<>(subcategories.keySet()));
-        lvMainCategory.setAdapter(mainCategoryAdapter);
+                ArrayAdapter<String> mainCategoryAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, mainCategories);
+                lvMainCategory.setAdapter(mainCategoryAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("FirebaseError", "Error fetching data", error.toException());
+            }
+        });
 
         lvMainCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String selectedMainCategory = (String) lvMainCategory.getItemAtPosition(position);
-                String[] subCategoryArray = subcategories.get(selectedMainCategory);
-                ArrayAdapter<String> subCategoryAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, subCategoryArray);
-                lvSubCategory.setAdapter(subCategoryAdapter);
-                lvDetailCategory.setAdapter(null); // Clear detail category when main category changes
+                selectedMainCategory = (String) lvMainCategory.getItemAtPosition(position);
+                categoryRef.child(selectedMainCategory).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        List<String> subCategories = new ArrayList<>();
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            subCategories.add(dataSnapshot.getKey());
+                        }
+
+                        ArrayAdapter<String> subCategoryAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, subCategories);
+                        lvSubCategory.setAdapter(subCategoryAdapter);
+                        lvDetailCategory.setAdapter(null); // Clear detail category when main category changes
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.e("FirebaseError", "Error fetching data", error.toException());
+                    }
+                });
             }
         });
 
@@ -183,13 +169,23 @@ public class BlankFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedSubCategory = (String) lvSubCategory.getItemAtPosition(position);
-                String[] detailCategories = subcategories.get(selectedSubCategory);
-                if (detailCategories == null) {
-                    Log.e("DetailCategoryError", "detailCategories is null for subCategory: " + selectedSubCategory);
-                    return;
-                }
-                ArrayAdapter<String> detailCategoryAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, detailCategories);
-                lvDetailCategory.setAdapter(detailCategoryAdapter);
+                categoryRef.child(selectedMainCategory).child(selectedSubCategory).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        List<String> detailCategories = new ArrayList<>();
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            detailCategories.add(dataSnapshot.getKey());
+                        }
+
+                        ArrayAdapter<String> detailCategoryAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, detailCategories);
+                        lvDetailCategory.setAdapter(detailCategoryAdapter);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.e("FirebaseError", "Error fetching data", error.toException());
+                    }
+                });
             }
         });
 
@@ -213,7 +209,6 @@ public class BlankFragment extends Fragment {
         dialog.show();
     }
 
-    //지역
     private void showAreaDialog() {
         final String[] areas = {"서울", "부산", "대구", "인천"};
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -226,23 +221,6 @@ public class BlankFragment extends Fragment {
             }
         });
         builder.show();
-    }
-
-    private void showCategoryList(String selectedCategory) {
-        categoryList.clear();
-        String[] parts = selectedCategory.split(" ");
-        if (parts.length < 2) {
-            return;
-        }
-
-        String categoryKey = parts[0];
-        Map<String, String[]> subcategories = dataMap.get(categoryKey);
-        if (subcategories != null) {
-            categoryList.addAll(subcategories.keySet());
-        }
-
-        categoryAdapter.notifyDataSetChanged();
-//        recyclerViewCategory.setVisibility(View.VISIBLE);
     }
 
     private class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
